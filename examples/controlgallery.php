@@ -12,7 +12,7 @@ $mainwin = $ui->newWindow("libui Control Gallery", 640, 480, 1);
 $ui->windowOnClosing($mainwin, 'onClosing', NULL);
 $ui->onShouldQuit(function ($data) use ($ui) {
     $mainwin = $ui->window($data);
-    $ui->controlDestroy($mainwin);
+	$ui->controlDestroy($mainwin);
     return 1;
 }, $mainwin);
 
@@ -34,8 +34,8 @@ $ui->controlShow($mainwin);
 $ui->main();
 function onClosing()
 {
-    uiQuit();
-    echo 'exit';
+	global $ui;
+	$ui->quit();
 	return 1;
 }
 

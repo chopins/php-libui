@@ -11,5 +11,6 @@ include '/src/UI.php';
 $ui = new UI('/usr/lib64/libui.so');
 $ui->init();
 $mainwin = $ui->newWindow("libui Control Gallery", 640, 480, 1);
+$ui->controlShow($mainwin);
 $ui->main();
 ```
