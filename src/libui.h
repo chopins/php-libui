@@ -1,3 +1,17 @@
+struct tm {
+	int tm_sec;
+	int tm_min;
+	int tm_hour;
+	int tm_mday;
+	int tm_mon;
+	int tm_year;
+	int tm_wday;
+	int tm_yday; 
+	int tm_isdst;
+	long int tm_gmtoff;
+	const char *tm_zone;
+};
+typedef struct tm tm;
 typedef unsigned int uiForEach;enum{
 	uiForEachContinue,
 	uiForEachStop,
@@ -147,7 +161,7 @@ extern  int uiRadioButtonsSelected(uiRadioButtons *r);
 extern  void uiRadioButtonsSetSelected(uiRadioButtons *r, int n);
 extern  void uiRadioButtonsOnSelected(uiRadioButtons *r, void (*f)(uiRadioButtons *, void *), void *data);
 extern  uiRadioButtons *uiNewRadioButtons(void);
-struct tm;
+
 typedef struct  uiControl uiDateTimePicker ;
 extern  void uiDateTimePickerTime(uiDateTimePicker *d, struct tm *time);
 extern  void uiDateTimePickerSetTime(uiDateTimePicker *d, const struct tm *time);

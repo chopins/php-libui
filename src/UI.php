@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Toknot (http://toknot.com)
  *
@@ -12,7 +13,6 @@
  * libui
  * All return C type is uiControll of CData instance
  * 
- * @method void uninit(void);
  * @method void freeInitError(const char *err);
  * @method void main(void);
  * @method void mainSteps(void);
@@ -281,6 +281,10 @@ class UI
      */
     const PI = 3.14159265358979323846264338327950288419716939937510582097494459;
 
+    const ALIGN_FILL = 0;
+    const ALIGN_START = 1;
+    const ALIGN_CENTER = 2;
+    const ALIGN_END = 3;
     /**
      * @var FFI
      */
@@ -381,16 +385,26 @@ class UI
     }
 
     /**
-     * @return int
+     *  @param array $data  init of time, below  is key list:
+     *                 int tm_sec;t
+     *                 int tm_min;
+     *                 int tm_hour;
+     *                 int tm_mday;
+     *                 int tm_mon;
+     *                 int tm_year;
+     *                 int tm_wday;
+     *                 int tm_yday; 
+     *                 int tm_isdst;
+     *                 int tm_gmtoff;
+     *                 string tm_zone;
+     *               
      */
-    public function align($name)
+    public function newTm($isPtr = false)
     {
-        $uiAlign = [
-            'uiAlignFill',
-            'uiAlignStart',
-            'uiAlignCenter',
-            'uiAlignEnd',
-        ];
-        return array_search($name, $uiAlign);
+        $type =  self::$ffi->new('tm');
+        if(!$isPtr) {
+            return $type;
+        }
+        return FFI::addr($type);
     }
 }

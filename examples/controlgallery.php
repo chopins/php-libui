@@ -194,10 +194,10 @@ function makeDataChoosersPage()
 	$ui->buttonOnClicked($button, 'onOpenFileClicked', $entry);
 	$ui->gridAppend($grid, $button,
 		0, 0, 1, 1,
-		0, $ui->align('uiAlignFill'), 0, $ui->align('uiAlignFill'));
+		0, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 	$ui->gridAppend($grid, $entry,
 		1, 0, 1, 1,
-		1, $ui->align('AlignFill'), 0, $ui->align('AlignFill'));
+		1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 
 	$button = $ui->newButton("Save File");
 	$entry = $ui->newEntry();
@@ -205,27 +205,27 @@ function makeDataChoosersPage()
 	$ui->buttonOnClicked($button, 'onSaveFileClicked', $entry);
 	$ui->gridAppend($grid, $button,
 		0, 1, 1, 1,
-		0, $ui->align('uiAlignFill'), 0, $ui->align('uiAlignFill'));
+		0, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 	$ui->gridAppend($grid, $entry,
 		1, 1, 1, 1,
-		1, $ui->align('uiAlignFill'), 0, $ui->align('uiAlignFill'));
+		1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 
 	$msggrid = $ui->newGrid();
 	$ui->gridSetPadded($msggrid, 1);
 	$ui->gridAppend($grid, $msggrid,
 		0, 2, 2, 1,
-		0, $ui->align('uiAlignCenter'), 0, $ui->align('uiAlignStart'));
+		0, $ui::ALIGN_CENTER, 0, $ui::ALIGN_START);
 
 	$button = $ui->newButton("Message Box");
 	$ui->buttonOnClicked($button, 'onMsgBoxClicked', NULL);
 	$ui->gridAppend($msggrid, $button,
 		0, 0, 1, 1,
-		0, $ui->align('uiAlignFill'), 0, $ui->align('uiAlignFill'));
+		0, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 	$button = $ui->newButton("Error Box");
 	$ui->buttonOnClicked($button, 'onMsgBoxErrorClicked', NULL);
 	$ui->gridAppend($msggrid, $button,
 		1, 0, 1, 1,
-		0, $ui->align('uiAlignFill'), 0, $ui->align('uiAlignFill'));
+		0, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 
 	return $hbox;
 }
