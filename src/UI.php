@@ -385,18 +385,7 @@ class UI
     }
 
     /**
-     *  @param array $data  init of time, below  is key list:
-     *                 int tm_sec;t
-     *                 int tm_min;
-     *                 int tm_hour;
-     *                 int tm_mday;
-     *                 int tm_mon;
-     *                 int tm_year;
-     *                 int tm_wday;
-     *                 int tm_yday; 
-     *                 int tm_isdst;
-     *                 int tm_gmtoff;
-     *                 string tm_zone;
+     *  @param bool $isPtr whether return pointer
      *               
      */
     public function newTm($isPtr = false)
