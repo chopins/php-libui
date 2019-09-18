@@ -8,15 +8,15 @@ main();
 function timeFormat($d)
 {
     global $dtboth,$dtdate, $dttime;
-	if ($d == $dtboth)
-		$fmt = "%c";
-	else if ($d == $dtdate)
-		$fmt = "%x";
-	else if ($d == $dttime)
-		$fmt = "%X";
-	else
+    if ($d == $dtboth)
+        $fmt = "%c";
+    else if ($d == $dtdate)
+        $fmt = "%x";
+    else if ($d == $dttime)
+        $fmt = "%X";
+    else
         $fmt = "";
-	return $fmt;
+    return $fmt;
 }
 
 function onChanged($d, $data)
@@ -36,97 +36,98 @@ function onChanged($d, $data)
 function onClicked($b, $data)
 {
     global $ui, $dtboth,$dtdate, $dttime;
-    try {
-    $t = FFI::new('int');
-   
-    $tmbuf = $ui->newTm(true);
-    $dataInt = $ui->cast('int*', $data);
-	$t = 0;
-	if ($now)
-		$t = time();
-    $tmbuf = localtime($t, true);
-	if ($now) {
-        $ui->dateTimePickerSetTime($dtdate, $tmbuf);
-        $ui->dateTimePickerSetTime($dttime, $tmbuf);
-	} else
-    $ui->dateTimePickerSetTime($dtboth, $tmbuf);
-} catch(Error $e) {
-    echo $e;
-} catch(Exception $e) {
-    echo $e;
-}
+    $tmbuf = $ui->newTm();
+    $t = 0;
+    if ($data !== null) {
+        $t = time();
+    }
+    $lt = localtime($t, true);
+    foreach($lt as $key => $v) {
+        $tmbuf->$key = $v;
+    }
+
+    if ($data !== null) {
+        $ui->dateTimePickerSetTime($dtdate, FFI::addr($tmbuf));
+        $ui->dateTimePickerSetTime($dttime, FFI::addr($tmbuf));
+    } else {
+        $ui->dateTimePickerSetTime($dtboth, FFI::addr($tmbuf));
+    }
 }
 
 function onClosing($w, $data) : int
 {
     global $ui, $dtboth,$dtdate, $dttime;
     $ui->quit();
-	return 1;
+    return 1;
 }
 
 function main() : int
 {
     global $ui, $dtboth,$dtdate, $dttime;
 
-	$err = $ui->init();
-	if ($err != NULL) {
-		fprintf("error initializing ui: %s\n", $err);
-		$ui->freeInitError($err);
-		return 1;
-	}
+    $err = $ui->init();
+    if ($err != NULL) {
+        fprintf("error initializing ui: %s\n", $err);
+        $ui->freeInitError($err);
+        return 1;
+    }
 
-	$w = $ui->newWindow("Date / Time", 320, 240, 0);
-	$ui->windowSetMargined($w, 1);
+    $w = $ui->newWindow("Date / Time", 320, 240, 0);
+    $ui->windowSetMargined($w, 1);
 
-	$g = $ui->newGrid();
+    $g = $ui->newGrid();
     $ui->gridSetPadded($g, 1);
     $ui->windowSetChild($w, $g);
 
-	$dtboth =$ui->newDateTimePicker();
-	$dtdate =$ui->newDatePicker();
-	$dttime =$ui->newTimePicker();
+    $dtboth =$ui->newDateTimePicker();
+    $dtdate =$ui->newDatePicker();
+    $dttime =$ui->newTimePicker();
 
     $time = $ui->new('struct tm*');
 
     $ui->gridAppend($g, $dtboth,
-		0, 0, 2, 1,
-		1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        0, 0, 2, 1,
+        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
     $ui->gridAppend($g, $dtdate,
-		0, 1, 1, 1,
-		1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        0, 1, 1, 1,
+        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
     $ui->gridAppend($g, $dttime,
-		1, 1, 1, 1,
-		1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        1, 1, 1, 1,
+        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
 
-	$l =$ui->newLabel("");
+    $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
-		0, 2, 2, 1,
-		1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        0, 2, 2, 1,
+        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
     $ui->dateTimePickerOnChanged($dtboth, 'onChanged', $l);
-	$l =$ui->newLabel("");
+    $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
-		0, 3, 1, 1,
-		1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        0, 3, 1, 1,
+        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
     $ui->dateTimePickerOnChanged($dtdate, 'onChanged', $l);
-	$l =$ui->newLabel("");
+    $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
-		1, 3, 1, 1,
-		1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        1, 3, 1, 1,
+        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
     $ui->dateTimePickerOnChanged($dttime, 'onChanged', $l);
 
-	$b =$ui->newButton("Now");
-    $ui->buttonOnClicked($b, 'onClicked',  FFI::cast('void *',1));
+    $b =$ui->newButton("Now");
+
+    $ui->buttonOnClicked($b, 'onClicked',  FFI::cast('void *', 1));
     $ui->gridAppend($g, $b,
-		0, 4, 1, 1,
-		1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
-	$b =$ui->newButton("Unix epoch");
-    $ui->buttonOnClicked($b, 'onClicked', FFI::cast('void *', 0));
+        0, 4, 1, 1,
+        1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
+
+    $b =$ui->newButton("Unix epoch");
+    $ui->buttonOnClicked($b, 'onClicked', FFI::cast('void*', 0));
     $ui->gridAppend($g, $b,
-		1, 4, 1, 1,
-		1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
+        1, 4, 1, 1,
+        1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
 
     $ui->windowOnClosing($w, 'onClosing', NULL);
     $ui->controlShow($w);
     $ui->main();
-	return 0;
+    return 0;
 }
+
+
