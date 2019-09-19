@@ -1,6 +1,5 @@
 <?php
 include dirname(__DIR__) . '/src/UI.php';
-
 $ui = new UI('/opt/libui/lib64/libui.so');
 $dtboth = $dtdate = $dttime = null;
 $time = $ui->newTm(true);
@@ -35,10 +34,11 @@ function onChanged($d, $data)
 
 function onClicked($b, $data)
 {
-    global $ui, $dtboth,$dtdate, $dttime;
+	global $ui, $dtboth,$dtdate, $dttime;
     $tmbuf = $ui->newTm();
-    $t = 0;
-    $now = !FFI::isNull($data);
+	$t = 0;
+
+    $now = $data !== null && !FFI::isNull($data) ;
     if ($now) {
         $t = time();
     }
@@ -52,7 +52,7 @@ function onClicked($b, $data)
         $ui->dateTimePickerSetTime($dttime, FFI::addr($tmbuf));
     } else {
         $ui->dateTimePickerSetTime($dtboth, FFI::addr($tmbuf));
-    }
+	}
 }
 
 function onClosing($w, $data) : int
@@ -119,7 +119,7 @@ function main() : int
         0, 4, 1, 1,
         1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
 
-    $b =$ui->newButton("Unix epoch");
+	$b =$ui->newButton("Unix epoch");
     $ui->buttonOnClicked($b, 'onClicked', FFI::cast('void*', 0));
     $ui->gridAppend($g, $b,
         1, 4, 1, 1,
