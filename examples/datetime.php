@@ -38,7 +38,8 @@ function onClicked($b, $data)
     global $ui, $dtboth,$dtdate, $dttime;
     $tmbuf = $ui->newTm();
     $t = 0;
-    if ($data !== null) {
+    $now = !FFI::isNull($data);
+    if ($now) {
         $t = time();
     }
     $lt = localtime($t, true);
@@ -46,7 +47,7 @@ function onClicked($b, $data)
         $tmbuf->$key = $v;
     }
 
-    if ($data !== null) {
+    if ($now) {
         $ui->dateTimePickerSetTime($dtdate, FFI::addr($tmbuf));
         $ui->dateTimePickerSetTime($dttime, FFI::addr($tmbuf));
     } else {
