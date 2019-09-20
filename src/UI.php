@@ -285,6 +285,142 @@ class UI
     const ALIGN_START = 1;
     const ALIGN_CENTER = 2;
     const ALIGN_END = 3;
+
+    const FOR_EACH_CONTINUE = 0;
+    const FOR_EACH_STOP = 1;
+
+    const WINDOW_RESIZE_EDGE_LEFT = 0;
+    const WINDOW_RESIZE_EDGE_TOP = 1;
+    const WINDOW_RESIZE_EDGE_RIGHT = 2;
+    const WINDOW_RESIZE_EDGE_BOTTOM = 3;
+    const WINDOW_RESIZE_EDGE_TOP_LEFT = 4;
+    const WINDOW_RESIZE_EDGE_TOP_RIGHT = 5;
+    const WINDOW_RESIZE_EDGE_BOTTOM_LEFT = 6;
+    const WINDOW_RESIZE_EDGE_BOTTOM_RIGHT = 7;
+
+    const DRAW_BRUSH_TYPE_SOLID = 0;
+    const DRAW_BRUSH_TYPE_LINEAR_GRADIENT = 1;
+    const DRAW_BRUSH_TYPE_RADIAL_GRADIENT = 2;
+    const DRAW_BRUSH_TYPE_IMAGE = 3;
+
+    const DRAW_LINE_CAP_FLAT = 0;
+    const DRAW_LINE_CAP_ROUND = 1;
+    const DRAW_LINE_CAP_SQUARE = 2;
+
+    const DRAW_LINE_JOIN_MITER = 0;
+    const DRAW_LINE_JOIN_ROUND = 1;
+    const DRAW_LINE_JOIN_BEVEL = 2;
+
+    const DRAW_FILL_MODE_WINDING = 0;
+    const DRAW_FILL_MODE_ALTERNATE = 1;
+
+    const ATTRIBUTE_TYPE_FAMILY = 0;
+    const ATTRIBUTE_TYPE_SIZE = 1;
+    const ATTRIBUTE_TYPE_WEIGHT = 2;
+    const ATTRIBUTE_TYPE_ITALIC = 3;
+    const ATTRIBUTE_TYPE_STRETCH = 4;
+    const ATTRIBUTE_TYPE_COLOR = 4;
+    const ATTRIBUTE_TYPE_BACKGROUND = 5;
+    const ATTRIBUTE_TYPE_UNDERLINE = 6;
+    const ATTRIBUTE_TYPE_UNDERLINE_COLOR = 7;
+    const ATTRIBUTE_TYPE_FEATURES = 8;
+
+    const TEXT_WEIGHT_MINIMUM = 0;
+    const TEXT_WEIGHT_THIN = 100;
+    const TEXT_WEIGHT_ULTRA_LIGHT = 200;
+    const TEXT_WEIGHT_LIGHT = 300;
+    const TEXT_WEIGHT_BOOK = 350;
+    const TEXT_WEIGHT_NORMAL = 400;
+    const TEXT_WEIGHT_MEDIUM = 500;
+    const TEXT_WEIGHT_SEMI_BOLD = 600;
+    const TEXT_WEIGHT_BOLD = 700;
+    const TEXT_WEIGHT_ULTRA_BOLD = 800;
+    const TEXT_WEIGHT_HEAVY = 900;
+    const TEXT_WEIGHT_ULTRA_HEAVY = 950;
+    const TEXT_WEIGHT_MAXIMUM = 1000;
+
+    const TEXT_ITALIC_NORMAL = 0;
+    const TEXT_ITALIC_OBLIQUE = 1;
+    const TEXT_ITALIC_ITALIC = 2;
+
+    const TEXT_STRETCH_ULTRA_CONDENSED = 0;
+    const TEXT_STRETCH_EXTRA_CONDENSED = 1;
+    const TEXT_STRETCH_CONDENSED = 2;
+    const TEXT_STRETCH_SEMI_CONDENSED = 3;
+    const TEXT_STRETCH_NORMAL = 4;
+    const TEXT_STRETCH_SEMI_EXPANDED = 5;
+    const TEXT_STRETCH_EXPANDED = 6;
+    const TEXT_STRETCH_EXTRA_EXPANDED = 7;
+    const TEXT_STRETCH_ULTRA_EXPANDED = 8;
+
+    const UNDERLINE_NONE = 0;
+    const UNDERLINE_SINGLE = 1;
+    const UNDERLINE_DOUBLE = 2;
+    const UNDERLINE_SUGGESTION = 3;
+
+    const UNDERLINE_COLOR_CUSTOM = 0;
+    const UNDERLINE_COLOR_SPELLING = 1;
+    const UNDERLINE_COLOR_GRAMMAR = 2;
+    const UNDERLINE_COLOR_AUXILIARY = 3;
+
+    const DRAW_TEXT_ALIGN_LEFT = 0;
+    const DRAW_TEXT_ALIGN_CENTER = 1;
+    const DRAW_TEXT_ALIGN_RIGHT = 2;
+
+    const MODIFIER_CTRL = 1 << 0;
+    const MODIFIER_ALT = 1 << 1;
+    const MODIFIER_SHIFT = 1 << 2;
+    const MODIFIER_SUPER = 1 << 3;
+
+    const EXT_KEY_ESCAPE = 1;
+    const EXT_KEY_INSERT = 2;
+    const EXT_KEY_DELETE = 3;
+    const EXT_KEY_HOME = 4;
+    const EXT_KEY_END = 5;
+    const EXT_KEY_PAGE_UP = 6;
+    const EXT_KEY_PAGE_DOWN = 7;
+    const EXT_KEY_UP = 8;
+    const EXT_KEY_DOWN = 9;
+    const EXT_KEY_LEFT = 10;
+    const EXT_KEY_RIGHT = 11;
+    const EXT_KEY_F1 = 12;
+    const EXT_KEY_F2 = 13;
+    const EXT_KEY_F3 = 14;
+    const EXT_KEY_F4 = 15;
+    const EXT_KEY_F5 = 16;
+    const EXT_KEY_F6 = 17;
+    const EXT_KEY_F7 = 18;
+    const EXT_KEY_F8 = 19;
+    const EXT_KEY_F9 = 20;
+    const EXT_KEY_F10 = 21;
+    const EXT_KEY_F11 = 22;
+    const EXT_KEY_F12 = 23;
+    const EXT_KEY_N0 = 24;
+    const EXT_KEY_N1 = 25;
+    const EXT_KEY_N2 = 26;
+    const EXT_KEY_N3 = 27;
+    const EXT_KEY_N4 = 28;
+    const EXT_KEY_N5 = 29;
+    const EXT_KEY_N6 = 30;
+    const EXT_KEY_N7 = 31;
+    const EXT_KEY_N8 = 32;
+    const EXT_KEY_N9 = 33;
+    const EXT_KEY_N_DOT = 34;
+    const EXT_KEY_N_ENTER = 35;
+    const EXT_KEY_N_ADD = 36;
+    const EXT_KEY_N_SUBTRACT = 37;
+    const EXT_KEY_N_MULTIPLY = 38;
+    const EXT_KEY_N_DIVIDE = 39;
+
+    const AT_LEADING = 0;
+    const AT_TOP = 1;
+    const AT_TRAILING = 2;
+    const AT_BOTTOM = 3;
+
+    const TABLE_VALUE_TYPE_STRING = 0;
+    const TABLE_VALUE_TYPE_IMAGE = 1;
+    const TABLE_VALUE_TYPE_INT = 2;
+    const TABLE_VALUE_TYPE_COLOR = 3;
     /**
      * @var FFI
      */
@@ -391,7 +527,7 @@ class UI
     public function newTm($isPtr = false)
     {
         $type =  self::$ffi->new('tm');
-        if(!$isPtr) {
+        if (!$isPtr) {
             return $type;
         }
         return FFI::addr($type);
