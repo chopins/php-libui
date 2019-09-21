@@ -20,11 +20,9 @@ const POINT_RADIUS =  5;
 const COLOR_WHITE = 0xFFFFFF;
 const COLOR_BLACK = 0x000000;
 const COLOR_DODGER_BLUE = 0x1E90FF;
-try {
+
 main();
-} catch(Error $e) {
-    echo $e;
-}
+
 // helper to quickly set a brush color
 function setSolidBrush($brush, $color,  $alpha)
 {
@@ -40,12 +38,12 @@ function setSolidBrush($brush, $color,  $alpha)
 }
 
 
-function pointLocations($width,  $height,  $xs,  $ys)
+function pointLocations($width,  $height,  &$xs,  &$ys)
 {
     global $ui, $datapoints;
 
-    $xincr = $width->cdata / 9;        // 10 - 1 to make the last point be at the end
-    $yincr = $height->cdata / 100;
+    $xincr = $width / 9;        // 10 - 1 to make the last point be at the end
+    $yincr = $height / 100;
 
     for ($i = 0; $i < 10; $i++) {
         // get the value of the point
@@ -60,8 +58,8 @@ function pointLocations($width,  $height,  $xs,  $ys)
 function constructGraph($width,  $height, $extend)
 {
     global $ui, $datapoints;
-    $xs = $ui->new('double[10]');
-    $ys = $ui->new('double[10]');
+    $xs = [];
+    $ys = [];
     pointLocations($width, $height, $xs, $ys);
 
     $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
@@ -71,8 +69,8 @@ function constructGraph($width,  $height, $extend)
         $ui->drawPathLineTo($path, $xs[$i], $ys[$i]);
 
     if ($extend) {
-        $ui->drawPathLineTo($path,$width->cdata, $height->cdata);
-        $ui->drawPathLineTo($path, 0, $height->cdata);
+        $ui->drawPathLineTo($path,$width, $height);
+        $ui->drawPathLineTo($path, 0, $height);
         $ui->drawPathCloseFigure($path);
     }
 
@@ -80,7 +78,7 @@ function constructGraph($width,  $height, $extend)
     return $path;
 }
 
-function graphSize($clientWidth,  $clientHeight,  $graphWidth,  $graphHeight)
+function graphSize($clientWidth,  $clientHeight,  &$graphWidth,  &$graphHeight)
 {
     $graphWidth = $clientWidth - X_OFF_LEFT - X_OFF_RIGHT;
     $graphHeight = $clientHeight - Y_OFF_TOP - Y_OFF_BOTTOM;
@@ -88,7 +86,7 @@ function graphSize($clientWidth,  $clientHeight,  $graphWidth,  $graphHeight)
 
 function handlerDraw($a, $area, $p)
 {
-    global $ui, $colorButton, $currentPoint;
+    global $ui, $handler, $mainwin, $colorButton, $histogram, $datapoints, $currentPoint;
     try {
         $brush = $ui->new('uiDrawBrush');
         $brushPtr = FFI::addr($brush);
@@ -97,10 +95,8 @@ function handlerDraw($a, $area, $p)
         $m = $ui->new('uiDrawMatrix');
         $mptr = FFI::addr($m);
         $spptr = FFI::addr($sp);
-        $graphHeight = $ui->new('double');
-        $graphHeightPtr = FFI::addr($graphHeight);
-        $graphWidth = $ui->new('double');
-        $graphWidthPtr = FFI::addr($graphWidth);
+        $graphHeight = 0;
+        $graphWidth = 0;
 
         $graphR = $ui->new('double');
         $graphG = $ui->new('double');
@@ -108,7 +104,7 @@ function handlerDraw($a, $area, $p)
         $graphA = $ui->new('double');
 
         // fill the area with white
-        setSolidBrush($brushPtr, COLOR_WHITE, 1.0);
+        setSolidBrush($brush, COLOR_WHITE, 1.0);
         $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
 
         $ui->drawPathAddRectangle($path, 0, 0, $p->AreaWidth, $p->AreaHeight);
@@ -117,7 +113,7 @@ function handlerDraw($a, $area, $p)
         $ui->drawFreePath($path);
 
         // figure out dimensions
-        graphSize($p->AreaWidth, $p->AreaHeight, $graphWidthPtr, $graphHeightPtr);
+        graphSize($p->AreaWidth, $p->AreaHeight, $graphWidth, $graphHeight);
 
         // clear sp to avoid passing garbage to $ui->drawStroke()
         // for example, we don't use dashing
@@ -140,12 +136,12 @@ function handlerDraw($a, $area, $p)
         $ui->drawPathLineTo(
             $path,
             X_OFF_LEFT,
-            Y_OFF_TOP + $graphHeight->cdata
+            Y_OFF_TOP + $graphHeight
         );
         $ui->drawPathLineTo(
             $path,
-            X_OFF_LEFT + $graphWidth->cdata,
-            Y_OFF_TOP + $graphHeight->cdata
+            X_OFF_LEFT + $graphWidth,
+            Y_OFF_TOP + $graphHeight
         );
         $ui->drawPathEnd($path);
         $ui->drawStroke($p->Context, $path, $brushPtr, $spptr);
@@ -178,8 +174,8 @@ function handlerDraw($a, $area, $p)
 
         // now draw the point being hovered over
         if ($currentPoint != -1) {
-            $xs = $ui->new('double[10]');
-            $ys = $ui->new('double[10]');
+            $xs = [];
+            $ys = [];
 
             pointLocations($graphWidth, $graphHeight, $xs, $ys);
             $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
@@ -214,14 +210,14 @@ function inPoint($x, $y, $xtest, $ytest)
 
 function handlerMouseEvent($a, $area, $e)
 {
-    global $ui, $currentPoint, $histogram;
-    try {
-    $graphWidth = $ui->new('double');
-    $graphHeight = $ui->new('double');
+    global $ui, $handler, $mainwin, $colorButton, $histogram, $datapoints, $currentPoint;
+
+    $graphWidth = 0;
+    $graphHeight = 0;
     $xs = $ui->new('double[10]');
     $ys = $ui->new('double[10]');
 
-    graphSize($e->AreaWidth, $e->AreaHeight, FFI::addr($graphWidth), FFI::addr($graphHeight));
+    graphSize($e->AreaWidth, $e->AreaHeight, $graphWidth, $graphHeight);
     pointLocations($graphWidth, $graphHeight, $xs, $ys);
 
     for ($i = 0; $i < 10; $i++)
@@ -233,9 +229,7 @@ function handlerMouseEvent($a, $area, $e)
     $currentPoint = $i;
     // TODO only redraw the relevant area
     $ui->areaQueueRedrawAll($histogram);
-    }catch(Error $e) {
-        echo $e;
-    }
+
 }
 
 function handlerMouseCrossed($ah, $a,  $left)
@@ -283,7 +277,7 @@ function shouldQuit($data): int
 
 function main(): int
 {
-    global $ui, $handler, $mainwin, $colorButton, $histogram, $datapoints;
+    global $ui, $handler, $mainwin, $colorButton, $histogram, $datapoints, $currentPoint;
 
     $brush = $ui->new('uiDrawBrush');
 

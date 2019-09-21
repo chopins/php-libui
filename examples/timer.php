@@ -6,7 +6,7 @@ main();
 function sayTime($data): int
 {
     global $ui, $e;
-    $s = date('D M d H:i:s Y');
+    $s = date('D M d H:i:s Y') . PHP_EOL;
     $ui->multilineEntryAppend($e, $s);
     return 1;
 }

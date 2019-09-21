@@ -109,8 +109,7 @@ function makeNumbersPage()
 function onOpenFileClicked($b, $data)
 {
     global $ui, $mainwin;
-    $entry = $ui->entry($data);
-
+    $entry = $data;
 
     $filename = $ui->openFile($mainwin);
     if ($filename == NULL) {
@@ -123,7 +122,7 @@ function onOpenFileClicked($b, $data)
 function onSaveFileClicked($b, $data)
 {
     global $ui, $mainwin;
-    $entry = $ui->entry($data);
+    $entry = $data;
     $filename = $ui->saveFile($mainwin);
     if ($filename == NULL) {
         $ui->entrySetText($entry, "(cancelled)");

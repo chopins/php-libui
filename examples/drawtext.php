@@ -91,7 +91,7 @@ function makeAttributedString()
 function handlerDraw($a, $area, $p)
 {
     global $ui, $fontButton, $attrstr, $alignment;
-    try {
+
     $defaultFont = FFI::addr($ui->new('uiFontDescriptor'));
     $params = $ui->new('uiDrawTextLayoutParams');
 
@@ -104,11 +104,6 @@ function handlerDraw($a, $area, $p)
     $ui->drawText($p->Context, $textLayout, 0, 0);
     $ui->drawFreeTextLayout($textLayout);
     $ui->freeFontButtonFont($defaultFont);
-    } catch(\Error $e) {
-        echo $e;
-    } catch(\Exception $e) {
-        echo $e;
-    }
 }
 
 function handlerMouseEvent($a, $area, $e)
@@ -161,7 +156,7 @@ function shouldQuit($data): int
 
 function main(): int
 {
-    global $ui, $handler, $mainwin, $alignment, $fontButton, $attrstr;
+    global $ui, $handler, $mainwin, $alignment, $fontButton, $attrstr, $area;
 
     $handler->Draw = 'handlerDraw';
     $handler->MouseEvent = 'handlerMouseEvent';
