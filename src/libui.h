@@ -197,10 +197,10 @@ extern  char *uiSaveFile(uiWindow *parent);
 extern  void uiMsgBox(uiWindow *parent, const char *title, const char *description);
 extern  void uiMsgBoxError(uiWindow *parent, const char *title, const char *description);
 typedef struct  uiControl uiArea ;
-typedef struct  uiControl uiAreaHandler ;
-typedef struct  uiControl uiAreaDrawParams ;
-typedef struct  uiControl uiAreaMouseEvent ;
-typedef struct  uiControl uiAreaKeyEvent ;
+typedef struct  uiAreaHandler uiAreaHandler ;
+typedef struct  uiAreaDrawParams uiAreaDrawParams ;
+typedef struct  uiAreaMouseEvent uiAreaMouseEvent ;
+typedef struct  uiAreaKeyEvent uiAreaKeyEvent ;
 typedef struct  uiControl uiDrawContext ;
 struct uiAreaHandler {
 	void (*Draw)(uiAreaHandler *, uiArea *, uiAreaDrawParams *);	void (*MouseEvent)(uiAreaHandler *, uiArea *, uiAreaMouseEvent *);	void (*MouseCrossed)(uiAreaHandler *, uiArea *, int left);
@@ -232,10 +232,10 @@ struct uiAreaDrawParams {
 	double ClipHeight;
 };
 typedef struct  uiControl uiDrawPath ;
-typedef struct  uiControl uiDrawBrush ;
-typedef struct  uiControl uiDrawStrokeParams ;
-typedef struct  uiControl uiDrawMatrix ;
-typedef struct  uiControl uiDrawBrushGradientStop ;
+typedef struct  uiDrawBrush uiDrawBrush ;
+typedef struct  uiDrawStrokeParams uiDrawStrokeParams ;
+typedef struct  uiDrawMatrix uiDrawMatrix ;
+typedef struct  uiDrawBrushGradientStop uiDrawBrushGradientStop ;
 typedef unsigned int uiDrawBrushType; enum {
 	uiDrawBrushTypeSolid,
 	uiDrawBrushTypeLinearGradient,
@@ -269,7 +269,8 @@ struct uiDrawBrush {
 	double G;
 	double B;
 	double A;	double X0;	double Y0;	double X1;	double Y1;	double OuterRadius;	uiDrawBrushGradientStop *Stops;
-	size_t NumStops;};
+	size_t NumStops;
+};
 struct uiDrawBrushGradientStop {
 	double Pos;
 	double R;

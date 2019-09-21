@@ -421,10 +421,19 @@ class UI
     const TABLE_VALUE_TYPE_IMAGE = 1;
     const TABLE_VALUE_TYPE_INT = 2;
     const TABLE_VALUE_TYPE_COLOR = 3;
+
+    const DRAW_DEFAULT_MITER_LIMIT = 10.0;
+    const TABLE_MODEL_COLUMN_NEVER_EDITABLE = -1;
+    const TABLE_MODEL_COLUMN_ALWAYS_EDITABLE = -2;
     /**
      * @var FFI
      */
     private static $ffi;
+
+    /**
+     * @var Struct
+     */
+    public $struct = null;
 
     /**
      * @param string $dll The libui dynamic link library path
@@ -433,6 +442,7 @@ class UI
     {
         $code = file_get_contents(__DIR__ . '/libui.h');
         self::$ffi  = FFI::cdef($code, $dll);
+        $this->struct = $this->struct();
     }
 
     /**
@@ -496,6 +506,11 @@ class UI
         return self::$ffi->new($type, $owned, $persistent);
     }
 
+    public function ptr($type, $owned = true, $persistent = false)
+    {
+        return self::$ffi->new("$type*", $owned, $persistent);
+    }
+
     /**
      * @return FFI\CType
      */
@@ -531,5 +546,19 @@ class UI
             return $type;
         }
         return FFI::addr($type);
+    }
+
+    public function struct()
+    {
+        static $isLoad = false;
+        static $struct = null;
+        if (!$isLoad) {
+            include __DIR__ . '/Struct.php';
+            $isLoad = true;
+        }
+        if ($struct === null) {
+            $struct = new Struct($this);
+        }
+        return $struct;
     }
 }
