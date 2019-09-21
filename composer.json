@@ -1,5 +1,5 @@
 {
-    "name": "php-libui",
+    "name": "phplibui",
     "description": "PHP bindings to the libui C library.",
     "keywords": ["ui", "php","ffi","libui"],
     "homepage": "http://toknot.com",
