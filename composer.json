@@ -1,0 +1,29 @@
+{
+    "name": "php-libui",
+    "description": "PHP bindings to the libui C library.",
+    "keywords": ["ui", "php","ffi","libui"],
+    "homepage": "http://toknot.com",
+    "license": "BSD-3-Clause",
+    "version" : "0.1",
+    "authors": [
+        {
+            "name": "Szopen Xiao",
+            "email": "xiao@toknot.com",
+            "homepage": "http://toknot.com",
+            "role": "Founder"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/chopins/php-libui/issues?state=open",
+        "source": "https://github.com/chopins/php-libui"
+    },
+    "require": {
+        "php": ">=7.4.0",
+        "ext-ffi" : "*"
+    },
+    "autoload" : {
+        "psr-4": {
+            "\\": "src/"
+        }
+    }
+}

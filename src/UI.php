@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Toknot (http://toknot.com)
+ * libui (http://toknot.com)
  *
  * @copyright  Copyright (c) 2011 - 2019 Toknot.com
  * @license    http://toknot.com/LICENSE.txt New BSD License
