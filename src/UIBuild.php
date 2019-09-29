@@ -5,9 +5,29 @@ class UIBuild
     public static $ui;
     protected $nodes = [];
     protected $win = null;
-    public function __construct($ui)
+    public static $defWinWidth = 800;
+    public static $defWinHeight = 640;
+    public static $defWinTitle = 'No Win Title';
+    public function __construct(UI $ui, array $config)
     {
+        if (!isset($config['body']) || !is_array($config['body'])) {
+            throw new \Exception('UI config must has \'body\' key and it is array');
+        }
         self::$ui = $ui;
+        $hasMenu = 0;
+        if (isset($config['menu'])) {
+            $hasMenu = 1;
+            $this->menu($config['menu']);
+        }
+        $this->window($config, $hasMenu);
+        foreach ($config['body'] as $tagName => $item) {
+            $this->createItem($tagName, $item);
+        }
+    }
+
+    public function getBodyTags()
+    {
+        return ['button', 'tab', 'text', 'checkbox', 'label', 'select', 'file', 'radio'];
     }
 
     public function getWin()
@@ -15,27 +35,110 @@ class UIBuild
         return $this->win;
     }
 
-    public function window($title, $width, $height, $hasMenu)
+    public function window($config, $hasMenu)
     {
         $err = self::$ui->init();
         if ($err) {
             throw new ErrorException($err);
         }
-        $this->win = self::$ui->newWindow($title, $width, $height, $hasMenu);
+        $config['title'] = $config['title'] ?? self::$defWinTitle;
+        $config['width'] = $config['width'] ?? self::$defWinWidth;
+        $config['height'] = $config['height'] ?? self::$defWinHeight;
+        $this->win = self::$ui->newWindow($config['title'], $config['width'], $config['height'], $hasMenu);
+        if (isset($config['border'])) {
+            self::$ui->windowSetBorderless($this->win, $config['border']);
+        }
+        if (isset($config['margin'])) {
+            self::$ui->windowSetMargined($config['margin']);
+        }
+        if (isset($config['quit'])) {
+            $this->bindEvent('quit', 'onShouldQuit', $config);
+        }
+        if (isset($config['close'])) {
+            $this->bindEvent('close', 'windowOnClosing', $config);
+        }
+        if(isset($config['resize'])) {
+            $this->bindEvent('resize', 'windowOnContentSizeChanged', $config);
+        }
         return $this->win;
     }
 
-    protected function recordNodes($node, $config)
+    public function bindEvent($event, $func, $config)
     {
-        $id = $config['id'] ?? null;
-        if ($id !== null) {
-            if (isset($this->nodes[$id])) {
-                throw new UiIDExistException("ID $id is exists of UI");
+        self::$ui->$func(function (...$params) use ($config, $event) {
+            try {
+                $call = $config[$event];
+                $config['callback_data'] = $config['callback_data'] ?? null;
+                array_pop($params);
+                $params[] = $config['callback_data'];
+                call_user_func_array($call, $params);
+            } catch (\Exception $e) {
+                echo $e;
+            } catch (\Error  $e) {
+                echo $e;
             }
-            $this->nodes[$id] = $node;
-        } else {
-            $this->nodes[] = $node;
+        }, 0);
+    }
+
+    public function winTitle($title = null)
+    {
+        if ($title === null) {
+            return self::$ui->windowTitle($this->win);
         }
+        self::$ui->windowSetTitle($title);
+    }
+
+    public function winBorder($border = null)
+    {
+        if ($border === null) {
+            return self::$ui->windowBorderless($this->win);
+        }
+        self::$ui->windowSetBorderless($this->win, $border);
+    }
+
+    public function winMargin($margin = null)
+    {
+        if ($margin === null) {
+            return self::$ui->windowMargined();
+        }
+        self::$ui->windowSetMargined($margin);
+    }
+
+    public function setChild($child)
+    {
+        self::$ui->windowSetChild($this->win, $child);
+    }
+
+    public function winSize($size = null)
+    {
+        if ($size === null) {
+            $w = self::$ui->ffi()->new('int*');
+            $h = self::$ui->ffi()->new('int*');
+            self::$ui->uiWindowContentSize($this->win, $w, $h);
+            return ['w' => $w->cdata, 'h' => $h->cdata];
+        }
+        self::$ui->windowSetContentSize($this->win, $size['w'], $size['h']);
+    }
+    public function fullscreen($isFull = null)
+    {
+        if ($isFull === null) {
+            return self::$ui->windowFullscreen($this->win);
+        }
+        return self::$ui->windowSetFullscreen($this->win, $isFull);
+    }
+
+    protected function newControl($node, $tag, $config)
+    {
+        $control =  new Control(self::$ui, $node, $config);
+        $control->setType($tag);
+        $id = $config['id'] ?? $control->getHandle();
+
+        if (isset($this->nodes[$id])) {
+            throw new UiIDExistException("ID $id is exists of UI");
+        }
+        $control->setId($id);
+        $this->nodes[$id] = $control;
+        return $control;
     }
 
     protected function buildSubMenu($parent, $menus)
@@ -47,17 +150,14 @@ class UIBuild
                 } else {
                     $nm = self::$ui->menuAppendItem($parent, $child['title']);
                 }
-                $this->recordNodes($nm, $child);
+                $this->newControl($nm, 'menu_item', $child);
                 if (isset($child['childs'])) {
                     $this->buildSubMenu($nm, $child['childs']);
                 }
                 if (isset($child['click'])) {
-                    self::$ui->menuItemOnClicked($nm, function ($menu, $win, $data) use ($child) {
-                        $call = $child['click'];
-                        $call($menu, $win, $child['callback_data']);
-                    }, $this->win, 0);
+                    $this->bindEvent('click', 'menuItemOnClicked', $child);
                 }
-            } else if ($child == 'sep') {
+            } else if ($child == 'hr') {
                 self::$ui->menuAppendSeparator($parent);
             }
         }
@@ -86,7 +186,7 @@ class UIBuild
     {
         foreach ($menus as  $item) {
             $nm = $this->newMenu($item['label']);
-            $this->recordNodes($nm, $item);
+            $this->newControl($nm, 'menu', $item);
             if (isset($item['childs'])) {
                 $this->buildSubMenu($nm, $item['childs']);
             }
@@ -113,14 +213,14 @@ class UIBuild
                         self::$ui->radioButtonsAppend($entry, $label);
                     }
                 }
-                if(isset($config['click'])) {
+                if (isset($config['click'])) {
                     $this->buttonClickCall($entry, 'radioButtonsOnSelected', null, $config);
                 }
             case 'text':
             default:
                 $entry = self::$ui->newEntry();
         }
-        $this->recordNodes($entry, $config);
+        $this->newControl($entry, 'input', $config);
         if ($config['readonly']) {
             self::$ui->entrySetReadOnly($entry, $config['readonly']);
         }
@@ -134,8 +234,9 @@ class UIBuild
         return self::$ui->buttonSetText($button, $text);
     }
 
-    public function radioSelect($radio, int $selected = -1) {
-        if($selected < 0) {
+    public function radioSelect($radio, int $selected = -1)
+    {
+        if ($selected < 0) {
             return self::$ui->radioButtonsSelected($radio);
         }
         return self::$ui->radioButtonsSetSelected($radio, $selected);
@@ -176,7 +277,7 @@ class UIBuild
                 }
         }
 
-        $this->recordNodes($button, $config);
+        $this->newControl($button, 'button', $config);
         return $button;
     }
 
@@ -235,7 +336,7 @@ class UIBuild
 
     public function getUINode($id)
     {
-        return $this->recordNodes[$id];
+        return $this->nodes[$id];
     }
 
     public function transformEventData($data)
@@ -252,47 +353,54 @@ class UIBuild
             case 'button':
                 return $this->button($config);
             case 'vbox':
-                $vbox =  self::$ui->newVerticalBox();
-                $this->recordNodes($vbox, $config);
-                self::$ui->boxSetPadded($vbox, $config['padded']);
-                $this->boxAppend($vbox, $config);
-                return $vbox;
+                $node =  self::$ui->newVerticalBox();
+                self::$ui->boxSetPadded($node, $config['padded']);
+                $this->boxAppend($node, $config);
+                break;
             case 'hbox':
-                $hbox = self::$ui->newHorizontalBox();
-                $this->recordNodes($hbox, $config);
-                self::$ui->boxSetPadded($hbox, $config['padded']);
-                $this->boxAppend($hbox, $config);
-                return $hbox;
+                $node = self::$ui->newHorizontalBox();
+                self::$ui->boxSetPadded($node, $config['padded']);
+                $this->boxAppend($node, $config);
+                break;
             case 'group':
-                $group = self::$ui->newGroup($config['title']);
-                $this->recordNodes($group, $config);
-                self::$ui->groupSetMargined($group, $config['margin']);
-                $this->groupAppend($group, $config);
-                return $group;
+                $node = self::$ui->newGroup($config['title']);
+                self::$ui->groupSetMargined($node, $config['margin']);
+                $this->groupAppend($node, $config);
+                break;
             case 'checkbox':
-                return self::$ui->newCheckbox($config['title']);
+                $node = self::$ui->newCheckbox($config['title']);
+                break;
             case 'label':
-                return self::$ui->newLabel($config['title']);
+                $node = self::$ui->newLabel($config['title']);
+                break;
             case 'hr':
-                return self::$ui->newHorizontalSeparator();
+                $node = self::$ui->newHorizontalSeparator();
+                break;
             case 'vr':
-                return self::$ui->newVerticalSeparator();
+                $node = self::$ui->newVerticalSeparator();
+                break;
             case 'input':
-                return $this->input($config);
+                $node = $this->input($config);
+                break;
             case 'form':
-                $form = $this->newForm();
-                $this->recordNodes($form, $config);
-                self::$ui->formSetPadded($form, $config['padded']);
-                $this->formAppend($form, $config);
-                return $form;
+                $node = $this->newForm();
+                self::$ui->formSetPadded($node, $config['padded']);
+                $this->formAppend($node, $config);
+                break;
             case 'grid':
-                $grid = self::$ui->newGrid();
-                $this->recordNodes($grid, $config);
-                self::$ui->gridSetPadded($grid, $config['padded']);
-                $this->gridAppend($grid, $config);
-                return $grid;
+                $node = self::$ui->newGrid();
+                self::$ui->gridSetPadded($node, $config['padded']);
+                $this->gridAppend($node, $config);
+                break;
+            case 'table':
+                $node = self::$ui->newTable();
+                break;
+            case 'select':
+                $node = self::$ui->newCombobox();
+                break;
             default:
-                return null;
+                throw new Exception("UI Control $name is invaild");
         }
+        return $this->newControl($node, $name, $config);
     }
 }

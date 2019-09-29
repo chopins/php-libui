@@ -438,11 +438,44 @@ class UI
     /**
      * @param string $dll The libui dynamic link library path
      */
-    public function __construct($dll)
+    public function __construct(string $dll = '')
     {
         $code = file_get_contents(__DIR__ . '/libui.h');
+        if (!$dll) {
+            $dll = $this->findDll();
+        }
         self::$ffi  = FFI::cdef($code, $dll);
         $this->struct = $this->struct();
+    }
+
+    protected function findDll()
+    {
+        switch (PHP_OS_FAMILY) {
+            case 'Linux':
+            case 'BSD':
+                $path = ['/usr/lib', '/usr/lib64', '/usr/local/lib', '/usr/local/lib64'];
+                foreach ($path as $p) {
+                    $path = "$p/libui.so";
+                    if (file_exists($path)) {
+                        return $path;
+                    }
+                }
+                break;
+            case 'Darwin':
+                $path = '/usr/lib/libui.dylib';
+                if (file_exists($path)) {
+                    return $path;
+                }
+                break;
+            case 'Windows':
+                $path = 'C:\Program Files\libui\libui.dll';
+                if (file_exists($path)) {
+                    return $path;
+                }
+                break;
+        }
+        $path = dirname(realpath($_SERVER['PHP_SELF'])) . DIRECTORY_SEPARATOR . 'libui.' . PHP_SHLIB_SUFFIX;
+        return $path;
     }
 
     /**
@@ -571,17 +604,8 @@ class UI
      *                          'body' => [
      *          ]
      */
-    public function build(array $config) {
-        $tag = ['window','menu', 'button', 'tab', 'text', 'checkbox', 'label', 'select', 'file', 'radio'];
-        $hasMenu = 0;
-        $build = new UIBuild($this);
-        if(isset($config['menu'])) {
-            $hasMenu = 1;
-            $build->menu($config['menu']);
-        }
-        $build->window($config['title'], $config['width'], $config['height'], $hasMenu);
-        foreach($config['body'] as $tagName => $item) {
-            $build->createItem($tagName, $item);
-        }
+    public function build(array $config)
+    {
+        return new UIBuild($this, $config);
     }
 }
