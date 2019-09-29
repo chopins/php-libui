@@ -9,10 +9,10 @@
  */
 
 /**
- * 
+ *
  * libui
  * All return C type is uiControll of CData instance
- * 
+ *
  * @method void freeInitError(const char *err);
  * @method void main(void);
  * @method void mainSteps(void);
@@ -447,7 +447,7 @@ class UI
 
     /**
      * most return FFI\CData of uiControl
-     * 
+     *
      * @return FFI\CData
      */
     public function __call($name, $arg = [])
@@ -479,7 +479,7 @@ class UI
 
     /**
      * init ui
-     * 
+     *
      * @return string
      */
     public function init()
@@ -490,7 +490,7 @@ class UI
     }
 
     /**
-     * 
+     *
      * @return FFI
      */
     public function ffi()
@@ -537,7 +537,7 @@ class UI
 
     /**
      *  @param bool $isPtr whether return pointer
-     *               
+     *
      */
     public function newTm($isPtr = false)
     {
@@ -560,5 +560,28 @@ class UI
             $struct = new Struct($this);
         }
         return $struct;
+    }
+
+    /**
+     * @param array $config  [
+     *                          'title' => 'title', 'width' => 100, 'height' => 100,
+     *                          'menu' => [
+     *                                       ['label' => 'menu_name', 'childs' => [], 'action' => '']
+     *                          ],
+     *                          'body' => [
+     *          ]
+     */
+    public function build(array $config) {
+        $tag = ['window','menu', 'button', 'tab', 'text', 'checkbox', 'label', 'select', 'file', 'radio'];
+        $hasMenu = 0;
+        $build = new UIBuild($this);
+        if(isset($config['menu'])) {
+            $hasMenu = 1;
+            $build->menu($config['menu']);
+        }
+        $build->window($config['title'], $config['width'], $config['height'], $hasMenu);
+        foreach($config['body'] as $tagName => $item) {
+            $build->createItem($tagName, $item);
+        }
     }
 }

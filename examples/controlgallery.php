@@ -4,7 +4,12 @@ include __DIR__ . '/loadui.php';
 $spinbox = $pbar = $spinbox = null;
 
 $err = $ui->init();
-
+$fileMenu = $ui->newMenu("File");
+$newItem = $ui->menuAppendItem($fileMenu, "New");
+$openItem = $ui->menuAppendItem($fileMenu, "Open");
+$ui->menuAppendSeparator($fileMenu);
+$shouldQuitItem = $ui->menuAppendCheckItem($fileMenu, "Should Quit");
+$quitItem = $ui->menuAppendQuitItem($fileMenu);
 $mainwin = $ui->newWindow("libui Control Gallery", 640, 480, 1);
 
 $ui->windowOnClosing($mainwin, 'onClosing', NULL);
@@ -233,7 +238,7 @@ function makeDataChoosersPage()
     $button = $ui->newButton("Save File");
     $entry = $ui->newEntry();
     $ui->entrySetReadOnly($entry, 1);
-    $ui->buttonOnClicked($button, 'onSaveFileClicked', $entry);
+	$ui->buttonOnClicked($button, 'onSaveFileClicked', $entry);
     $ui->gridAppend(
         $grid,
         $button,
