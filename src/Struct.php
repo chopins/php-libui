@@ -7,6 +7,8 @@
  * @link       https://github.com/chopins/php-libui
  */
 
+ namespace UI;
+
 class Struct
 {
     const STRUCT_MAP = [

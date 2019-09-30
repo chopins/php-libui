@@ -8,6 +8,11 @@
  * @link       https://github.com/chopins/php-libui
  */
 
+namespace UI;
+
+use UI\UIBuild;
+use FFI;
+
 /**
  *
  * libui
@@ -521,7 +526,10 @@ class UI
         FFI::memset(FFI::addr($o), 0, FFI::sizeof($o));
         return self::$ffi->uiInit(FFI::addr($o));
     }
-
+    public function string(FFI\Data $data)
+    {
+        return self::$ffi::string($data);
+    }
     /**
      *
      * @return FFI
@@ -596,13 +604,16 @@ class UI
     }
 
     /**
-     * @param array $config  [
-     *                          'title' => 'title', 'width' => 100, 'height' => 100,
+     * @param array $config  similar : [
+     *                          'title' => 'title', 'width' => 100, 'height' => 100,'border' => 0, 'margin' => 0,
+     *                          'quit' => 'quit_callable', 'close' => 'close_callable', 'resize' => 'resize_callable'
+     *                          'callback_data' => ['quit' => 'data', 'close' => 'data', 'resize' => 'data']
      *                          'menu' => [
-     *                                       ['label' => 'menu_name', 'childs' => [], 'action' => '']
-     *                          ],
+     *                                       ['label' => 'menu_name', 'childs' => [], 'click' => 'click_callable', 'callback_data' => 'data']
+     *                                     ],
      *                          'body' => [
-     *          ]
+     *                              'vbox' => ['padded' => 0, 'childs' => [....]]
+     *                          ]
      */
     public function build(array $config)
     {

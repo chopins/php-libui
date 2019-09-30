@@ -1,34 +1,57 @@
 <?php
 
-class Control
+namespace UI;
+
+use UI\UIBuild;
+
+abstract class Control
 {
-    private $type = '';
-    private $id = '';
-    private $instance = null;
-    private $attr = [];
-    private $title = '';
-    private static $ui;
+    protected $instance = null;
+    protected $attr = [];
+    protected $build = null;
 
-    public function __construct($ui, \FFI\CData $instance, array $attr)
+    /**
+     * @var UI\UI
+     */
+    protected static $ui;
+    public static $idKey = 'id';
+
+    public function __construct(UIBuild $build, array $attr)
     {
-        self::$ui = $ui;
-        $this->instance = $instance;
-        $this->title = $attr['title'];
+        $this->build = $build;
+        if (is_null(self::$ui)) {
+            self::$ui = $build->getUI();
+        }
+        $this->instance = $this->newControl();
         $this->attr = $attr;
+        self::$ui->appendNodes($this,  $this->attr[self::$idKey] ?? $this->getHandle());
     }
 
-    public function setType($type)
+    abstract public function newControl();
+
+    public function getAttr()
     {
-        $this->type = $type;
+        return $this->attr;
     }
 
-    public function getHandle() {
-        return self::$ui->uiControlHandle($this->instance);
-    }
-
-    public function setId($id)
+    public function getUI()
     {
-        $this->id = $id;
+        return self::$ui;
+    }
+
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    public function getUIInstance()
+    {
+        return $this->instance;
+    }
+
+    public function getHandle()
+    {
+        return $this->uiControlHandle();
     }
 
     public function __get($name)
@@ -36,52 +59,106 @@ class Control
         return $this->$name;
     }
 
+    public function __call($func, $args)
+    {
+        switch (count($args)) {
+            case 0:
+                return self::$ui->$func($this->instance);
+            case 1:
+                return self::$ui->$func($this->instance, $args[0]);
+            case 2:
+                return self::$ui->$func($this->instance, $args[0], $args[1]);
+            case 3:
+                return self::$ui->$func($this->instance, $args[0], $args[1], $args[2]);
+            case 4:
+                return self::$ui->$func($this->instance, $args[0], $args[1], $args[2], $args[3]);
+            default:
+                return call_user_func_array([self::$ui, $func], $args);
+        }
+    }
+
     public function show()
     {
-        self::$ui->controlShow($this->instance);
+        $this->controlShow();
     }
 
     public function hide()
     {
-        self::$ui->controlHide($this->instance);
+        $this->controlHide();
     }
 
     public function enable()
     {
-        self::$ui->controlEnable($this->instance);
+        $this->controlEnable();
     }
 
     public function disbale()
     {
-        self::$ui->controlDisable($this->instance);
+        $this->controlDisable();
     }
     public function destroy()
     {
-        self::$ui->controlDestroy($this->instance);
+        $this->controlDestroy();
     }
 
     public function parent()
     {
-        return self::$ui->controlParent($this->instance);
+        return $this->controlParent();
     }
 
     public function setParent($parent)
     {
-        self::$ui->controlSetParent($this->instance, $parent);
+        $this->controlSetParent($parent);
     }
 
     public function isVisible()
     {
-        return self::$ui->controlVisible($this->instance);
+        return $this->controlVisible();
     }
 
     public function isEnabled()
     {
-        return self::$ui->controlEnabled($this->instance);
+        return $this->controlEnabled();
     }
 
     public function getTopLevel()
     {
-        return self::$ui->controlToplevel($this->instance);
+        return $this->controlToplevel();
+    }
+
+    public function bindEvent($event, array $callable)
+    {
+        $this->$event($this->instance, function (...$params) use ($callable) {
+            $func = $callable[0];
+            $data = $callable[1] ?? null;
+            try {
+                switch (count($params)) {
+                    case 0:
+                        $func($data);
+                        break;
+                    case 1:
+                        $func($data);
+                        break;
+                    case 2:
+                        $func($params[0], $data);
+                        break;
+                    case 3:
+                        $func($params[0], $params[1], $data);
+                        break;
+                    case 4:
+                        $func($params[0], $params[1], $params[2], $data);
+                        break;
+                    default:
+                        array_pop($params);
+                        $params[] = $data;
+                        call_user_func_array($func, $params);
+                        break;
+                }
+            } catch (\Exception $e) {
+                echo $e;
+            } catch (\Error $e) {
+                echo $e;
+            }
+        }, null);
     }
 }
