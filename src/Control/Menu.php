@@ -5,6 +5,9 @@ namespace UI\Control;
 use UI\Control;
 use UI\Control\MenuItem;
 
+/**
+ * Create window menu
+ */
 class Menu extends Control
 {
     protected $childs = [];

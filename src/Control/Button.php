@@ -4,6 +4,9 @@ namespace UI\Control;
 
 use UI\Control;
 
+/**
+ * Create button,file,save-file,font,color by type in config
+ */
 class Button extends Control
 {
     public function newControl()

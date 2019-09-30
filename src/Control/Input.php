@@ -4,6 +4,9 @@ namespace UI\Control;
 
 use UI\Control;
 
+/**
+ * Create password,search,radio,select,checkbox,text
+ */
 class Input extends Control
 {
     public function newControl()
