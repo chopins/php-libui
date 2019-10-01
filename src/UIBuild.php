@@ -2,9 +2,14 @@
 
 namespace UI;
 
+use UI\Control\Box;
 use UI\Control\Button;
+use UI\Control\Form;
+use UI\Control\Grid;
+use UI\Control\Group;
 use UI\Control\Input;
 use UI\Control\Menu;
+use UI\Control\Table;
 use UI\Control\Window;
 use UI\UI;
 
@@ -32,7 +37,9 @@ class UIBuild
         }
         $this->window($config, $hasMenu);
         foreach ($config['body'] as $tagName => $item) {
-            $this->createItem($tagName, $item);
+            $item['parent'] = $this->win;
+            $control = $this->createItem($tagName, $item);
+            $this->win->setChild($control);
         }
     }
 
@@ -59,8 +66,7 @@ class UIBuild
     public function window($config, $hasMenu)
     {
         $config['hasMenu'] = $hasMenu;
-        $w = new Window($this, $config);
-        $this->win = $w->getUIInstance();
+        $this->win = new Window($this, $config);
         return $this->win;
     }
 
@@ -151,49 +157,32 @@ class UIBuild
     {
         switch ($name) {
             case 'button':
-                return $this->button($config);
-            case 'vbox':
-                $node =  self::$ui->newVerticalBox();
-                self::$ui->boxSetPadded($node, $config['padded']);
-                $this->boxAppend($node, $config);
-                break;
-            case 'hbox':
-                $node = self::$ui->newHorizontalBox();
-                self::$ui->boxSetPadded($node, $config['padded']);
-                $this->boxAppend($node, $config);
-                break;
+                return new Button($this, $config);
+            case 'box':
+                return new Box($this, $config);
             case 'group':
-                $node = self::$ui->newGroup($config['title']);
-                self::$ui->groupSetMargined($node, $config['margin']);
-                $this->groupAppend($node, $config);
-                break;
+                return new Group($this, $config);
             case 'label':
-                $node = self::$ui->newLabel($config['title']);
-                break;
+                return new Label($this, $config);
             case 'hr':
-                $node = self::$ui->newHorizontalSeparator();
-                break;
+                return self::$ui->newHorizontalSeparator();
             case 'vr':
-                $node = self::$ui->newVerticalSeparator();
-                break;
+                return self::$ui->newVerticalSeparator();
             case 'input':
-                $node = $this->input($config);
-                break;
+                return new Input($this, $config);
             case 'form':
-                $node = $this->newForm();
-                self::$ui->formSetPadded($node, $config['padded']);
-                $this->formAppend($node, $config);
-                break;
+                return new Form($this, $config);
             case 'grid':
-                $node = self::$ui->newGrid();
-                self::$ui->gridSetPadded($node, $config['padded']);
-                $this->gridAppend($node, $config);
-                break;
+                return new Grid($this, $config);
             case 'table':
-                $node = self::$ui->newTable();
+                return new Table($this, $config);
+            case 'tab':
+                $node = self::$ui -> newTab();
+                break;
+            case 'img':
                 break;
             default:
-                throw new Exception("UI Control $name is invaild");
+                throw new Exception("UI Control name $name is invaild");
         }
     }
 }

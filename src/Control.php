@@ -11,7 +11,7 @@ abstract class Control
     protected $build = null;
 
     /**
-     * @var UI\UI
+     * @var \UI\UI
      */
     protected static $ui;
     public static $idKey = 'id';

@@ -530,6 +530,11 @@ class UI
     {
         return self::$ffi::string($data);
     }
+
+    public function addr($data)
+    {
+        return self::$ffi::addr($data);
+    }
     /**
      *
      * @return FFI

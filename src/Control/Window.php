@@ -76,9 +76,10 @@ class Window extends Control
         $this->windowSetMargined($margin);
     }
 
-    public function setChild($child)
+    public function setChild(Control $child)
     {
-        $this->windowSetChild($child);
+        $uiControl = $child->getUIInstance();
+        $this->windowSetChild($uiControl);
     }
 
     public function winSize($size = null)

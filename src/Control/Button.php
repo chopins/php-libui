@@ -71,11 +71,43 @@ class Button extends Control
 
     public function getValue()
     {
-        return $this->buttonText();
+        if ($this->attr['type'] === 'font') {
+            $des = self::$ui->addr(self::$ui->new('uiFontDescriptor'));
+            $this->fontButtonFont($des);
+            $fonts = [
+                'family' => self::$ui::string($des[0]->Family),
+                'size' => $des[0]->Size,
+                'weight' => $des[0]->Weight,
+                'italic' => $des[0]->Italic,
+                'stretch' => $des[0]->Stretch,
+                'cdata' => $des
+            ];
+            return $fonts;
+        } elseif ($this->attr['type'] === 'color') {
+            $r = self::$ui->new('double*');
+            $g = self::$ui->new('double*');
+            $bl = self::$ui->new('double*');
+            $a = self::$ui->new('double*');
+            $this->colorButtonColor($r, $g, $bl, $a);
+            return [
+                'red' => $r[0], 'green' => $g[0], 'blue' => $bl[0], 'alpha' => $a[0]
+            ];
+        } else {
+            return $this->buttonText();
+        }
+    }
+
+    public function freeFont(array $fonts)
+    {
+        self::$ui->freeFontButtonFont($fonts['cdata']);
     }
 
     public function setValue($text)
     {
-        $this->buttonSetText($text);
+        if ($this->attr['type'] === 'font') { } elseif ($this->attr['type'] === 'color') {
+            $this->colorButtonSetColor($text['red'], $text['green'], $text['blue'], $text['alpha']);
+        } else {
+            $this->buttonSetText($text);
+        }
     }
 }
