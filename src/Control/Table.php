@@ -67,7 +67,8 @@ class Table extends Control
         $rowColData = $this->attr['tbody'][$row][$col];
         switch ($this->columnTypeList[$col]) {
             case self::$ui::TABLE_VALUE_TYPE_STRING:
-                return self::$ui->newTableValueString($rowColData);
+                $val =  self::$ui->newTableValueString($rowColData);
+                break;
             case self::$ui::TABLE_VALUE_TYPE_IMAGE:
                 $imgsrc = $rowColData['src'];
                 $key = $imgsrc;
@@ -80,18 +81,24 @@ class Table extends Control
                     $imgConfig['height'] = $rowColData['height'];
                     $key .= $imgConfig['height'];
                 }
-                $img = new Img($this->build, $imgConfig);
+
                 $imgId = \md5($key);
                 if (isset($this->imgsList[$imgId])) {
-                    return $this->imgsList[$imgId];
+                    $img = $this->imgsList[$imgId];
+                } else {
+                    $img = new Img($this->build, $imgConfig);
+                    $this->imgsList[$imgId] = $img;
                 }
-                $this->imgsList[$imgId] = $img;
-                return self::$ui->newTableValueImage($img->getUIInstance());
+                $val = self::$ui->newTableValueImage($img->getUIInstance());
+                break;
             case self::$ui::TABLE_VALUE_TYPE_INT:
-                return self::$ui->newTableValueInt($rowColData);
+                $val = self::$ui->newTableValueInt($rowColData);
+                break;
             case self::$ui::TABLE_VALUE_TYPE_COLOR:
-                return self::$ui->newTableValueColor($rowColData['r'], $rowColData['g'], $rowColData['b'], $rowColData['a']);
+                $val = self::$ui->newTableValueColor($rowColData['r'], $rowColData['g'], $rowColData['b'], $rowColData['a']);
+                break;
         }
+        return $val[0];
     }
     public function returnSetCellValue($mh, $tm, $row, $col, $val)
     {
