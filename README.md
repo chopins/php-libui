@@ -11,7 +11,7 @@ libui is a lightweight, portable GUI library that uses the native GUI technologi
 ### A Simple Example
 ```php
 include '/src/UI.php';
-$ui = new UI('/usr/lib64/libui.so');
+$ui = new \UI\UI('/usr/lib64/libui.so');
 $ui->init();
 $mainwin = $ui->newWindow("libui Control Gallery", 640, 480,1);
 $ui->controlShow($mainwin);
