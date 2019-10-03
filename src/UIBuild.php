@@ -9,6 +9,7 @@ use UI\Control\Grid;
 use UI\Control\Group;
 use UI\Control\Input;
 use UI\Control\Menu;
+use UI\Control\Separator;
 use UI\Control\Table;
 use UI\Control\Window;
 use UI\UI;
@@ -33,7 +34,7 @@ class UIBuild
         $hasMenu = 0;
         if (isset($config['menu'])) {
             $hasMenu = 1;
-            $this->menu($config['menu']);
+            new Menu($this, $config['menu']);
         }
         $this->window($config, $hasMenu);
         foreach ($config['body'] as $tagName => $item) {
@@ -48,9 +49,10 @@ class UIBuild
         return self::$ui;
     }
 
-    public function appendNodes($node, $id)
+    public function appendNodes(Control $control)
     {
-        $this->nodes[$id] = $node;
+        $id = $control->getAttr('id') ?? $control->getHandle();
+        $this->nodes[$id] = $control;
     }
 
     public function getBodyTags()
@@ -71,86 +73,9 @@ class UIBuild
     }
 
 
-    public function menu($menus)
-    {
-        return new Menu($this, $menus);
-    }
-
-    public function input($config)
-    {
-        return new Input($this, $config);
-    }
-
-
-    public function button($config)
-    {
-        return new Button($this, $config);
-    }
-
-    protected function nodeAppend($parent, $funcName, $config, $hasOption = true)
-    {
-        if (empty($config['childs'])) {
-            return;
-        }
-        foreach ($config['childs'] as $tag => $sub) {
-            $subNode = $this->createItem($tag, $sub);
-            if ($hasOption) {
-                $stretchy = empty($sub['fit']) ? 0 : 1;
-                self::$ui->$funcName($parent, $subNode, $stretchy);
-            } else {
-                self::$ui->$funcName($parent, $subNode);
-            }
-        }
-    }
-
-    protected function boxAppend($parent, $config)
-    {
-        $this->nodeAppend($parent, 'boxAppend', $config);
-    }
-
-    protected function formAppend($parent, $config)
-    {
-        $this->nodeAppend($parent, 'formAppend', $config);
-    }
-
-    protected function groupAppend($parent, $config)
-    {
-        $this->nodeAppend($parent, 'groupSetChild', $config, false);
-    }
-
-    protected function gridAppend($parent, $config)
-    {
-        if (empty($config['childs'])) {
-            return;
-        }
-        foreach ($config['childs'] as $tag => $sub) {
-            $subNode = $this->createItem($tag, $sub);
-            self::$ui->gridAppend(
-                $parent,
-                $subNode,
-                $sub['left'],
-                $sub['top'],
-                $sub['width'],
-                $sub['height'],
-                $sub['hexpand'] ?? 0,
-                $sub['halgin'],
-                $sub['vexpand'] ?? 0,
-                $sub['valign']
-            );
-        }
-    }
-
-    public function getUINode($id)
+    public function getUINode($id): Control
     {
         return $this->nodes[$id];
-    }
-
-    public function transformEventData($data)
-    {
-        if ($data['type'] === 'node') {
-            return $this->getUINode($data['value']);
-        }
-        return $data['value'];
     }
 
     public function createItem($name, $config = [])
@@ -165,9 +90,9 @@ class UIBuild
             case 'label':
                 return new Label($this, $config);
             case 'hr':
-                return self::$ui->newHorizontalSeparator();
+                return new Separator($this, ['type' => 'hr']);
             case 'vr':
-                return self::$ui->newVerticalSeparator();
+                return new Separator($this, ['type' => 'vr']);
             case 'input':
                 return new Input($this, $config);
             case 'form':
@@ -177,10 +102,9 @@ class UIBuild
             case 'table':
                 return new Table($this, $config);
             case 'tab':
-                $node = self::$ui -> newTab();
-                break;
+                return new Tabe($this, $config);
             case 'img':
-                break;
+                return new Img($this, $config);
             default:
                 throw new Exception("UI Control name $name is invaild");
         }

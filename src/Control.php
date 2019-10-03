@@ -24,13 +24,28 @@ abstract class Control
         }
         $this->instance = $this->newControl();
         $this->attr = $attr;
-        self::$ui->appendNodes($this,  $this->attr[self::$idKey] ?? $this->getHandle());
+        $this->build->appendNodes($this);
+        $this->pushChilds();
     }
 
     abstract public function newControl();
 
-    public function getAttr()
+    public function pushChilds()
     {
+        $this->attr['childs'] = $this->attr['childs'] ?? [];
+        foreach ($this->attr['childs'] as $key => $config) {
+            $control = $this->build->createItem($key, $config);
+            $this->addChilds($control);
+        }
+    }
+    public function addChilds(Control $childs)
+    { }
+
+    public function getAttr($key = null)
+    {
+        if ($key !== null) {
+            return $this->attr[$key];
+        }
         return $this->attr;
     }
 
@@ -51,7 +66,7 @@ abstract class Control
 
     public function getHandle()
     {
-        return $this->uiControlHandle();
+        return $this->controlHandle();
     }
 
     public function __get($name)

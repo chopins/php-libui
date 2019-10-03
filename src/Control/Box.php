@@ -18,6 +18,11 @@ class Box extends Control
         $this->boxSetPadded($this->attr['padded']);
     }
 
+    public function addChilds(\UI\Control $childs)
+    {
+        $fit = $childs->getAttr('fit');
+        $this->append($childs, $fit);
+    }
     public function setPadded(int $padded)
     {
         $this->boxSetPadded($padded);

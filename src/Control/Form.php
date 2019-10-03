@@ -12,6 +12,11 @@ class Form extends Control
         $this->setPadded($this->attr['padded']);
     }
 
+    public function addChilds(\UI\Control $childs)
+    {
+        $this->append($childs);
+    }
+
     public function setPadded(int $padded)
     {
         $this->formSetPadded($padded);

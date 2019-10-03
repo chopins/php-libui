@@ -15,6 +15,11 @@ class Group extends Control
         $this->setMargin($this->attr['margin']);
     }
 
+    public function addChilds(\UI\Control $childs)
+    {
+        $this->setChild($childs);
+    }
+
     public function setMargin(int $margin)
     {
         $this->groupSetMargined($margin);

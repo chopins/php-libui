@@ -17,6 +17,12 @@ class Grid extends Control
         $this->gridSetPadded($padded);
     }
 
+    public function addChilds(\UI\Control $childs)
+    {
+        $config = $childs->getAttr();
+        $this->append($childs, $config['left'], $config['top'], $config['width'], $config['height'], $config['hexpand'], $config['haligin'], $config['vexpand'], $config['valign']);
+    }
+
     public function getPadded()
     {
         return $this->gridPadded();
