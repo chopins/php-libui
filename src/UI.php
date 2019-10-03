@@ -610,16 +610,42 @@ class UI
     }
 
     /**
-     * @param array $config  similar : [
-     *                          'title' => 'title', 'width' => 100, 'height' => 100,'border' => 0, 'margin' => 0,
-     *                          'quit' => 'quit_callable', 'close' => 'close_callable', 'resize' => 'resize_callable'
-     *                          'callback_data' => ['quit' => 'data', 'close' => 'data', 'resize' => 'data']
-     *                          'menu' => [
-     *                                       ['label' => 'menu_name', 'childs' => [], 'click' => 'click_callable', 'callback_data' => 'data']
-     *                                     ],
-     *                          'body' => [
-     *                              'vbox' => ['padded' => 0, 'childs' => [....]]
-     *                          ]
+     * @param array $config  similar : 
+     * <code>
+     * [
+     *    'title' => 'title',
+     *    'width' => 100, 
+     *    'height' => 100,
+     *    'border' => 0,
+     *    'margin' => 0,
+     *    'quit' => ['quit_callable','data'], 
+     *    'close' => ['close_callable'], 
+     *    'resize' => ['resize_callable','data'],
+     *    'menu' => [
+     *                 [
+     *                    'title' => 'menu_name', 
+     *                  'childs' => [], 
+     *                  'click' => ['click_callable', 'callback_data'
+     *                 ]
+     *               ],
+     *    'body' => [
+     *        'box' => ['padded' => 0, 
+     *                'dir' => 'v',
+     *                'childs' => [....]],
+     *        'table' => [
+     *                    'th' => [
+     *                        ['title' => 'Colum1', 'idx' => 0, 'type' => 'text'],
+     *                         ['title' => 'Colum2', 'idx' => 1, 'type' => 'button'],
+     *                        ['title' => 'Colum3', 'idx' => 2, 'type' => 'text'],
+     *                   ],
+     *                   'tbody' => [
+     *                       [1, 'button0', 3],
+     *                       [1, 'button1', 3],
+     *                       [1, 'button2', 3]
+     *                   ],
+     *               ]
+     *    ]
+     * </code>
      */
     public function build(array $config)
     {
@@ -632,7 +658,7 @@ class UI
             $classInfo  = explode('\\', $class);
             array_shift($classInfo);
             array_unshift($classInfo, __DIR__);
-            $path  = join(DIRECTORY_SEPARATOR, $classInfo). '.php';
+            $path  = join(DIRECTORY_SEPARATOR, $classInfo) . '.php';
             if (file_exists($path)) {
                 include_once $path;
             }
