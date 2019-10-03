@@ -3,6 +3,7 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Table extends Control
 {
@@ -12,7 +13,8 @@ class Table extends Control
     protected $columnNum = 0;
     protected $columnTypeList = [];
     protected $imgsList = [];
-    public function newControl()
+    const DEF_FCOLOR = -1;
+    public function newControl(): CData
     {
         $this->columnNum = count($this->attr['th']);
         $this->rowNum = count($this->attr['tbody']);
@@ -20,18 +22,69 @@ class Table extends Control
         $this->model = self::$ui->newTableModel(self::$ui->addr($this->modelHandle));
         $param = self::$ui->new('uiTableParams');
         $param->Model = $this->model;
-        $param->RowBackgroundColorModelColumn = $this->attr['rowBgcolor'];
-        $this->instance = self::$ui->newTable(self::$ui->addr($param));
+        $param->RowBackgroundColorModelColumn = $this->attr['rowBgcolor'] ?? self::DEF_FCOLOR;
+        $this->initColumnType();
+        return self::$ui->newTable(self::$ui->addr($param));
+    }
+
+    public function pushChilds()
+    {
+
+        foreach ($this->attr['th'] as $index => $config) {
+            $idx = $config['idx'] ?? $index;
+            $editable = $config['editable'] ?? false;
+            $textColor = $config['textColor'] ?? self::DEF_FCOLOR;
+            $this->addColumn($config['title'], $idx, $config['type'], $editable, $textColor);
+        }
+    }
+
+    public function initColumnType()
+    {
+        foreach ($this->attr['th'] as $index => $config) {
+            $id = $config['idx'] ?? $index;
+            switch ($config['type']) {
+                case 'button':
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    break;
+                case 'image':
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
+                    break;
+                case 'imgtext':
+                    $this->columnTypeList[$id[0]] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
+                    $this->columnTypeList[$id[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    break;
+                case 'progress':
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
+                    break;
+                case 'checkbox':
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
+                    break;
+                case 'checkboxtext':
+                    if (is_array($id)) {
+                        $this->columnTypeList[$id[0]] = self::$ui::TABLE_VALUE_TYPE_INT;
+                        $this->columnTypeList[$id[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    } else {
+                        $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
+                    }
+                    break;
+                case 'color':
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_COLOR;
+                    break;
+                case 'text':
+                default:
+                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_STRING;
+            }
+        }
     }
 
     public function initModelHandler()
     {
         $this->modelHandle = self::$ui->new('uiTableModelHandler');
-        $this->modelHandle->NumColumns = [$this, 'returnColumnNum'];
-        $this->modelHandle->ColumnType = [$this, 'returnColumnType'];
-        $this->modelHandle->NumRows = [$this, 'returnRowNum'];
-        $this->modelHandle->CellValue = [$this, 'returnCellValue'];
-        $this->modelHandle->SetCellValue = [$this, 'returnSetCellValue'];
+        $this->modelHandle->NumColumns = [$this, 'columnNumCall'];
+        $this->modelHandle->ColumnType = [$this, 'columnTypeCall'];
+        $this->modelHandle->NumRows = [$this, 'rowNumCall'];
+        $this->modelHandle->CellValue = [$this, 'cellValueCall'];
+        $this->modelHandle->SetCellValue = [$this, 'setCellValueCall'];
     }
 
     public function changeRow($row)
@@ -49,26 +102,23 @@ class Table extends Control
         self::$ui->tableModelRowDeleted($this->model, $row);
     }
 
-    public function returnRowNum($mh, $tm)
+    public function rowNumCall($mh, $tm)
     {
         return $this->rowNum;
     }
-    public function returnColumnNum($mh, $tm)
+    public function columnNumCall($mh, $tm)
     {
         return $this->columnNum;
     }
 
-    public function returnColumnType($mh, $tm, $col)
+    public function columnTypeCall($mh, $tm, $col)
     {
         return $this->columnTypeList[$col];
     }
-    public function returnCellValue($mh, $tm, $row, $col)
+    public function cellValueCall($mh, $tm, $row, $col)
     {
         $rowColData = $this->attr['tbody'][$row][$col];
         switch ($this->columnTypeList[$col]) {
-            case self::$ui::TABLE_VALUE_TYPE_STRING:
-                $val =  self::$ui->newTableValueString($rowColData);
-                break;
             case self::$ui::TABLE_VALUE_TYPE_IMAGE:
                 $imgsrc = $rowColData['src'];
                 $key = $imgsrc;
@@ -97,14 +147,20 @@ class Table extends Control
             case self::$ui::TABLE_VALUE_TYPE_COLOR:
                 $val = self::$ui->newTableValueColor($rowColData['r'], $rowColData['g'], $rowColData['b'], $rowColData['a']);
                 break;
+            case self::$ui::TABLE_VALUE_TYPE_STRING:
+            default:
+                if (!is_string($rowColData)) {
+                    $rowColData = (string) $rowColData;
+                }
+                $val =  self::$ui->newTableValueString($rowColData);
+                break;
         }
-        return $val[0];
+        return $val;
     }
-    public function returnSetCellValue($mh, $tm, $row, $col, $val)
+    public function setCellValueCall($mh, $tm, $row, $col, $val)
     {
         $callback = $this->attr['change'][$row][$col];
         switch ($this->columnTypeList[$col]) {
-
             case self::$ui::TABLE_VALUE_TYPE_INT:
                 $value = self::$ui->tableValueInt($val);
                 break;
@@ -133,15 +189,15 @@ class Table extends Control
         $this->modelHandle->$key = $callable;
     }
 
-    public function addTh($title, $id, $type = 'text', $editable = false, $textColor = -1)
+    public function addTh($title, $id, $type = 'text', $editable = false, $textColor = self::DEF_FCOLOR)
     {
-        $this->addColumn($title, $id, $type = 'text', $editable = false, $textColor);
+        $this->addColumn($title, $id, $type, $editable, $textColor);
     }
 
-    public function addColumn($title, $id, $type = 'text', $editable = false, $textColor = -1)
+    public function addColumn(string $title, int $id, string $type = 'text', bool $editable = false, $textColor = self::DEF_FCOLOR)
     {
         $editable = $editable ? self::$ui::TABLE_MODEL_COLUMN_ALWAYS_EDITABLE : self::$ui::TABLE_MODEL_COLUMN_NEVER_EDITABLE;
-        $tp = null;
+        $tp = $tpPtr = null;
         if ($textColor >= 0) {
             $tp = self::$ui->new('uiTableTextColumnOptionalParams');
             $tp->ColorModelColumn = $textColor;
@@ -149,30 +205,22 @@ class Table extends Control
         }
         switch ($type) {
             case 'button':
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_STRING;
                 $this->tableAppendButtonColumn($title, $id, $editable);
                 break;
             case 'image':
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
                 $this->tableAppendImageColumn($title, $id);
                 break;
             case 'imgtext':
-                $this->columnTypeList[$id[0]] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
-                $this->columnTypeList[$id[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
                 $this->tableAppendImageTextColumn($title, $id[0], $id[1], $editable, $tpPtr);
                 break;
             case 'progress':
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
                 $this->tableAppendProgressBarColumn($title, $id);
                 break;
             case 'checkbox':
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
                 $this->tableAppendCheckboxColumn($title, $id, $editable);
                 break;
             case 'checkboxtext':
                 if (is_array($id)) {
-                    $this->columnTypeList[$id[0]] = self::$ui::TABLE_VALUE_TYPE_INT;
-                    $this->columnTypeList[$id[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
                     $this->uiTableAppendCheckboxTextColumn(
                         $title,
                         $id[0],
@@ -182,7 +230,6 @@ class Table extends Control
                         $tpPtr
                     );
                 } else {
-                    $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_INT;
                     $this->uiTableAppendCheckboxTextColumn(
                         $title,
                         $id,
@@ -191,11 +238,9 @@ class Table extends Control
                 }
                 break;
             case 'color':
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_COLOR;
                 break;
             case 'text':
             default:
-                $this->columnTypeList[$id] = self::$ui::TABLE_VALUE_TYPE_STRING;
                 $this->tableAppendTextColumn($title, $id, $editable, $tpPtr);
         }
     }

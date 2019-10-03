@@ -2,14 +2,16 @@
 
 namespace UI\Control;
 
+use FFI\CData;
 use UI\Control;
 
 class Grid extends Control
 {
-    public function newControl()
+    public function newControl(): CData
     {
         $this->instance = self::$ui->newGrid();
         $this->setPadded($this->attr['padded']);
+        return $this->instance;
     }
 
     public function setPadded(int $padded)
@@ -19,8 +21,7 @@ class Grid extends Control
 
     public function addChilds(\UI\Control $childs)
     {
-        $config = $childs->getAttr();
-        $this->append($childs, $config['left'], $config['top'], $config['width'], $config['height'], $config['hexpand'], $config['haligin'], $config['vexpand'], $config['valign']);
+        $this->append($childs, $this->attr['child_left'], $this->attr['child_top'], $this->attr['child_width'], $this->attr['child_height'], $this->attr['child_hexpand'], $this->attr['child_haligin'], $this->attr['child_vexpand'], $this->attr['child_valign']);
     }
 
     public function getPadded()

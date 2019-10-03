@@ -3,16 +3,18 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Group extends Control
 {
 
-    public function newControl()
+    public function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? '';
         $this->attr['margin'] = $this->attr['margin'] ?? 0;
         $this->instance = self::$ui->newGroup($this->attr['title']);
         $this->setMargin($this->attr['margin']);
+        return $this->instance;
     }
 
     public function addChilds(\UI\Control $childs)

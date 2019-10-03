@@ -2,8 +2,10 @@
 
 namespace UI\Control;
 
+use RuntimeException;
 use UI\Control;
 use UI\Control\MenuItem;
+use FFI\CData;
 
 /**
  * Create window menu
@@ -11,22 +13,21 @@ use UI\Control\MenuItem;
 class Menu extends Control
 {
     protected $childs = [];
-
-    public function newControl()
+    public function newControl(): CData
     {
-        foreach ($this->attr as  $item) {
-            $nm = $this->newMenu($item['label']);
-            $this->newControl($nm, 'menu', $item);
-            if (isset($item['childs'])) {
-                $this->buildSubMenu($nm, $item['childs']);
-            }
+        static $i = 0;
+        if (empty($this->attr['title'])) {
+            throw new RuntimeException('menu title can not empty');
         }
+        $this->attr['id'] =  $this->attr['id'] ?? '_win_menu_' . $i;
+        $i++;
+        return self::$ui->newMenu($this->attr['title']);
     }
 
-
-    public function buildSubMenu($parent, $menus)
+    public function pushChilds()
     {
-        foreach ($menus as $child) {
+        $this->attr['childs'] = $this->attr['childs'] ?? [];
+        foreach ($this->attr['childs'] as $child) {
             if (is_array($child)) {
                 $this->childs[] = $this->addMenuItem($child);
             } else if ($child == 'hr') {
@@ -38,7 +39,11 @@ class Menu extends Control
     public function addMenuItem($menus)
     {
         $menus['parent'] = $this;
-        return new MenuItem($this->build, $menus);
+        $menus['parent_id'] = $this->attr['id'];
+        $menus['idx'] = count($this->childs);
+        $item = new MenuItem($this->build, $menus);
+        $this->childs[] = $item;
+        return $item;
     }
 
     public function addSep()

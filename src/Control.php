@@ -3,6 +3,7 @@
 namespace UI;
 
 use UI\UIBuild;
+use FFI\CData;
 
 abstract class Control
 {
@@ -22,13 +23,13 @@ abstract class Control
         if (is_null(self::$ui)) {
             self::$ui = $build->getUI();
         }
-        $this->instance = $this->newControl();
         $this->attr = $attr;
+        $this->instance = $this->newControl();
         $this->build->appendNodes($this);
         $this->pushChilds();
     }
 
-    abstract public function newControl();
+    abstract public function newControl(): CData;
 
     public function pushChilds()
     {
@@ -44,7 +45,7 @@ abstract class Control
     public function getAttr($key = null)
     {
         if ($key !== null) {
-            return $this->attr[$key];
+            return $this->attr[$key] ?? null;
         }
         return $this->attr;
     }

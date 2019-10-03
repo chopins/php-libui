@@ -3,12 +3,12 @@
 namespace UI\Control;
 
 use UI\Control;
-
-class Table extends Control
+use FFI\CData;
+class Tab extends Control
 {
-    public function newControl()
+    public function newControl():CData
     {
-        $this->instance = self::$ui->newTab();
+        return self::$ui->newTab();
     }
 
     public function pushChilds()

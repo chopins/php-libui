@@ -451,6 +451,7 @@ class UI
         }
         self::$ffi  = FFI::cdef($code, $dll);
         $this->struct = $this->struct();
+        $this->autoload();
     }
 
     protected function findDll()
@@ -623,5 +624,18 @@ class UI
     public function build(array $config)
     {
         return new UIBuild($this, $config);
+    }
+
+    public function autoload()
+    {
+        spl_autoload_register(function ($class) {
+            $classInfo  = explode('\\', $class);
+            array_shift($classInfo);
+            array_unshift($classInfo, __DIR__);
+            $path  = join(DIRECTORY_SEPARATOR, $classInfo). '.php';
+            if (file_exists($path)) {
+                include_once $path;
+            }
+        });
     }
 }

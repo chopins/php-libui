@@ -3,13 +3,14 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 /**
  * Create button,file,save-file,font,color by type in config
  */
 class Button extends Control
 {
-    public function newControl()
+    public function newControl():CData
     {
         $type = $this->attr['type'] ?? null;
         $this->attr['click'] = $this->attr['click'] ?? null;

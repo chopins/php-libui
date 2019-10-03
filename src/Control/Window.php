@@ -3,18 +3,15 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Window extends Control
 {
     public static $defWinWidth = 800;
     public static $defWinHeight = 640;
     public static $defWinTitle = 'No Win Title';
-    public function newControl()
+    public function newControl():CData
     {
-        $err = self::$ui->init();
-        if ($err) {
-            throw new ErrorException($err);
-        }
         $this->attr['title'] = $this->attr['title'] ?? self::$defWinTitle;
         $this->attr['width'] = $this->attr['width'] ?? self::$defWinWidth;
         $this->attr['height'] = $this->attr['height'] ?? self::$defWinHeight;
@@ -34,6 +31,7 @@ class Window extends Control
         if (isset($this->attr['resize'])) {
             $this->onResize($this->attr['resize']);
         }
+        return $this->instance;
     }
 
     public function onQuit(array $callable)

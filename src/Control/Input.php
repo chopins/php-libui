@@ -3,13 +3,14 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 /**
  * Create password,search,radio,select,checkbox,text
  */
 class Input extends Control
 {
-    public function newControl()
+    public function newControl(): CData
     {
         $$this->attr['type'] = $this->attr['type'] ?? null;
         switch ($this->attr['type']) {
@@ -57,6 +58,7 @@ class Input extends Control
         if ($this->attr['readonly']) {
             $this->entrySetReadOnly($this->attr['readonly']);
         }
+        return $this->instance;
     }
 
     public function addOption($value)
@@ -75,7 +77,7 @@ class Input extends Control
             $v = $this->radioButtonsSelected();
         } elseif ($this->attr['type'] === 'textarea') {
             $v = $this->multilineEntryText();
-        } elseif($this->attr['type'] === 'select') {
+        } elseif ($this->attr['type'] === 'select') {
             $v = $this->comboboxSelected();
         } else {
             $v = $this->entryText();
@@ -89,7 +91,7 @@ class Input extends Control
             $this->checkboxSetText($v);
         } elseif ($this->attr['type'] === 'radio') {
             $this->radioButtonsSetSelected($v);
-        } elseif($this->attr['type'] === 'select') {
+        } elseif ($this->attr['type'] === 'select') {
             $v = $this->comboboxSetSelected();
         } elseif ($this->attr['type'] === 'textarea') {
             if (is_scalar($v)) {

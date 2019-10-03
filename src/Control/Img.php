@@ -3,10 +3,11 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Img extends Control
 {
-    public function newControl()
+    public function newControl(): CData
     {
         if (!empty($this->attr['src'][0])) {
             $size = \getimagesize($this->attr['src'][0]);
@@ -14,6 +15,7 @@ class Img extends Control
             $this->attr['height'] = $this->attr['height'] ?? $size[1];
         }
         $this->instance = self::$ui->newImage($this->attr['width'], $this->attr['height']);
+        return $this->instance;
     }
 
     public function free()

@@ -574,11 +574,12 @@ extern  void uiTableValueColor(const uiTableValue *v, double *r, double *g, doub
 typedef struct  uiControl uiTableModel ;
 typedef struct uiTableModelHandler uiTableModelHandler;
 
+typedef uiTableValue* uiTableValuePtr;
 struct uiTableModelHandler {
     int (*NumColumns)(uiTableModelHandler *, uiTableModel *);    
     uiTableValueType (*ColumnType)(uiTableModelHandler *, uiTableModel *, int);
     int (*NumRows)(uiTableModelHandler *, uiTableModel *);
-    uiTableValue (*CellValue)(uiTableModelHandler *mh, uiTableModel *m, int row, int column);
+    uiTableValuePtr (*CellValue)(uiTableModelHandler *mh, uiTableModel *m, int row, int column);
     void (*SetCellValue)(uiTableModelHandler *, uiTableModel *, int, int, const uiTableValue *);
 };
 extern  uiTableModel *uiNewTableModel(uiTableModelHandler *mh);

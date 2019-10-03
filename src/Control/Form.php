@@ -2,14 +2,16 @@
 
 namespace UI\Control;
 
+use FFI\CData;
 use UI\Control;
 
 class Form extends Control
 {
-    public function newControl()
+    public function newControl(): CData
     {
         $this->instance = self::$ui->newForm();
         $this->setPadded($this->attr['padded']);
+        return $this->instance;
     }
 
     public function addChilds(\UI\Control $childs)

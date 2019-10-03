@@ -3,10 +3,11 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Box extends Control
 {
-    public function newControl()
+    public function newControl():CData
     {
         $this->attr['dir'] = $this->attr['dir'] ?? 'h';
         $this->attr['padded'] = $this->attr['padded'] ?? 0;
@@ -16,11 +17,12 @@ class Box extends Control
             $this->instance = self::$ui->newHorizontalBox();
         }
         $this->boxSetPadded($this->attr['padded']);
+        return $this->instance;
     }
 
     public function addChilds(\UI\Control $childs)
     {
-        $fit = $childs->getAttr('fit');
+        $fit = $this->attr['child_fit'] ?? 0;
         $this->append($childs, $fit);
     }
     public function setPadded(int $padded)

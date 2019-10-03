@@ -3,12 +3,14 @@
 namespace UI\Control;
 
 use UI\Control;
+use FFI\CData;
 
 class Label extends Control
 {
-    public function newControl()
+    public function newControl(): CData
     {
         $this->instance = self::$ui->newLabel($this->attr['title']);
+        return $this->instance;
     }
     public function getTitle()
     {

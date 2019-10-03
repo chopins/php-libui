@@ -11,16 +11,21 @@ use UI\Control\Input;
 use UI\Control\Menu;
 use UI\Control\Separator;
 use UI\Control\Table;
+use UI\Control\Tab;
 use UI\Control\Window;
 use UI\UI;
 
 class UIBuild
 {
     /**
-     * @var UI\UI
+     * @var \UI\UI
      */
     protected static $ui = null;
     protected $nodes = [];
+
+    /**
+     * @var \UI\Control\Window
+     */
     protected $win = null;
 
     public function __construct(UI $ui, array $config)
@@ -31,16 +36,33 @@ class UIBuild
         if (is_null(self::$ui)) {
             self::$ui = $ui;
         }
+        $err = self::$ui->init();
+        if ($err) {
+            throw new ErrorException($err);
+        }
         $hasMenu = 0;
         if (isset($config['menu'])) {
             $hasMenu = 1;
-            new Menu($this, $config['menu']);
+            $this->menu($config['menu']);
         }
+
         $this->window($config, $hasMenu);
         foreach ($config['body'] as $tagName => $item) {
             $item['parent'] = $this->win;
             $control = $this->createItem($tagName, $item);
             $this->win->setChild($control);
+        }
+    }
+
+    public function show()
+    {
+        $this->win->show();
+        self::$ui->main();
+    }
+    public function menu($config)
+    {
+        foreach ($config as $menu) {
+            new Menu($this, $menu);
         }
     }
 
@@ -102,7 +124,7 @@ class UIBuild
             case 'table':
                 return new Table($this, $config);
             case 'tab':
-                return new Tabe($this, $config);
+                return new Tab($this, $config);
             case 'img':
                 return new Img($this, $config);
             default:
