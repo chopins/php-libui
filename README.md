@@ -79,6 +79,7 @@ The array level 1 of item element is one menu, similar:
 ```
 Top menu only contain `title`, `id`, `childs` , the `title` value will display in window, every element of `childs` array is submenu that display in drop-down menu. if element is string and equral `hr` will display a separator  
 __current Build UI Config of submenu only contain the following attr:__
+
 | key   | type          | Description                                                 | require |
 | ----- | ------------- | ----------------------------------------------------------- | ------- |
 | title | string        | menu title                                                  | yes     |
