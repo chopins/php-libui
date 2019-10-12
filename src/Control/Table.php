@@ -142,6 +142,7 @@ class Table extends Control
                 $val = self::$ui->newTableValueImage($img->getUIInstance());
                 break;
             case self::$ui::TABLE_VALUE_TYPE_INT:
+                $rowColData = (int) $rowColData;
                 $val = self::$ui->newTableValueInt($rowColData);
                 break;
             case self::$ui::TABLE_VALUE_TYPE_COLOR:

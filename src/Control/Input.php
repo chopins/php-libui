@@ -30,9 +30,6 @@ class Input extends Control
                         $this->radioButtonsAppend($label);
                     }
                 }
-                if (isset($this->attr['click'])) {
-                    $this->onClick($this->attr['click']);
-                }
                 break;
             case 'select':
                 $this->instance = self::$ui->newCombobox();
@@ -41,15 +38,9 @@ class Input extends Control
                         $this->comboboxAppend($label);
                     }
                 }
-                if (isset($this->attr['change'])) {
-                    $this->onChage($this->attr['change']);
-                }
                 break;
             case 'checkbox':
                 $this->instance = self::$ui->newCheckbox($this->attr['title']);
-                if (isset($this->attr['click'])) {
-                    $this->onClick($this->attr['click']);
-                }
                 break;
             case 'text':
             default:
@@ -57,6 +48,12 @@ class Input extends Control
         }
         if ($this->attr['readonly']) {
             $this->entrySetReadOnly($this->attr['readonly']);
+        }
+        if (isset($this->attr['change'])) {
+            $this->onChage($this->attr['change']);
+        }
+        if (isset($this->attr['click'])) {
+            $this->onClick($this->attr['click']);
         }
         return $this->instance;
     }
