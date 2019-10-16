@@ -1,41 +1,39 @@
-# [中文说明](README_zh.md)
 # php-libui
-PHP bindings to the [libui](https://github.com/andlabs/libui) C library.
+PHP 绑定 [libui](https://github.com/andlabs/libui) 的 C 库.
 
-libui is a lightweight, portable GUI library that uses the native GUI technologies of each platform it supports.
+libui 一个轻量级的且可移植的GUI库，其使用了原生的GUI技术为每一个平台提高支持
 
-### Requirements
+### 必须
 * PHP >= 7.4
-* PHP FFI extension available
-* libui latest version
+* PHP FFI 扩展可用
+* libui 最新版本
 
 ### A Simple Example
-first download libui dynamic library from https://github.com/andlabs/libui/releases or checkout source for self-build, then load in php code use following code
+首先从  https://github.com/andlabs/libui/releases 下载 libui 动态库，或者检出代码自行编译，然后使用后面例子的方法加载
 ```php
 include '/src/UI.php';
-$ui = new \UI\UI('/usr/lib64/libui.so'); //load libui dynamic library
+$ui = new \UI\UI('/usr/lib64/libui.so'); //加载 libui 动态库
 $ui->init();
 $mainwin = $ui->newWindow("libui Control Gallery", 640, 480,1);
 $ui->controlShow($mainwin);
 $ui->main();
 ```
+## 注意：访问libui C 函数时，函数名需去掉`ui`前缀，然后首字母小写
 
-## Note: When Call libui C function need remove `ui` prefix of name, then to lower case first char
+# 使用 UIBuild 创建UI
 
-# Use UIBuild create UI
-
-##  Basic Usage:
+##  基本用法:
 ```php
 include '/src/UI.php';
 $ui = new \UI\UI('/usr/lib64/libui.so');
-$config = ['title' => 'test', 'width' => 600,'height' => 450];
+$config = ['title' => 'test', 'width' => 600,'height' => 450];//UI 配置数组
 $build = $ui->build($config);
 $build->show();
 ```
 
-## bild config structure
+## 构建配置数组结构
 
-build config is array, main key contain `body`,`menu` and *window attribute key*; in config array, element key is attr name, element value is attr value,similar the following:
+构建配置数组第一层包含`body` `menu` 以及 window 属性；在配置数组中键为属性，值为属性值。 类似后面代码所展示的结构。
 ```php
 [
     'title' => 'window title name',
@@ -45,7 +43,7 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
 ]
 ```
 
-## window attribute key list:
+## window 属性列表:
 | key    | type          | Description     | Default Vlaue |
 | ------ | ------------- | --------------- | ------------- |
 | title  | string        | window title    | No Win Title  |
@@ -57,10 +55,10 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
 | close  | EventCallable | close callback  | null          |
 | resize | EventCallable | resize callback | null          |
 
-above table type `EventCallable` is php `array`, element 0 is `callable`, element 1 is pass to callable data of user. similar `['function_name', 'pass_data_string']`,  __Note: The doc of EventCallable type is same as this__
+上面的 `EventCallable` 类型实际上是 PHP 数组 `array` 类型, 其第0个元素是回调函数 `callable` 类型, 第一个元素是需要传给回调函数的数据. 结构类似 `['function_name', 'pass_data_string']`,  __注意: 本文档中的 EventCallable 类型都是如此__
 
-## menu array
-The array level 1 of item element is one menu, similar:
+## 菜单数组 menu
+这个数组中的每一个元素为一个菜单配置，结构类似：
 ```php
 [
     [
@@ -81,8 +79,8 @@ The array level 1 of item element is one menu, similar:
     ],
 ]
 ```
-Top menu only contain `title`, `id`, `childs` , the `title` value will display in window, every element of `childs` array is submenu that display in drop-down menu. if element is string and equral `hr` will display a separator
-__current Build UI Config of submenu only contain the following attr:__
+顶级菜单只有 `title`, `id`, `childs` 几个子键(属性), `title`值为菜单名,`childs`数组是子菜单即下拉菜单。如果`childs`的元素是字符串且等于`hr`将显示分割线
+__当前UI配置中的菜单只支持下面的属性:__
 
 | key   | type          | Description                                                 | require |
 | ----- | ------------- | ----------------------------------------------------------- | ------- |
@@ -90,30 +88,30 @@ __current Build UI Config of submenu only contain the following attr:__
 | type  | string        | menu type, value is `text` or `checkbox`, default is `text` | no      |
 | click | EventCallable | click callback                                              | no      |
 
-## body array
-every element key of `body` array is control config, the element key is control name and value is control config, __Build UI__ current only support the following control:
+## body 数组
+`body`数组的每一个元素为一个UI控件的配置，每一个元素键为控件名，值为配置，当前 __Build UI__ 配置只支持入如下控件名，
 
-1. `button`, Button control,contain the following attr:
-   1. `type`, control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:
+1. `button`, Button control,包含下面的属性:
+   1. `type`,  控件类型，类似HTML的`<button>`标签的`type`属性，可能值如下:
       1. `file`, open file button
       2. `save`, save file button
       3. `font`, select font button
       4. `color`, select color button
       5. `button`, is default value
    2. `title`, button label name
-   3. `chick`, it is `EventCallable`, when click callback, when type `file` and `save` is after select file call
+   3. `chick`, it is `EventCallable`, when click callback, 当`type`为 `file` 或 `save` 时，选择文件后会被调用，并会将文件名传给回调函数
    4. `change`,only when `color` and `font` available, select color or font be call
-2. `box` box layout,the following attr:
+2. `box` 盒布局 ,the following attr:
    1. `dir` layout direction, Specify one of `h` is horizontal and default value, `v` is vertical
    2. `padded`, padding value, `int` type, default is `0`
    3. `child_fit` Whether to automatically adapt
    4. `childs` sub control list
-3. `group` group layout, have `title` and `margin`, `childs` attr
-4. `label`  text control, only has `title` attr
-5. `hr`   horizontal separator, no attr
-6. `vr`   vertical separator, no attr
-7. `input`  input control, the following attr:
-   1. `type`, miliar HTML `<input>` tag of `type` attr, specify one of the following value:
+3. `group` 组布局, have `title` and `margin`, `childs` attr
+4. `label` 文本标签控件, only has `title` attr
+5. `hr`  水平分割线, no attr
+6. `vr`  垂直分割线, no attr
+7. `input`  输入类控件, the following attr:
+   1. `type`, 类似HTML的`<input>`标签的`type`属性，specify one of the following value:
       1. `password`  password entry control
       2. `search`   search entry control
       3. `textarea` multiline entry control
@@ -127,8 +125,8 @@ every element key of `body` array is control config, the element key is control 
    5. `change`, is `EventCallable`, exclude `checkbox` and `radio`
    6. `title`, `checkbox` available
    7. `click`, only `radio` and `checkbox` available
-8. `form`   form layout, has `padded`, `childs` attr
-9. `grid`   grid layout, the following attr:
+8. `form` 表单布局, has `padded`, `childs` attr
+9. `grid` 网格布局, the following attr:
     1. `padded`
     2. `child_left`
     3. `child_top`
@@ -139,7 +137,7 @@ every element key of `body` array is control config, the element key is control 
     8. `child_vexpand`
     9. `child_valign`
     10. `childs`
-10. `table`  table control, has following sub key :
+10. `table`  表格控件, has following sub key :
     1. `th`, is `array`, every element of value is array, key is id, has the following attr:
        1. `editable`, `bool` type, the column is whether editable
        2. `textColor`widthwidth
@@ -150,12 +148,12 @@ every element key of `body` array is control config, the element key is control 
        2. `color` type has `r`,`g`,`b`
     3. `rowBgcolor`
     4. `change` is `array`, every element is one row change callback list, column is `callable`
-11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
-12. `img`   image control, has flowing attr:
+11. `tab` 可切换页控件, has `page` sub array, `page` array every element value is page child control and key is page title
+12. `img` 图片控件， has flowing attr:
     1. `src` is image paths list, `array` type, every element value is image file path, key is natural order number
     2. `width`  the image control width, default is `src` first element image width
     3. `height` the image control heigth, default is `src` first element image width
-13. unsupport control must call libui C function by `UI\UI`
+13. 构建配置未支持控件使用`UI\UI`直接访问`libui` C 函数
 
 ## Control common method:
 * show()
