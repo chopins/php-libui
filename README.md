@@ -9,9 +9,10 @@ libui is a lightweight, portable GUI library that uses the native GUI technologi
 * libui latest version
 
 ### A Simple Example
+first download libui dynamic library from https://github.com/andlabs/libui/releases or checkout source for self-build, then load in php code use following code
 ```php
 include '/src/UI.php';
-$ui = new \UI\UI('/usr/lib64/libui.so');
+$ui = new \UI\UI('/usr/lib64/libui.so'); //load libui dynamic library
 $ui->init();
 $mainwin = $ui->newWindow("libui Control Gallery", 640, 480,1);
 $ui->controlShow($mainwin);
@@ -77,7 +78,7 @@ The array level 1 of item element is one menu, similar:
     ],
 ]
 ```
-Top menu only contain `title`, `id`, `childs` , the `title` value will display in window, every element of `childs` array is submenu that display in drop-down menu. if element is string and equral `hr` will display a separator  
+Top menu only contain `title`, `id`, `childs` , the `title` value will display in window, every element of `childs` array is submenu that display in drop-down menu. if element is string and equral `hr` will display a separator
 __current Build UI Config of submenu only contain the following attr:__
 
 | key   | type          | Description                                                 | require |
@@ -86,7 +87,7 @@ __current Build UI Config of submenu only contain the following attr:__
 | type  | string        | menu type, value is `text` or `checkbox`, default is `text` | no      |
 | click | EventCallable | click callback                                              | no      |
 
-## body array  
+## body array
 every element key of `body` array is node control name, __Build UI__ current only support the following control:
 
 1. `button`, Button control,contail the following attr:
@@ -113,7 +114,7 @@ every element key of `body` array is node control name, __Build UI__ current onl
       1. `password`  password entry control
       2. `search`   search entry control
       3. `textarea` multiline entry control
-      4. `radio`    radio 
+      4. `radio`    radio
       5. `select`   select
       6. `checkbox` checkbox
       7. `text`, is default value
