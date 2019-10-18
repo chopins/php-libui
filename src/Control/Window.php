@@ -2,9 +2,28 @@
 
 namespace UI\Control;
 
-use UI\Control;
 use FFI\CData;
+use UI\Control;
 
+/**
+ * @method void msgBox(string $title, string $msg)
+ * @method void msgBoxError(string $title, string $msg)  error box
+ * @method string openFile() open file box
+ * @method string saveFile() save file box
+ * @method string windowTitle()  get window title
+ * @method string windowSetTitle(string $title)   set window title
+ * @method void windowSetContentSize(int $width, int $height)
+ * @method int windowFullscreen()
+ * @method void windowSetFullscreen(int $fullscreen)
+ * @method void windowOnContentSizeChanged(callable $func, $data)
+ * @method void windowOnClosing(callable $func, $data)
+ * @method int windowBorderless()
+ * @method void windowSetBorderless(int $borderless)
+ * @method void windowSetChild(FFI\CData $child)
+ * @method int windowMargined()
+ * @method void windowSetMargined(int $margin)
+ * 
+ */
 class Window extends Control
 {
     public static $defWinWidth = 800;
@@ -47,6 +66,14 @@ class Window extends Control
     public function onResize(array $callable)
     {
         $this->bindEvent('windowOnContentSizeChanged', $callable);
+    }
+    
+    public function windowContentSize(int &$width, int &$height) {
+        $w = self::$ui->new('int*');
+        $h = self::$ui->new('int*');
+        self::$ui->windowContentSize($this->instance, $w, $h);
+        $width = $w[0];
+        $height = $h[0];
     }
 
 
