@@ -128,16 +128,20 @@ every element key of `body` array is control config, the element key is control 
    
 8. `form`   form layout, has `padded`, `childs` attr
 9. `grid`   grid layout, the following attr:
-    1. `padded`
-    2. `child_left`
-    3. `child_top`
-    4. `child_width`
-    5. `child_height`
-    6. `child_hexpand`
-    7. `child_haligin`
-    8. `child_vexpand`
-    9. `child_valign`
-    10. `childs`
+
+   | attr          | type          | Description        | require | 
+   | ------------- | ------------- | -------------------| ------- |
+   | padded        | int   |  | no |
+   | child_left    | int   |  | no |
+   | child_top     | int   |  | no |
+   | child_width   | int   |  | no |
+   | child_height  | int   |  | no |
+   | child_hexpand | int   |  | no |
+   | child_haligin | int   |  | no |
+   | child_vexpand | int   |  | no |
+   | child_valign  | int   |  | no |
+   | childs        | array |  | no |
+ 
 10. `table`  table control, has following sub key :
 
    | attr  | type    | Description                                                                             | require | 
