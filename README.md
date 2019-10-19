@@ -33,7 +33,7 @@ $build = $ui->build($config);
 $build->show();
 ```
 
-## bild config structure
+## build config structure
 
 build config is array, main key contain `body`,`menu` and *window attribute key*; in config array, element key is attr name, element value is attr value,similar the following:
 ```php
