@@ -94,39 +94,38 @@ __current Build UI Config of submenu only contain the following attr:__
 every element key of `body` array is control config, the element key is control name and value is control config, __Build UI__ current only support the following control:
 
 1. `button`, Button control,contain the following attr:
-   1. `type`, control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:
-      1. `file`, open file button
-      2. `save`, save file button
-      3. `font`, select font button
-      4. `color`, select color button
-      5. `button`, is default value
-   2. `title`, button label name
-   3. `chick`, it is `EventCallable`, when click callback, when type `file` and `save` is after select file call
-   4. `change`,only when `color` and `font` available, select color or font be call
+
+   | attr  | type          | Description                                                                             | require | 
+   | ----- | ------------- | --------------------------------------------------------------------------------------- | ------- |
+   | type  | string        | control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:<br />  1. `file`, open file button<br />2. `save`, save file button<br />3. `font`, select font button<br />4. `color`, select color button<br />5. `button`, is default value| yes     |
+   | title | string        | button label name                                                                       | yes     |
+   | click | EventCallable | when click callback, when type `file` and `save` is after select file call              | no      |
+   | change| EventCallable | only when `color` and `font` available, select color or font be call                    | no      |
+
 2. `box` box layout,the following attr:
-   1. `dir` layout direction, Specify one of `h` is horizontal and default value, `v` is vertical
-   2. `padded`, padding value, `int` type, default is `0`
-   3. `child_fit` Whether to automatically adapt
-   4. `childs` sub control list
+
+   | attr  | type          | Description                                                                             | require | 
+   | ----- | ------------- | --------------------------------------------------------------------------------------- | ------- |
+   | dir   | string        | layout direction, Specify one of `h` is horizontal and default value, `v` is vertical   | yes     |
+   | padded| int           | padding value,  default is `0`                                                          | no      |
+   | child_fit | int       |   Whether to automatically adapt  |  no |
+   | childs | array        | sub control list  | no |
 3. `group` group layout, have `title` and `margin`, `childs` attr
 4. `label`  text control, only has `title` attr
 5. `hr`   horizontal separator, no attr
 6. `vr`   vertical separator, no attr
 7. `input`  input control, the following attr:
-   1. `type`, miliar HTML `<input>` tag of `type` attr, specify one of the following value:
-      1. `password`  password entry control
-      2. `search`   search entry control
-      3. `textarea` multiline entry control
-      4. `radio`    radio
-      5. `select`   select
-      6. `checkbox` checkbox
-      7. `text`, is default value
-   2. `readonly`
-   3. `wrap`, only `textarea` is available, `bool` type, `false` is non wrapping textarea
-   4. `option`, `radio` and `select` available,`array` type, element value is option title, key is natural order number
-   5. `change`, is `EventCallable`, exclude `checkbox` and `radio`
-   6. `title`, `checkbox` available
-   7. `click`, only `radio` and `checkbox` available
+
+   | attr  | type          | Description                                                                             | require | 
+   | ----- | ------------- | --------------------------------------------------------------------------------------- | ------- |
+   | type  | string        |miliar HTML `<input>` tag of `type` attr, specify one of the following value:<br />1. `password`  password entry control<br />2. `search`   search entry control<br />3. `textarea` multiline entry control<br />4. `radio`    radio<br />5. `select`   select<br />6. `checkbox` checkbox<br />7. `text`, is default value  | yes |
+   | readonly | bool | whether readonly | no |
+   | wrap | bool | only `textarea` is available, `false` is non wrapping textarea  | no |
+   | option | array | `radio` and `select` available, element value is option title, key is natural order number | no |
+   | change | EventCallable | exclude `checkbox` and `radio` | no |
+   | title | string | `checkbox` available | yes |
+   | click | EventCallable | only `radio` and `checkbox` available | no |
+   
 8. `form`   form layout, has `padded`, `childs` attr
 9. `grid`   grid layout, the following attr:
     1. `padded`
@@ -140,21 +139,21 @@ every element key of `body` array is control config, the element key is control 
     9. `child_valign`
     10. `childs`
 10. `table`  table control, has following sub key :
-    1. `th`, is `array`, every element of value is array, key is id, has the following attr:
-       1. `editable`, `bool` type, the column is whether editable
-       2. `textColor`widthwidth
-       3. `title`
-       4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`
-    2. `tbody` is `array`, the table row value list, every element is one row value, when row of column is array has the following attr:
-       1. `image` type, has `src` `width` `height`
-       2. `color` type has `r`,`g`,`b`
-    3. `rowBgcolor`
-    4. `change` is `array`, every element is one row change callback list, column is `callable`
+
+   | attr  | type    | Description                                                                             | require | 
+   | ----- | ------- | --------------------------------------------------------------------------------------- | ------- |
+   | th    | array   | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text` | yes |
+   | tbody | array   | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes |
+   
 11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img`   image control, has flowing attr:
-    1. `src` is image paths list, `array` type, every element value is image file path, key is natural order number
-    2. `width`  the image control width, default is `src` first element image width
-    3. `height` the image control heigth, default is `src` first element image width
+
+   | attr  | type    | Description                                                                             | require | 
+   | ----- | ------- | --------------------------------------------------------------------------------------- | ------- |
+   | src   | array   | is image paths list, every element value is image file path, key is natural order number| yes     |
+   | width |  int    |  the image control width, default is `src` first element image width                 | no |
+   | height|  int    | the image control heigth, default is `src` first element image width                 | no |
+
 13. unsupport control must call libui C function by `UI\UI`
 
 ## Control common method:
