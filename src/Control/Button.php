@@ -10,7 +10,8 @@ use FFI\CData;
  */
 class Button extends Control
 {
-    public function newControl():CData
+    const CTL_NAME = 'button';
+    public function newControl(): CData
     {
         $type = $this->attr['type'] ?? null;
         $this->attr['click'] = $this->attr['click'] ?? null;

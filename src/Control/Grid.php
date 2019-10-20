@@ -7,6 +7,7 @@ use UI\Control;
 
 class Grid extends Control
 {
+    const CTL_NAME = 'grid';
     public function newControl(): CData
     {
         $this->instance = self::$ui->newGrid();
@@ -19,7 +20,7 @@ class Grid extends Control
         $this->gridSetPadded($padded);
     }
 
-    public function addChilds(\UI\Control $childs)
+    public function addChild(\UI\Control $childs)
     {
         $this->append($childs, $this->attr['child_left'], $this->attr['child_top'], $this->attr['child_width'], $this->attr['child_height'], $this->attr['child_hexpand'], $this->attr['child_haligin'], $this->attr['child_vexpand'], $this->attr['child_valign']);
     }

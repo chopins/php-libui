@@ -12,6 +12,7 @@ use FFI\CData;
  */
 class Menu extends Control
 {
+    const CTL_NAME = 'menu';
     protected $childs = [];
     public function newControl(): CData
     {
@@ -36,7 +37,12 @@ class Menu extends Control
         }
     }
 
-    public function addMenuItem($menus)
+    /**
+     * 
+     * @param array $menus
+     * @return MenuItem
+     */
+    public function addMenuItem(array $menus): \UI\MenuItem
     {
         $menus['parent'] = $this;
         $menus['parent_id'] = $this->attr['id'];

@@ -7,6 +7,7 @@ use FFI\CData;
 
 class Img extends Control
 {
+    const CTL_NAME = 'img';
     public function newControl(): CData
     {
         if (!empty($this->attr['src'][0])) {
@@ -23,11 +24,20 @@ class Img extends Control
         $this->freeImage();
     }
 
+    /**
+     * @param string $imgData  The image data
+     * @param int  $width
+     * @param int  $height
+     * @param int  $byteStride
+     */
     public function append($imgData, int $width, int $height, int $byteStride)
     {
         $this->imageAppend($imgData,  $width,  $height,  $byteStride);
     }
 
+    /**
+     * @param string $img  The image file path
+     */
     public function appendImg(string $img)
     {
         $size = \getimagesize($img);

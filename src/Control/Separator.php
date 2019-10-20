@@ -7,6 +7,7 @@ use FFI\CData;
 
 class Separator extends Control
 {
+    const CTL_NAME = 'sep';
     public function newControl(): CData
     {
         if ($this->attr['type'] == 'hr') {

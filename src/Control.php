@@ -25,7 +25,7 @@ abstract class Control
         }
         $this->attr = $attr;
         $this->instance = $this->newControl();
-        $this->build->appendNodes($this);
+        $this->build->appendControl($this);
         $this->pushChilds();
     }
 
@@ -36,10 +36,10 @@ abstract class Control
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         foreach ($this->attr['childs'] as $key => $config) {
             $control = $this->build->createItem($key, $config);
-            $this->addChilds($control);
+            $this->addChild($control);
         }
     }
-    public function addChilds(Control $childs)
+    public function addChild(Control $childs)
     { }
 
     public function getAttr($key = null)
@@ -144,7 +144,7 @@ abstract class Control
 
     public function bindEvent($event, array $callable)
     {
-        $this->$event($this->instance, function (...$params) use ($callable) {
+        $this->$event(function (...$params) use ($callable) {
             $func = $callable[0];
             $data = $callable[1] ?? null;
             try {

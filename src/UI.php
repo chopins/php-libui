@@ -443,9 +443,12 @@ class UI
     /**
      * @param string $dll The libui dynamic link library path
      */
-    public function __construct(string $dll = '')
+    public function __construct(string $dll = '', bool $new = false)
     {
-        $code = file_get_contents(__DIR__ . '/libui.h');
+        if(!$new && self::$ffi instanceof FFI) {
+            return self::$ffi;
+        }
+        $code = file_get_contents(__DIR__ . '/include/libui.h');
         if (!$dll) {
             $dll = $this->findDll();
         }

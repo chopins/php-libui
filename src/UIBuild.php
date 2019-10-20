@@ -13,6 +13,8 @@ use UI\Control\Separator;
 use UI\Control\Table;
 use UI\Control\Tab;
 use UI\Control\Window;
+use UI\Control\Datetime;
+use UI\Control\Progress;
 use UI\UI;
 
 class UIBuild
@@ -21,20 +23,28 @@ class UIBuild
      * @var \UI\UI
      */
     protected static $ui = null;
-    protected $nodes = [];
+    protected $controls = [];
+    protected $controlsName = [];
 
     /**
      * @var \UI\Control\Window
      */
     protected $win = null;
 
-    public function __construct(UI $ui, array $config)
+    public function __construct(UI $ui, array $config = [])
+    {
+        if (is_null(self::$ui)) {
+            self::$ui = $ui;
+        }
+        if ($config) {
+            $this->createMainWin($config);
+        }
+    }
+
+    public  function createMainWin($config)
     {
         if (!isset($config['body']) || !is_array($config['body'])) {
             throw new \Exception('UI config must has \'body\' key and it is array');
-        }
-        if (is_null(self::$ui)) {
-            self::$ui = $ui;
         }
         $err = self::$ui->init();
         if ($err) {
@@ -50,7 +60,7 @@ class UIBuild
         foreach ($config['body'] as $tagName => $item) {
             $item['parent'] = $this->win;
             $control = $this->createItem($tagName, $item);
-            $this->win->setChild($control);
+            $this->win->addChild($control);
         }
     }
 
@@ -71,10 +81,19 @@ class UIBuild
         return self::$ui;
     }
 
-    public function appendNodes(Control $control)
+    public function appendControl(Control $control)
     {
         $id = $control->getAttr('id') ?? $control->getHandle();
-        $this->nodes[$id] = $control;
+        $this->controls[$id] = $control;
+        $name = $control::CTL_NAME;
+        if($name == 'sep') {
+            $name = $control->getAttr('type');
+        }
+        if(isset($this->controlsName[$name])) {
+            $this->controlsName[$name][] = $control;
+        } else {
+            $this->controlsName[$name] = [$control];
+        }
     }
 
     public function getBodyTags()
@@ -82,11 +101,20 @@ class UIBuild
         return ['button', 'tab', 'text', 'checkbox', 'label', 'select', 'file', 'radio'];
     }
 
+    /**
+     * @return \UI\Control\Window
+     */
     public function getWin()
     {
         return $this->win;
     }
 
+    /**
+     * 
+     * @param array $config
+     * @param bool  $hasMenu
+     * @return \UI\Control\Window
+     */
     public function window($config, $hasMenu)
     {
         $config['hasMenu'] = $hasMenu;
@@ -94,10 +122,14 @@ class UIBuild
         return $this->win;
     }
 
-
-    public function getUINode($id): Control
+    public function getControlById($id): Control
     {
-        return $this->nodes[$id];
+        return $this->controls[$id];
+    }
+    
+    public function getCOntrolByName($name): array 
+    {
+        return $this->controlsName[$name] ?? [];
     }
 
     public function createItem($name, $config = [])
@@ -127,6 +159,10 @@ class UIBuild
                 return new Tab($this, $config);
             case 'img':
                 return new Img($this, $config);
+            case 'progress':
+                return new Progress($this, $config);
+            case 'datetime':
+                return new Datetime($this, $config);
             default:
                 throw new Exception("UI Control name $name is invaild");
         }

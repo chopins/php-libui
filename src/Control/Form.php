@@ -7,6 +7,7 @@ use UI\Control;
 
 class Form extends Control
 {
+    const CTL_NAME = 'form';
     public function newControl(): CData
     {
         $this->instance = self::$ui->newForm();
@@ -14,7 +15,7 @@ class Form extends Control
         return $this->instance;
     }
 
-    public function addChilds(\UI\Control $childs)
+    public function addChild(\UI\Control $childs)
     {
         $this->append($childs);
     }

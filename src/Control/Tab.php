@@ -4,9 +4,11 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+
 class Tab extends Control
 {
-    public function newControl():CData
+    const CTL_NAME = 'tab';
+    public function newControl(): CData
     {
         return self::$ui->newTab();
     }

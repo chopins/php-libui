@@ -7,7 +7,8 @@ use FFI\CData;
 
 class Box extends Control
 {
-    public function newControl():CData
+    const CTL_NAME = 'box';
+    public function newControl(): CData
     {
         $this->attr['dir'] = $this->attr['dir'] ?? 'h';
         $this->attr['padded'] = $this->attr['padded'] ?? 0;
@@ -20,7 +21,7 @@ class Box extends Control
         return $this->instance;
     }
 
-    public function addChilds(\UI\Control $childs)
+    public function addChild(\UI\Control $childs)
     {
         $fit = $this->attr['child_fit'] ?? 0;
         $this->append($childs, $fit);

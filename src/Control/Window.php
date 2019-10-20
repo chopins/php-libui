@@ -26,20 +26,21 @@ use UI\Control;
  */
 class Window extends Control
 {
+    const CTL_NAME = 'window';
     public static $defWinWidth = 800;
     public static $defWinHeight = 640;
     public static $defWinTitle = 'No Win Title';
-    public function newControl():CData
+    public function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? self::$defWinTitle;
         $this->attr['width'] = $this->attr['width'] ?? self::$defWinWidth;
         $this->attr['height'] = $this->attr['height'] ?? self::$defWinHeight;
         $this->instance = self::$ui->newWindow($this->attr['title'], $this->attr['width'], $this->attr['height'], $this->attr['hasMenu']);
         if (isset($this->attr['border'])) {
-            self::$ui->windowSetBorderless($this->instance, $this->attr['border']);
+            $this->windowSetBorderless($this->instance, $this->attr['border']);
         }
         if (isset($this->attr['margin'])) {
-            self::$ui->windowSetMargined($this->attr['margin']);
+            $this->windowSetMargined($this->attr['margin']);
         }
         if (isset($this->attr['quit'])) {
             $this->onQuit($this->attr['quit']);
@@ -67,8 +68,9 @@ class Window extends Control
     {
         $this->bindEvent('windowOnContentSizeChanged', $callable);
     }
-    
-    public function windowContentSize(int &$width, int &$height) {
+
+    public function windowContentSize(int &$width, int &$height)
+    {
         $w = self::$ui->new('int*');
         $h = self::$ui->new('int*');
         self::$ui->windowContentSize($this->instance, $w, $h);
@@ -101,7 +103,7 @@ class Window extends Control
         $this->windowSetMargined($margin);
     }
 
-    public function setChild(Control $child)
+    public function addChild(Control $child)
     {
         $uiControl = $child->getUIInstance();
         $this->windowSetChild($uiControl);

@@ -10,6 +10,7 @@ use FFI\CData;
  */
 class Input extends Control
 {
+    const CTL_NAME = 'input';
     public function newControl(): CData
     {
         $$this->attr['type'] = $this->attr['type'] ?? null;
@@ -32,16 +33,24 @@ class Input extends Control
                 }
                 break;
             case 'select':
-                $this->instance = self::$ui->newCombobox();
+                $this->instance = $this->attr['editable'] ? self::$ui->newEditableCombobox() : self::$ui->newCombobox();
                 if (isset($this->attr['option'])) {
+                    $selectFunc = $this->attr['editable'] ? 'editableComboboxAppend' : 'comboboxAppend';
                     foreach ($this->attr['option'] as $label) {
-                        $this->comboboxAppend($label);
+                        $this->$selectFunc($label);
                     }
                 }
                 break;
             case 'checkbox':
                 $this->instance = self::$ui->newCheckbox($this->attr['title']);
                 break;
+            case 'number':
+                $this->instance = self::$ui->newSpinbox($this->attr['min'], $this->attr['max']);
+                break;
+            case 'slider':
+                $this->attr['min'] = $this->attr['min'] ?? 0;
+                $this->attr['max'] = $this->attr['max'] ?? 100;
+                $this->instance = self::$ui->newSlider($this->attr['min'], $this->attr['max']);
             case 'text':
             default:
                 $this->instance = self::$ui->newEntry();
@@ -68,38 +77,53 @@ class Input extends Control
     }
     public function getValue()
     {
-        if ($this->attr['type'] === 'checkbox') {
-            $v = $this->checkboxText();
-        } elseif ($this->attr['type'] === 'radio') {
-            $v = $this->radioButtonsSelected();
-        } elseif ($this->attr['type'] === 'textarea') {
-            $v = $this->multilineEntryText();
-        } elseif ($this->attr['type'] === 'select') {
-            $v = $this->comboboxSelected();
-        } else {
-            $v = $this->entryText();
+        $isInt = false;
+        switch ($this->attr['type']) {
+            case 'checkbox':
+                $v = $this->checkboxText();
+                break;
+            case 'radio':
+                return $this->radioButtonsSelected();
+            case 'textarea':
+                $v = $this->multilineEntryText();
+                break;
+            case 'select':
+                return $this->attr['editable'] ? $this->editableComboboxText() : $this->comboboxSelected();
+            case 'number':
+                return $this->spinboxValue();
+            case 'slider':
+                return $this->sliderValue();
+            default:
+                $v = $this->entryText();
         }
         return self::$ui->string($v);
     }
 
     public function setValue($v)
     {
-        if ($this->attr['type'] === 'checkbox') {
-            $this->checkboxSetText($v);
-        } elseif ($this->attr['type'] === 'radio') {
-            $this->radioButtonsSetSelected($v);
-        } elseif ($this->attr['type'] === 'select') {
-            $v = $this->comboboxSetSelected();
-        } elseif ($this->attr['type'] === 'textarea') {
-            if (is_scalar($v)) {
-                $this->multilineEntrySetText($v);
-            } else {
-                foreach ($v as $c) {
-                    $this->multilineEntryAppend($c);
+        switch ($this->attr['type']) {
+            case 'checkbox':
+                return $this->checkboxSetText($v);
+            case 'radio':
+                return $this->radioButtonsSetSelected($v);
+            case 'select':
+                return $this->attr['editable'] ? $this->editableComboboxSetText($v) : $this->comboboxSetSelected($v);
+            case 'number':
+                return $this->spinboxSetValue($v);
+            case 'slider':
+                return $this->sliderSetValue($v);
+            case 'textarea':
+                if (is_scalar($v)) {
+                    $this->multilineEntrySetText($v);
+                } else {
+                    foreach ($v as $c) {
+                        $this->multilineEntryAppend($c);
+                    }
                 }
-            }
-        } else {
-            $this->entrySetText($v);
+                return;
+            case 'text':
+            default:
+                return $this->entrySetText($v);
         }
     }
 
@@ -158,15 +182,19 @@ class Input extends Control
     {
         switch ($this->attr['type']) {
             case 'textarea':
-                $this->bindEvent('multilineEntryOnChanged', $callable);
-                break;
+                return $this->bindEvent('multilineEntryOnChanged', $callable);
             case 'radio' || 'checkbox':
-                break;
+                return;
+            case 'slider':
+                return $this->bindEvent('sliderOnChanged', $callable);
             case 'select':
-                $this->bindEvent('comboboxOnSelected', $callable);
-                break;
+                $event = $this->attr['editable'] ? 'editableComboboxOnChanged' : 'comboboxOnSelected';
+                $this->bindEvent($event, $callable);
+                return;
+            case 'number':
+                return $this->bindEvent('spinboxOnChanged', $callable);
             default:
-                $this->bindEvent('uiEntryOnChanged', $callable);
+                return $this->bindEvent('entryOnChanged', $callable);
         }
     }
 

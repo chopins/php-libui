@@ -7,6 +7,7 @@ use FFI\CData;
 
 class Table extends Control
 {
+    const CTL_NAME = 'table';
     protected $model = null;
     protected $modelHandle = null;
     protected $rowNum = 0;
