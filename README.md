@@ -152,21 +152,21 @@ every element key of `body` array is control config, the element key is control 
  
 10. `table`  table control, has following sub key :
 
-   | attr  | type   | Description                                                                                                                                                                                                                                                                                                               | require |
-   | ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-   | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`                            | yes     |
-   | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes     |
-   | id    | string |                                                                                                                                                                                                                                                                                                                           | no      |
+    | attr  | type   | Description                                                                                                                                                                                                                                                                                                               | require |
+    | ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+    | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`                            | yes     |
+    | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes     |
+    | id    | string |                                                                                                                                                                                                                                                                                                                           | no      |
    
 11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img`   image control, has flowing attr:
 
-   | attr   | type   | Description                                                                              | require |
-   | ------ | ------ | ---------------------------------------------------------------------------------------- | ------- |
-   | src    | array  | is image paths list, every element value is image file path, key is natural order number | yes     |
-   | width  | int    | the image control width, default is `src` first element image width                      | no      |
-   | height | int    | the image control heigth, default is `src` first element image width                     | no      |
-   | id     | string |                                                                                          | no      |
+    | attr   | type   | Description                                                                              | require |
+    | ------ | ------ | ---------------------------------------------------------------------------------------- | ------- |
+    | src    | array  | is image paths list, every element value is image file path, key is natural order number | yes     |
+    | width  | int    | the image control width, default is `src` first element image width                      | no      |
+    | height | int    | the image control heigth, default is `src` first element image width                     | no      |
+    | id     | string |                                                                                          | no      |
 
 13. `datetime` datetime control
     
