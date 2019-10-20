@@ -42,7 +42,7 @@ class Menu extends Control
      * @param array $menus
      * @return MenuItem
      */
-    public function addMenuItem(array $menus): \UI\MenuItem
+    public function addMenuItem(array $menus): MenuItem
     {
         $menus['parent'] = $this;
         $menus['parent_id'] = $this->attr['id'];

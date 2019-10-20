@@ -105,11 +105,17 @@ abstract class Control
 
     public function enable()
     {
+        if (self::CTL_NAME === 'menu') {
+            return $this->menuItemEnable();
+        }
         $this->controlEnable();
     }
 
     public function disbale()
     {
+        if (self::CTL_NAME === 'menu') {
+            return $this->menuItemDisable();
+        }
         $this->controlDisable();
     }
     public function destroy()
