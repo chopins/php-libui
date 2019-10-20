@@ -13,7 +13,7 @@ class Input extends Control
     const CTL_NAME = 'input';
     public function newControl(): CData
     {
-        $$this->attr['type'] = $this->attr['type'] ?? null;
+        $this->attr['type'] = $this->attr['type'] ?? null;
         switch ($this->attr['type']) {
             case 'password':
                 $this->instance = self::$ui->newPasswordEntry();
@@ -33,6 +33,7 @@ class Input extends Control
                 }
                 break;
             case 'select':
+                $this->attr['editable'] = $this->attr['editable'] ?? 0;
                 $this->instance = $this->attr['editable'] ? self::$ui->newEditableCombobox() : self::$ui->newCombobox();
                 if (isset($this->attr['option'])) {
                     $selectFunc = $this->attr['editable'] ? 'editableComboboxAppend' : 'comboboxAppend';
@@ -55,7 +56,7 @@ class Input extends Control
             default:
                 $this->instance = self::$ui->newEntry();
         }
-        if ($this->attr['readonly']) {
+        if (isset($this->attr['readonly'])) {
             $this->entrySetReadOnly($this->attr['readonly']);
         }
         if (isset($this->attr['change'])) {
