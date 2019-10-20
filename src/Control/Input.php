@@ -153,7 +153,7 @@ class Input extends Control
         }
     }
 
-    public function check($checked = 1)
+    public function setCheck($checked = 1)
     {
         switch ($this->attr['type']) {
             case 'radio':
