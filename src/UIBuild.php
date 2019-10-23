@@ -2,6 +2,7 @@
 
 namespace UI;
 
+use UI\Control\Area;
 use UI\Control\Box;
 use UI\Control\Button;
 use UI\Control\Form;
@@ -110,7 +111,7 @@ class UIBuild
     }
 
     /**
-     * 
+     *
      * @param array $config
      * @param bool  $hasMenu
      * @return \UI\Control\Window
@@ -126,8 +127,8 @@ class UIBuild
     {
         return $this->controls[$id];
     }
-    
-    public function getCOntrolByName($name): array 
+
+    public function getCOntrolByName($name): array
     {
         return $this->controlsName[$name] ?? [];
     }
@@ -163,6 +164,8 @@ class UIBuild
                 return new Progress($this, $config);
             case 'datetime':
                 return new Datetime($this, $config);
+            case 'canvas':
+                return new Area($this, $config);
             default:
                 throw new Exception("UI Control name $name is invaild");
         }

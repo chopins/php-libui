@@ -17,16 +17,26 @@ abstract class Control
     protected static $ui;
     public static $idKey = 'id';
 
-    public function __construct(UIBuild $build, array $attr)
+    public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
         $this->build = $build;
         if (is_null(self::$ui)) {
             self::$ui = $build->getUI();
         }
         $this->attr = $attr;
-        $this->instance = $this->newControl();
+        if($instance === null) {
+            $this->instance = $this->newControl();
+        } else {
+            $this->instance = $instance;
+        }
         $this->build->appendControl($this);
         $this->pushChilds();
+    }
+
+    public static function uiControl(UIBuild $build, CData $control)
+    {
+        $ins  = new static($build, [], $control);
+        return $ins;
     }
 
     abstract public function newControl(): CData;

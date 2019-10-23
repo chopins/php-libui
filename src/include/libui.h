@@ -6,7 +6,7 @@ struct tm {
     int tm_mon;
     int tm_year;
     int tm_wday;
-    int tm_yday; 
+    int tm_yday;
     int tm_isdst;
     long int tm_gmtoff;
     const char *tm_zone;
@@ -18,21 +18,21 @@ typedef struct tm tm;
  * *****************************************************************************************************
  * Copyright (c) 2014 Pietro Gagliardi
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
- * associated documentation files (the "Software"), to deal in the Software without restriction, including 
- * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
- * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
  * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
- * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  * (this is called the MIT License or Expat License; see http://www.opensource.org/licenses/MIT)
  * *********************************************************************************************************
  */
@@ -227,10 +227,13 @@ typedef struct  uiAreaMouseEvent uiAreaMouseEvent ;
 typedef struct  uiAreaKeyEvent uiAreaKeyEvent ;
 typedef struct  uiControl uiDrawContext ;
 struct uiAreaHandler {
-    void (*Draw)(uiAreaHandler *, uiArea *, uiAreaDrawParams *);    void (*MouseEvent)(uiAreaHandler *, uiArea *, uiAreaMouseEvent *);    void (*MouseCrossed)(uiAreaHandler *, uiArea *, int left);
+    void (*Draw)(uiAreaHandler *, uiArea *, uiAreaDrawParams *);
+    void (*MouseEvent)(uiAreaHandler *, uiArea *, uiAreaMouseEvent *);
+    void (*MouseCrossed)(uiAreaHandler *, uiArea *, int left);
     void (*DragBroken)(uiAreaHandler *, uiArea *);
     int (*KeyEvent)(uiAreaHandler *, uiArea *, uiAreaKeyEvent *);
 };
+
 typedef unsigned int uiWindowResizeEdge; enum {
     uiWindowResizeEdgeLeft,
     uiWindowResizeEdgeTop,
@@ -248,7 +251,8 @@ extern  void uiAreaBeginUserWindowResize(uiArea *a, uiWindowResizeEdge edge);
 extern  uiArea *uiNewArea(uiAreaHandler *ah);
 extern  uiArea *uiNewScrollingArea(uiAreaHandler *ah, int width, int height);
 struct uiAreaDrawParams {
-    uiDrawContext *Context;    double AreaWidth;
+    uiDrawContext *Context;
+    double AreaWidth;
     double AreaHeight;
     double ClipX;
     double ClipY;
@@ -576,7 +580,7 @@ typedef struct uiTableModelHandler uiTableModelHandler;
 
 typedef uiTableValue* uiTableValuePtr;
 struct uiTableModelHandler {
-    int (*NumColumns)(uiTableModelHandler *, uiTableModel *);    
+    int (*NumColumns)(uiTableModelHandler *, uiTableModel *);
     uiTableValueType (*ColumnType)(uiTableModelHandler *, uiTableModel *, int);
     int (*NumRows)(uiTableModelHandler *, uiTableModel *);
     uiTableValuePtr (*CellValue)(uiTableModelHandler *mh, uiTableModel *m, int row, int column);
