@@ -41,16 +41,24 @@ class Path extends Control
     }
 
     /**
-     * Undocumented function
+     * stroke
      *
-     * @param CData $context
-     * @param Brush $brush
-     * @param StrokeParams $params
+     * @param CData $context    The param from callable function that is Area::draw($handler, $area, $params) passed $params['context']
+     * @param Brush $brush      is new UI\Control\Draw\Brush
+     * @param StrokeParams $params  is new UI\Control\Draw\StrokeParams
      * @return void
      */
     public function stroke(CData $context, Brush $brush, StrokeParams $params)
     {
-        $paramType = $params->getStruct();
+        $paramType = $params->getStrokeParams();
         self::$ui->drawStroke($context, $this->instance, self::$ui->addr($brush->getBrush()), self::$ui->addr($paramType));
+    }
+
+    public function newBrush() {
+        return new Brush($this->build);
+    }
+
+    public function newStrokeParams() {
+        return new StrokeParams($this->build);
     }
 }

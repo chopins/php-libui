@@ -19,7 +19,7 @@ class StrokeParams
     {
         self::$ui = $build->getUI();
     }
-    public function getStruct()
+    public function getStrokeParams()
     {
         $paramType = self::$ui->new('uiDrawStrokeParams');
         $paramType->Cap = $this->cap;
