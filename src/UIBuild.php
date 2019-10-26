@@ -26,6 +26,7 @@ class UIBuild
     protected static $ui = null;
     protected $controls = [];
     protected $controlsName = [];
+    protected $handles = [];
 
     /**
      * @var \UI\Control\Window
@@ -83,13 +84,15 @@ class UIBuild
 
     public function appendControl(Control $control)
     {
-        $id = $control->getAttr('id') ?? $control->getHandle();
+        $handle = $control->getHandle();
+        $this->handles[$handle] = $control;
+        $id = $control->getAttr('id') ?? $handle;
         $this->controls[$id] = $control;
         $name = $control::CTL_NAME;
-        if($name == 'sep') {
+        if ($name == 'sep') {
             $name = $control->getAttr('type');
         }
-        if(isset($this->controlsName[$name])) {
+        if (isset($this->controlsName[$name])) {
             $this->controlsName[$name][] = $control;
         } else {
             $this->controlsName[$name] = [$control];
@@ -127,9 +130,14 @@ class UIBuild
         return $this->controls[$id];
     }
 
-    public function getCOntrolByName($name): array
+    public function getControlByName($name): array
     {
         return $this->controlsName[$name] ?? [];
+    }
+
+    public function getControlByHandle($handle): Control
+    {
+        return $this->handles[$handle];
     }
 
     public function createItem($name, $config = [])

@@ -11,9 +11,9 @@ use FFI\CData;
  */
 abstract class Control
 {
-    protected $instance = null;
-    protected $attr = [];
-    protected $build = null;
+    protected CData $instance = null;
+    protected array $attr = [];
+    protected UIBuild $build = null;
 
     /**
      * @var \UI\UI

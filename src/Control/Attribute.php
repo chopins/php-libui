@@ -1,9 +1,10 @@
 <?php
 
-namespace UI\Control\Attribute;
+namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Control\OpenTypeFeatures;
 
 /**
  * @method int getType()
@@ -19,7 +20,7 @@ use FFI\CData;
  * @property-read float $green
  * @property-read float $blue
  * @property-read float $alpha
- * @property-read \UI\Control $control
+ * @property-read \UI\Control\OpenTypeFeatures $control
  * @property-read int $italic   specify of \UI\UI::TEXT_ITALIC_*
  * @property-read float $size
  * @property-read int $stretch  specify of \UI\UI::TEXT_STRETCH_*
@@ -44,7 +45,7 @@ class Attribute extends Control
                 $this->instance = self::$ui->newColorAttribute($this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
                 break;
             case self::$ui::ATTRIBUTE_TYPE_FEATURES:
-                $this->instance = self::$ui->newFeaturesAttribute($this->attr['control']);
+                $this->instance = self::$ui->newFeaturesAttribute($this->attr['control']->getUIInstance());
                 break;
             case self::$ui::ATTRIBUTE_TYPE_ITALIC:
                 $this->instance = self::$ui->newItalicAttribute($this->attr['italic']);
@@ -71,7 +72,7 @@ class Attribute extends Control
     public function __call($func, $args = [])
     {
         $func = 'attribute' . ucfirst($func);
-        return $this->__call($func, $args);
+        return parent::__call($func, $args);
     }
 
     public function color(&$r, &$g, &$b, &$a)
@@ -80,7 +81,7 @@ class Attribute extends Control
         $gptr = self::$ui->new('double*');
         $bptr = self::$ui->new('double*');
         $aptr = self::$ui->new('double*');
-        self::$ui->attributeColor($this->instance, $rptr, $gptr, $bptr, $aptr);
+        $this->attributeColor($rptr, $gptr, $bptr, $aptr);
         $r = $rptr[0];
         $g = $gptr[0];
         $b = $bptr[0];
@@ -93,11 +94,24 @@ class Attribute extends Control
         $gptr = self::$ui->new('double*');
         $bptr = self::$ui->new('double*');
         $aptr = self::$ui->new('double*');
-        self::$ui->attributeUnderlineColor($this->instance, $uptr, $rptr, $gptr, $bptr, $aptr);
+        $this->attributeUnderlineColor($uptr, $rptr, $gptr, $bptr, $aptr);
         $u = $uptr[0];
         $r = $rptr[0];
         $g = $gptr[0];
         $b = $bptr[0];
         $a = $aptr[0];
+    }
+
+    public  function features()
+    {
+        if ($this->attr['type'] === self::$ui::ATTRIBUTE_TYPE_FEATURES) {
+            $control = self::$ui->attributeFeatures();
+            $handle = self::$ui->controlHandle($control);
+            $open = $this->build->getControlByHandle($handle);
+            if ($open) {
+                return $open;
+            }
+            return new OpenTypeFeatures($this->build, [], $control);
+        }
     }
 }

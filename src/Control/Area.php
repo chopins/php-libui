@@ -8,6 +8,7 @@ use UI\Struct\Matrix;
 use UI\Control\Path;
 use UI\Struct\StrokeParams;
 use UI\Struct\Brush;
+use UI\Struct\TextLayoutParams;
 
 /**
  * @property-read string $type
@@ -220,6 +221,11 @@ class Area extends Control
         return new StrokeParams($this->build);
     }
 
+    public function newTextLayoutParams()
+    {
+        return new TextLayoutParams($this->build);
+    }
+
     public function drawfill(Path $path,  Brush $brush)
     {
         self::$ui->drawFill($this->context, $path->getUIInstance(), $brush->getBrush());
@@ -254,5 +260,10 @@ class Area extends Control
     public function drawRestore()
     {
         self::$ui->drawRestore($this->context);
+    }
+
+    public function drawText(DrawText $d, float $x, float $y)
+    {
+        self::$ui->drawText($this->context, $d->getUIInstance(), $x, $y);
     }
 }

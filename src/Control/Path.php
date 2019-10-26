@@ -30,7 +30,7 @@ class Path extends Control
 
     public function free()
     {
-        $this->drawFreePath($this->instance);
+        $this->drawFreePath();
     }
 
     public function __call($func, $args)
