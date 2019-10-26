@@ -19,8 +19,16 @@ use UI\Control;
 class Grid extends Control
 {
     const CTL_NAME = 'grid';
+
+    protected array $attrList = ['child_left', 'child_left', 'child_top',
+        'child_width', 'child_height', 'child_hexpand',
+        'child_haligin', 'child_vexpand', 'child_valign'];
+
     public function newControl(): CData
     {
+        foreach ($this->attrList as $k) {
+            $this->initAttr($this->attr, $k, 0);
+        }
         $this->instance = self::$ui->newGrid();
         $this->setPadded($this->attr['padded']);
         return $this->instance;
@@ -41,9 +49,21 @@ class Grid extends Control
         $this->gridSetPadded($padded);
     }
 
-    protected function addChild(\UI\Control $childs)
+    public function initAttr(&$arr, $key, $def = null, $defArr = [])
     {
-        $this->append($childs, $this->attr['child_left'], $this->attr['child_top'], $this->attr['child_width'], $this->attr['child_height'], $this->attr['child_hexpand'], $this->attr['child_haligin'], $this->attr['child_vexpand'], $this->attr['child_valign']);
+        if ($def === null) {
+            $arr[$key] = $arr[$key] ?? $defArr[$key];
+        } else {
+            $arr[$key] = $arr[$key] ?? $def;
+        }
+    }
+
+    protected function addChild(Control $childs, $option = [])
+    {
+        foreach ($this->attrList as $k) {
+            $this->initAttr($option, $k, null, $this->attr);
+        }
+        $this->append($childs, $option['child_left'], $option['child_top'], $option['child_width'], $option['child_height'], $option['child_hexpand'], $option['child_haligin'], $option['child_vexpand'], $option['child_valign']);
     }
 
     public function getPadded()
@@ -64,4 +84,5 @@ class Grid extends Control
         $this->gridInsertAt($ui, $eui, $at, $xspan, $yspan, $hexpand, $halign, $vexpand, $valign);
         $this->updateChildsList($child);
     }
+
 }

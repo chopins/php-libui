@@ -16,6 +16,12 @@ use UI\Control\Tab;
 use UI\Control\Window;
 use UI\Control\Datetime;
 use UI\Control\Progress;
+use UI\Control\Label;
+use UI\Control\Path;
+use UI\Control\DrawText;
+use UI\Control\Attribute;
+use UI\Control\AttributeString;
+use UI\Control\OpenTypeFeatures;
 use UI\UI;
 use ErrorException;
 
@@ -24,7 +30,7 @@ class UIBuild
     /**
      * @var \UI\UI
      */
-    protected static UI $ui = null;
+    protected static ?UI $ui = null;
     protected array $controls = [];
     protected array $controlsName = [];
     protected array $handles = [];
@@ -32,7 +38,7 @@ class UIBuild
     /**
      * @var \UI\Control\Window
      */
-    protected Window $win = null;
+    protected ?Window $win = null;
 
     public function __construct(UI $ui, array $config = [])
     {
@@ -53,6 +59,19 @@ class UIBuild
         if ($err) {
             throw new ErrorException($err);
         }
+
+        if (isset($config['quit'])) {
+            self::$ui->onShouldQuit($config['quit']->getFunc(), $config['quit']->getData());
+        }
+
+        if (isset($config['app_queue'])) {
+            self::$ui->queueMain($config['app_queue']->getFunc(), $config['app_queue']->getData());
+        }
+
+        if (isset($config['timer'])) {
+            self::$ui->timer($config['timer']->time, $config['timer']->getFunc(), $config['timer']->getData());
+        }
+
         $hasMenu = 0;
         if (isset($config['menu'])) {
             $hasMenu = 1;
@@ -79,9 +98,30 @@ class UIBuild
         }
     }
 
+    public function openFile()
+    {
+        $file = self::$ui->openFile($this->win->getUIInstance());
+        $path = self::$ui->string($file);
+        self::$ui->freeText($file);
+        return $path;
+    }
+
+    public function saveFile()
+    {
+        $file = self::$ui->saveFile($this->win->getUIInstance());
+        $path = self::$ui->string($file);
+        self::$ui->freeText($file);
+        return $path;
+    }
+
     public function getUI(): UI
     {
         return self::$ui;
+    }
+
+    public function destroyWin()
+    {
+        self::$ui->controlDestroy($this->win->getUIInstance());
     }
 
     public function appendControl(Control $control)
@@ -175,6 +215,16 @@ class UIBuild
                 return new Datetime($this, $config);
             case 'canvas':
                 return new Area($this, $config);
+            case 'path':
+                return new Path($this, $config);
+            case 'text':
+                return new DrawText($this, $config);
+            case 'attribute':
+                return new Attribute($this, $config);
+            case 'string':
+                return new AttributeString($this,$config);
+            case 'feature':
+                return new OpenTypeFeatures($this, $config);
             default:
                 throw new Exception("UI Control name $name is invaild");
         }

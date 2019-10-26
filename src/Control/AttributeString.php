@@ -18,7 +18,8 @@ use UI\Control\Attribute;
  */
 class AttributeString extends Control
 {
-    const CTL_NAME = 'attribute_string';
+    const CTL_NAME = 'string';
+
     public function newControl(): CData
     {
         $this->instance = self::$ui->newAttributedString($this->attr['string']);
@@ -40,14 +41,16 @@ class AttributeString extends Control
         $func = function ($s, $a, $start, $end, $passdata) use ($callable, $data) {
             $handle = self::$ui->controlHandle($a);
             $ac = $this->build->getControlByHandle($handle);
-            $attr =  $ac ?? new Attribute($this->build, [], $a);
+            $attr = $ac ?? new Attribute($this->build, [], $a);
             return (int) $callable($this, $attr, $start, $end, $data);
         };
         $this->attributedStringForEachAttribute($func, null);
     }
-    public  function __call($func, $args = [])
+
+    public function __call($func, $args = [])
     {
         $func = 'attributedString' . ucfirst($func);
         return parent::__call($func, $args);
     }
+
 }

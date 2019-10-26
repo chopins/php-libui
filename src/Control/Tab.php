@@ -11,6 +11,7 @@ use FFI\CData;
 class Tab extends Control
 {
     const CTL_NAME = 'tab';
+
     public function newControl(): CData
     {
         return self::$ui->newTab();
@@ -20,25 +21,26 @@ class Tab extends Control
     {
         $this->attr['page'] = $this->attr['page'] ?? [];
         foreach ($this->attr['page'] as $pageName => $childs) {
-            foreach ($childs as $cname => $config) {
-                $control = $this->build->createItem($cname, $config);
+            foreach ($childs as $config) {
+                $control = $this->build->createItem($config['name'], $config['attr']);
                 $this->appendPage($pageName, $control);
             }
         }
     }
+
     public function appendPage($pageName, Control $childs)
     {
         $ui = $childs->getUIInstance();
         $this->tabAppend($pageName, $ui);
     }
 
-    public  function insertPage($name, Control $childs)
+    public function insertPage($name, Control $childs)
     {
         $ui = $childs->getUIInstance();
         $this->tabInsertAt($name, $ui);
     }
 
-    public  function deletePage($page)
+    public function deletePage($page)
     {
         $this->tabDelete($page);
     }
@@ -57,4 +59,5 @@ class Tab extends Control
     {
         $this->tabSetMargined($page, $margin);
     }
+
 }

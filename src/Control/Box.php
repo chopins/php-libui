@@ -33,9 +33,9 @@ class Box extends Control
         }
     }
 
-    public function addChild(\UI\Control $childs)
+    public function addChild(\UI\Control $childs, $option)
     {
-        $fit = $this->attr['child_fit'] ?? 0;
+        $fit = $option['child_fit'] ?? $this->attr['child_fit'];
         $this->append($childs, $fit);
     }
     public function setPadded(int $padded)

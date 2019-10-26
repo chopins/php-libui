@@ -1,6 +1,5 @@
 <?php
 
-use UI\Control;
 use UI\UIBuild;
 
 include_once dirname(__DIR__) . '/examples/loadui.php';

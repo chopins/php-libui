@@ -11,7 +11,8 @@ use FFI\CData;
  */
 class OpenTypeFeatures extends Control
 {
-    const CTL_NAME = 'open_type';
+    const CTL_NAME = 'feature';
+
     public function newControl(): CData
     {
         $this->instance = self::$ui->newOpenTypeFeatures();
@@ -51,4 +52,5 @@ class OpenTypeFeatures extends Control
         };
         $this->openTypeFeaturesForEach($func, null);
     }
+
 }

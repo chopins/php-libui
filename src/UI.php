@@ -21,265 +21,265 @@ use UI\Struct\Struct;
  * libui
  * All return C type is uiControll of CData instance
  *
- * @method void freeInitError(const char *err);
- * @method void main(void);
- * @method void mainSteps(void);
- * @method int mainStep(int wait);
- * @method void quit(void);
- * @method void queueMain(void (*f)(void *data), void *data);
- * @method void timer(int milliseconds, int (*f)(void *data), void *data);
- * @method void onShouldQuit(int (*f)(void *data), void *data);
- * @method void freeText(char *text);
- * @method void controlDestroy(uiControl *);
- * @method uintptr_t controlHandle(uiControl *);
- * @method uiControl *controlParent(uiControl *);
- * @method void controlSetParent(uiControl *, uiControl *);
- * @method int controlToplevel(uiControl *);
- * @method int controlVisible(uiControl *);
- * @method void controlShow(uiControl *);
- * @method void controlHide(uiControl *);
- * @method int controlEnabled(uiControl *);
- * @method void controlEnable(uiControl *);
- * @method void controlDisable(uiControl *);
- * @method uiControl *allocControl(size_t n, uint32_t OSsig, uint32_t typesig, const char *typenamestr);
- * @method void freeControl(uiControl *);
- * @method void controlVerifySetParent(uiControl *, uiControl *);
- * @method int controlEnabledToUser(uiControl *);
- * @method void userBugCannotSetParentOnToplevel(const char *type);
- * @method char *windowTitle(uiWindow *w);
- * @method void windowSetTitle(uiWindow *w, const char *title);
- * @method void windowContentSize(uiWindow *w, int *width, int *height);
- * @method void windowSetContentSize(uiWindow *w, int width, int height);
- * @method int windowFullscreen(uiWindow *w);
- * @method void windowSetFullscreen(uiWindow *w, int fullscreen);
- * @method void windowOnContentSizeChanged(uiWindow *w, void (*f)(uiWindow *, void *), void *data);
- * @method void windowOnClosing(uiWindow *w, int (*f)(uiWindow *w, void *data), void *data);
- * @method int windowBorderless(uiWindow *w);
- * @method void windowSetBorderless(uiWindow *w, int borderless);
- * @method void windowSetChild(uiWindow *w, uiControl *child);
- * @method int windowMargined(uiWindow *w);
- * @method void windowSetMargined(uiWindow *w, int margined);
- * @method uiWindow *newWindow(const char *title, int width, int height, int hasMenubar);
- * @method char *buttonText(uiButton *b);
- * @method void buttonSetText(uiButton *b, const char *text);
- * @method void buttonOnClicked(uiButton *b, void (*f)(uiButton *b, void *data), void *data);
- * @method uiButton *newButton(const char *text);
- * @method void boxAppend(uiBox *b, uiControl *child, int stretchy);
- * @method void boxDelete(uiBox *b, int index);
- * @method int boxPadded(uiBox *b);
- * @method void boxSetPadded(uiBox *b, int padded);
- * @method uiBox *newHorizontalBox(void);
- * @method uiBox *newVerticalBox(void);
- * @method char *checkboxText(uiCheckbox *c);
- * @method void checkboxSetText(uiCheckbox *c, const char *text);
- * @method void checkboxOnToggled(uiCheckbox *c, void (*f)(uiCheckbox *c, void *data), void *data);
- * @method int checkboxChecked(uiCheckbox *c);
- * @method void checkboxSetChecked(uiCheckbox *c, int checked);
- * @method uiCheckbox *newCheckbox(const char *text);
- * @method char *entryText(uiEntry *e);
- * @method void entrySetText(uiEntry *e, const char *text);
- * @method void entryOnChanged(uiEntry *e, void (*f)(uiEntry *e, void *data), void *data);
- * @method int entryReadOnly(uiEntry *e);
- * @method void entrySetReadOnly(uiEntry *e, int readonly);
- * @method uiEntry *newEntry(void);
- * @method uiEntry *newPasswordEntry(void);
- * @method uiEntry *newSearchEntry(void);
- * @method char *labelText(uiLabel *l);
- * @method void labelSetText(uiLabel *l, const char *text);
- * @method uiLabel *newLabel(const char *text);
- * @method void tabAppend(uiTab *t, const char *name, uiControl *c);
- * @method void tabInsertAt(uiTab *t, const char *name, int before, uiControl *c);
- * @method void tabDelete(uiTab *t, int index);
- * @method int tabNumPages(uiTab *t);
- * @method int tabMargined(uiTab *t, int page);
- * @method void tabSetMargined(uiTab *t, int page, int margined);
- * @method uiTab *newTab(void);
- * @method char *groupTitle(uiGroup *g);
- * @method void groupSetTitle(uiGroup *g, const char *title);
- * @method void groupSetChild(uiGroup *g, uiControl *c);
- * @method int groupMargined(uiGroup *g);
- * @method void groupSetMargined(uiGroup *g, int margined);
- * @method uiGroup *newGroup(const char *title);
- * @method int spinboxValue(uiSpinbox *s);
- * @method void spinboxSetValue(uiSpinbox *s, int value);
- * @method void spinboxOnChanged(uiSpinbox *s, void (*f)(uiSpinbox *s, void *data), void *data);
- * @method uiSpinbox *newSpinbox(int min, int max);
- * @method int sliderValue(uiSlider *s);
- * @method void sliderSetValue(uiSlider *s, int value);
- * @method void sliderOnChanged(uiSlider *s, void (*f)(uiSlider *s, void *data), void *data);
- * @method uiSlider *newSlider(int min, int max);
- * @method int progressBarValue(uiProgressBar *p);
- * @method void progressBarSetValue(uiProgressBar *p, int n);
- * @method uiProgressBar *newProgressBar(void);
- * @method uiSeparator *newHorizontalSeparator(void);
- * @method uiSeparator *newVerticalSeparator(void);
- * @method void comboboxAppend(uiCombobox *c, const char *text);
- * @method int comboboxSelected(uiCombobox *c);
- * @method void comboboxSetSelected(uiCombobox *c, int n);
- * @method void comboboxOnSelected(uiCombobox *c, void (*f)(uiCombobox *c, void *data), void *data);
- * @method uiCombobox *newCombobox(void);
- * @method void editableComboboxAppend(uiEditableCombobox *c, const char *text);
- * @method char *editableComboboxText(uiEditableCombobox *c);
- * @method void editableComboboxSetText(uiEditableCombobox *c, const char *text);
- * @method void editableComboboxOnChanged(uiEditableCombobox *c, void (*f)(uiEditableCombobox *c, void *data), void *data);
- * @method uiEditableCombobox *newEditableCombobox(void);
- * @method void radioButtonsAppend(uiRadioButtons *r, const char *text);
- * @method int radioButtonsSelected(uiRadioButtons *r);
- * @method void radioButtonsSetSelected(uiRadioButtons *r, int n);
- * @method void radioButtonsOnSelected(uiRadioButtons *r, void (*f)(uiRadioButtons *, void *), void *data);
- * @method uiRadioButtons *newRadioButtons(void);
- * @method void dateTimePickerTime(uiDateTimePicker *d, struct tm *time);
- * @method void dateTimePickerSetTime(uiDateTimePicker *d, const struct tm *time);
- * @method void dateTimePickerOnChanged(uiDateTimePicker *d, void (*f)(uiDateTimePicker *, void *), void *data);
- * @method uiDateTimePicker *newDateTimePicker(void);
- * @method uiDateTimePicker *newDatePicker(void);
- * @method uiDateTimePicker *newTimePicker(void);
- * @method char *multilineEntryText(uiMultilineEntry *e);
- * @method void multilineEntrySetText(uiMultilineEntry *e, const char *text);
- * @method void multilineEntryAppend(uiMultilineEntry *e, const char *text);
- * @method void multilineEntryOnChanged(uiMultilineEntry *e, void (*f)(uiMultilineEntry *e, void *data), void *data);
- * @method int multilineEntryReadOnly(uiMultilineEntry *e);
- * @method void multilineEntrySetReadOnly(uiMultilineEntry *e, int readonly);
- * @method uiMultilineEntry *newMultilineEntry(void);
- * @method uiMultilineEntry *newNonWrappingMultilineEntry(void);
- * @method void menuItemEnable(uiMenuItem *m);
- * @method void menuItemDisable(uiMenuItem *m);
- * @method void menuItemOnClicked(uiMenuItem *m, void (*f)(uiMenuItem *sender, uiWindow *window, void *data), void *data);
- * @method int menuItemChecked(uiMenuItem *m);
- * @method void menuItemSetChecked(uiMenuItem *m, int checked);
- * @method uiMenuItem *menuAppendItem(uiMenu *m, const char *name);
- * @method uiMenuItem *menuAppendCheckItem(uiMenu *m, const char *name);
- * @method uiMenuItem *menuAppendQuitItem(uiMenu *m);
- * @method uiMenuItem *menuAppendPreferencesItem(uiMenu *m);
- * @method uiMenuItem *menuAppendAboutItem(uiMenu *m);
- * @method void menuAppendSeparator(uiMenu *m);
- * @method uiMenu *newMenu(const char *name);
- * @method char *openFile(uiWindow *parent);
- * @method char *saveFile(uiWindow *parent);
- * @method void msgBox(uiWindow *parent, const char *title, const char *description);
- * @method void msgBoxError(uiWindow *parent, const char *title, const char *description);
- * @method void areaSetSize(uiArea *a, int width, int height);
- * @method void areaQueueRedrawAll(uiArea *a);
- * @method void areaScrollTo(uiArea *a, double x, double y, double width, double height);
- * @method void areaBeginUserWindowMove(uiArea *a);
- * @method void areaBeginUserWindowResize(uiArea *a, uiWindowResizeEdge edge);
- * @method uiArea *newArea(uiAreaHandler *ah);
- * @method uiArea *newScrollingArea(uiAreaHandler *ah, int width, int height);
- * @method uiDrawPath *drawNewPath(uiDrawFillMode fillMode);
- * @method void drawFreePath(uiDrawPath *p);
- * @method void drawPathNewFigure(uiDrawPath *p, double x, double y);
- * @method void drawPathNewFigureWithArc(uiDrawPath *p, double xCenter, double yCenter, double radius, double startAngle, double sweep, int negative);
- * @method void drawPathLineTo(uiDrawPath *p, double x, double y);
- * @method void drawPathArcTo(uiDrawPath *p, double xCenter, double yCenter, double radius, double startAngle, double sweep, int negative);
- * @method void drawPathBezierTo(uiDrawPath *p, double c1x, double c1y, double c2x, double c2y, double endX, double endY);
- * @method void drawPathCloseFigure(uiDrawPath *p);
- * @method void drawPathAddRectangle(uiDrawPath *p, double x, double y, double width, double height);
- * @method void drawPathEnd(uiDrawPath *p);
- * @method void drawStroke(uiDrawContext *c, uiDrawPath *path, uiDrawBrush *b, uiDrawStrokeParams *p);
- * @method void drawFill(uiDrawContext *c, uiDrawPath *path, uiDrawBrush *b);
- * @method void drawMatrixSetIdentity(uiDrawMatrix *m);
- * @method void drawMatrixTranslate(uiDrawMatrix *m, double x, double y);
- * @method void drawMatrixScale(uiDrawMatrix *m, double xCenter, double yCenter, double x, double y);
- * @method void drawMatrixRotate(uiDrawMatrix *m, double x, double y, double amount);
- * @method void drawMatrixSkew(uiDrawMatrix *m, double x, double y, double xamount, double yamount);
- * @method void drawMatrixMultiply(uiDrawMatrix *dest, uiDrawMatrix *src);
- * @method int drawMatrixInvertible(uiDrawMatrix *m);
- * @method int drawMatrixInvert(uiDrawMatrix *m);
- * @method void drawMatrixTransformPoint(uiDrawMatrix *m, double *x, double *y);
- * @method void drawMatrixTransformSize(uiDrawMatrix *m, double *x, double *y);
- * @method void drawTransform(uiDrawContext *c, uiDrawMatrix *m);
- * @method void drawClip(uiDrawContext *c, uiDrawPath *path);
- * @method void drawSave(uiDrawContext *c);
- * @method void drawRestore(uiDrawContext *c);
- * @method void freeAttribute(uiAttribute *a);
- * @method uiattributetype attributeGetType(const uiAttribute *a);
- * @method uiAttribute *newFamilyAttribute(const char *family);
- * @method string *attributeFamily(const uiAttribute *a);
- * @method uiAttribute *newSizeAttribute(double size);
- * @method double attributeSize(const uiAttribute *a);
- * @method uiAttribute *newWeightAttribute(uiTextWeight weight);
- * @method uitextweight attributeWeight(const uiAttribute *a);
- * @method uiAttribute *newItalicAttribute(uiTextItalic italic);
- * @method uitextitalic attributeItalic(const uiAttribute *a);
- * @method uiAttribute *newStretchAttribute(uiTextStretch stretch);
- * @method uitextstretch attributeStretch(const uiAttribute *a);
- * @method uiAttribute *newColorAttribute(double r, double g, double b, double a);
- * @method void attributeColor(const uiAttribute *a, double *r, double *g, double *b, double *alpha);
- * @method uiAttribute *newBackgroundAttribute(double r, double g, double b, double a);
- * @method uiAttribute *newUnderlineAttribute(uiUnderline u);
- * @method uiunderline attributeUnderline(const uiAttribute *a);
- * @method uiAttribute *newUnderlineColorAttribute(uiUnderlineColor u, double r, double g, double b, double a);
- * @method void attributeUnderlineColor(const uiAttribute *a, uiUnderlineColor *u, double *r, double *g, double *b, double *alpha);
- * @method uiOpenTypeFeatures *newOpenTypeFeatures(void);
- * @method void freeOpenTypeFeatures(uiOpenTypeFeatures *otf);
- * @method uiOpenTypeFeatures *openTypeFeaturesClone(const uiOpenTypeFeatures *otf);
- * @method void openTypeFeaturesAdd(uiOpenTypeFeatures *otf, char a, char b, char c, char d, uint32_t value);
- * @method void openTypeFeaturesRemove(uiOpenTypeFeatures *otf, char a, char b, char c, char d);
- * @method int openTypeFeaturesGet(const uiOpenTypeFeatures *otf, char a, char b, char c, char d, uint32_t *value);
- * @method void openTypeFeaturesForEach(const uiOpenTypeFeatures *otf, uiOpenTypeFeaturesForEachFunc f, void *data);
- * @method uiAttribute *newFeaturesAttribute(const uiOpenTypeFeatures *otf);
- * @method const openTypeFeatures *uiAttributeFeatures(const uiAttribute *a);
- * @method uiAttributedString *newAttributedString(const char *initialString);
- * @method void freeAttributedString(uiAttributedString *s);
- * @method string *attributedStringString(const uiAttributedString *s);
- * @method size_t attributedStringLen(const uiAttributedString *s);
- * @method void attributedStringAppendUnattributed(uiAttributedString *s, const char *str);
- * @method void attributedStringInsertAtUnattributed(uiAttributedString *s, const char *str, size_t at);
- * @method void attributedStringDelete(uiAttributedString *s, size_t start, size_t end);
- * @method void attributedStringSetAttribute(uiAttributedString *s, uiAttribute *a, size_t start, size_t end);
- * @method void attributedStringForEachAttribute(const uiAttributedString *s, uiAttributedStringForEachAttributeFunc f, void *data);
- * @method size_t attributedStringNumGraphemes(uiAttributedString *s);
- * @method size_t attributedStringByteIndexToGrapheme(uiAttributedString *s, size_t pos);
- * @method size_t attributedStringGraphemeToByteIndex(uiAttributedString *s, size_t pos);
- * @method uiDrawTextLayout *drawNewTextLayout(uiDrawTextLayoutParams *params);
- * @method void drawFreeTextLayout(uiDrawTextLayout *tl);
- * @method void drawText(uiDrawContext *c, uiDrawTextLayout *tl, double x, double y);
- * @method void drawTextLayoutExtents(uiDrawTextLayout *tl, double *width, double *height);
+ * @method void freeInitError( string $err)
+ * @method void main()
+ * @method void mainSteps()
+ * @method int mainStep(int $wait)
+ * @method void quit()
+ * @method void queueMain(callable $f, $data = null)
+ * @method void timer(int $milliseconds, callable $f, $data = null)
+ * @method void onShouldQuit($f, $data = null)
+ * @method void freeText(string $text)
+ * @method void controlDestroy(uiControl $c)
+ * @method uintptr_t controlHandle(uiControl $c)
+ * @method uiControl controlParent(uiControl $c)
+ * @method void controlSetParent(uiControl $c, uiControl $cparent)
+ * @method int controlToplevel(uiControl $c)
+ * @method int controlVisible(uiControl $c)
+ * @method void controlShow(uiControl $c)
+ * @method void controlHide(uiControl $c)
+ * @method int controlEnabled(uiControl $c)
+ * @method void controlEnable(uiControl $c)
+ * @method void controlDisable(uiControl $c)
+ * @method uiControl allocControl(size_t $n, int $OSsig, int $typesig,  string $typenamestr)
+ * @method void freeControl(uiControl $c)
+ * @method void controlVerifySetParent(uiControl $c, uiControl $cparent)
+ * @method int controlEnabledToUser(uiControl $c)
+ * @method void userBugCannotSetParentOnToplevel(string $type)
+ * @method char windowTitle(uiWindow $w)
+ * @method void windowSetTitle(uiWindow $w,  string $title)
+ * @method void windowContentSize(uiWindow $w, int &$width, int &$height)
+ * @method void windowSetContentSize(uiWindow $w, int $width, int $height)
+ * @method int windowFullscreen(uiWindow $w)
+ * @method void windowSetFullscreen(uiWindow $w, int $fullscreen)
+ * @method void windowOnContentSizeChanged(uiWindow $w, callable $f, $data = null)
+ * @method void windowOnClosing(uiWindow $w, callable $f, $data = null)
+ * @method int windowBorderless(uiWindow $w)
+ * @method void windowSetBorderless(uiWindow $w, int $borderless)
+ * @method void windowSetChild(uiWindow $w, uiControl $child)
+ * @method int windowMargined(uiWindow $w)
+ * @method void windowSetMargined(uiWindow $w, int $margined)
+ * @method uiWindow newWindow( string $title, int $width, int $height, int $hasMenubar)
+ * @method char buttonText(uiButton $b)
+ * @method void buttonSetText(uiButton $b,  string $text)
+ * @method void buttonOnClicked(uiButton $b, callable $f, $data = null)
+ * @method uiButton newButton( string $text)
+ * @method void boxAppend(uiBox $b, uiControl $child, int $stretchy)
+ * @method void boxDelete(uiBox $b, int $index)
+ * @method int boxPadded(uiBox $b)
+ * @method void boxSetPadded(uiBox $b, int $padded)
+ * @method uiBox newHorizontalBox()
+ * @method uiBox newVerticalBox()
+ * @method char checkboxText(uiCheckbox $c)
+ * @method void checkboxSetText(uiCheckbox $c,  string $text)
+ * @method void checkboxOnToggled(uiCheckbox $c, callable $f, $data = null)
+ * @method int checkboxChecked(uiCheckbox $c)
+ * @method void checkboxSetChecked(uiCheckbox $c, int $checked)
+ * @method uiCheckbox newCheckbox( string $text)
+ * @method char entryText(uiEntry $e)
+ * @method void entrySetText(uiEntry $e,  string $text)
+ * @method void entryOnChanged(uiEntry $e, callable $f, $data = null)
+ * @method int entryReadOnly(uiEntry $e)
+ * @method void entrySetReadOnly(uiEntry $e, int $readonly)
+ * @method uiEntry newEntry()
+ * @method uiEntry newPasswordEntry()
+ * @method uiEntry newSearchEntry()
+ * @method char labelText(uiLabel $l)
+ * @method void labelSetText(uiLabel $l,  string $text)
+ * @method uiLabel newLabel( string $text)
+ * @method void tabAppend(uiTab $t,  string $name, uiControl $c)
+ * @method void tabInsertAt(uiTab $t,  string $name, int $before, uiControl $c)
+ * @method void tabDelete(uiTab $t, int $index)
+ * @method int tabNumPages(uiTab $t)
+ * @method int tabMargined(uiTab $t, int $page)
+ * @method void tabSetMargined(uiTab $t, int $page, int $margined)
+ * @method uiTab newTab()
+ * @method char groupTitle(uiGroup $g)
+ * @method void groupSetTitle(uiGroup $g,  string $title)
+ * @method void groupSetChild(uiGroup $g, uiControl $c)
+ * @method int groupMargined(uiGroup $g)
+ * @method void groupSetMargined(uiGroup $g, int $margined)
+ * @method uiGroup newGroup( string $title)
+ * @method int spinboxValue(uiSpinbox $s)
+ * @method void spinboxSetValue(uiSpinbox $s, int $value)
+ * @method void spinboxOnChanged(uiSpinbox $s, callable $f, $data = null)
+ * @method uiSpinbox newSpinbox(int $min, int $max)
+ * @method int sliderValue(uiSlider $s)
+ * @method void sliderSetValue(uiSlider $s, int $value)
+ * @method void sliderOnChanged(uiSlider $s, callable $f, $data = null)
+ * @method uiSlider newSlider(int $min, int $max)
+ * @method int progressBarValue(uiProgressBar $p)
+ * @method void progressBarSetValue(uiProgressBar $p, int $n)
+ * @method uiProgressBar newProgressBar()
+ * @method uiSeparator newHorizontalSeparator()
+ * @method uiSeparator newVerticalSeparator()
+ * @method void comboboxAppend(uiCombobox $c,  string $text)
+ * @method int comboboxSelected(uiCombobox $c)
+ * @method void comboboxSetSelected(uiCombobox $c, int $n)
+ * @method void comboboxOnSelected(uiCombobox $c, callable $f, $data = null)
+ * @method uiCombobox newCombobox()
+ * @method void editableComboboxAppend(uiEditableCombobox $c,  string $text)
+ * @method char editableComboboxText(uiEditableCombobox $c)
+ * @method void editableComboboxSetText(uiEditableCombobox $c,  string $text)
+ * @method void editableComboboxOnChanged(uiEditableCombobox $c, callable $f, $data = null)
+ * @method uiEditableCombobox newEditableCombobox()
+ * @method void radioButtonsAppend(uiRadioButtons $r,  string $text)
+ * @method int radioButtonsSelected(uiRadioButtons $r)
+ * @method void radioButtonsSetSelected(uiRadioButtons $r, int $n)
+ * @method void radioButtonsOnSelected(uiRadioButtons $r, callable $f, $data = null)
+ * @method uiRadioButtons newRadioButtons()
+ * @method void dateTimePickerTime(uiDateTimePicker $d, $time)
+ * @method void dateTimePickerSetTime(uiDateTimePicker $d, $time)
+ * @method void dateTimePickerOnChanged(uiDateTimePicker $d, callable $f, $data = null)
+ * @method uiDateTimePicker newDateTimePicker()
+ * @method uiDateTimePicker newDatePicker()
+ * @method uiDateTimePicker newTimePicker()
+ * @method char multilineEntryText(uiMultilineEntry $e)
+ * @method void multilineEntrySetText(uiMultilineEntry $e,  string $text)
+ * @method void multilineEntryAppend(uiMultilineEntry $e,  string $text)
+ * @method void multilineEntryOnChanged(uiMultilineEntry $e, callable $f, $data = null)
+ * @method int multilineEntryReadOnly(uiMultilineEntry $e)
+ * @method void multilineEntrySetReadOnly(uiMultilineEntry $e, int $readonly)
+ * @method uiMultilineEntry newMultilineEntry()
+ * @method uiMultilineEntry newNonWrappingMultilineEntry()
+ * @method void menuItemEnable(uiMenuItem $m)
+ * @method void menuItemDisable(uiMenuItem $m)
+ * @method void menuItemOnClicked(uiMenuItem $m, callable $f, $data = null)
+ * @method int menuItemChecked(uiMenuItem $m)
+ * @method void menuItemSetChecked(uiMenuItem $m, int $checked)
+ * @method uiMenuItem menuAppendItem(uiMenu $m,  string $name)
+ * @method uiMenuItem menuAppendCheckItem(uiMenu $m,  string $name)
+ * @method uiMenuItem menuAppendQuitItem(uiMenu $m)
+ * @method uiMenuItem menuAppendPreferencesItem(uiMenu $m)
+ * @method uiMenuItem menuAppendAboutItem(uiMenu $m)
+ * @method void menuAppendSeparator(uiMenu $m)
+ * @method uiMenu newMenu( string $name)
+ * @method char openFile(uiWindow $parent)
+ * @method char saveFile(uiWindow $parent)
+ * @method void msgBox(uiWindow $parent,  string $title,  string $description)
+ * @method void msgBoxError(uiWindow $parent,  string $title,  string $description)
+ * @method void areaSetSize(uiArea $a, int $width, int $height)
+ * @method void areaQueueRedrawAll(uiArea $a)
+ * @method void areaScrollTo(uiArea $a, float $x, float $y, float $width, float $height)
+ * @method void areaBeginUserWindowMove(uiArea $a)
+ * @method void areaBeginUserWindowResize(uiArea $a, uiWindowResizeEdge $edge)
+ * @method uiArea newArea(uiAreaHandler $ah)
+ * @method uiArea newScrollingArea(uiAreaHandler $ah, int $width, int $height)
+ * @method uiDrawPath drawNewPath(uiDrawFillMode $fillMode)
+ * @method void drawFreePath(uiDrawPath $p)
+ * @method void drawPathNewFigure(uiDrawPath $p, float $x, float $y)
+ * @method void drawPathNewFigureWithArc(uiDrawPath $p, float $xCenter, float $yCenter, float $radius, float $startAngle, float $sweep, int $negative)
+ * @method void drawPathLineTo(uiDrawPath $p, float $x, float $y)
+ * @method void drawPathArcTo(uiDrawPath $p, float $xCenter, float $yCenter, float $radius, float $startAngle, float $sweep, int $negative)
+ * @method void drawPathBezierTo(uiDrawPath $p, float $c1x, float $c1y, float $c2x, float $c2y, float $endX, float $endY)
+ * @method void drawPathCloseFigure(uiDrawPath $p)
+ * @method void drawPathAddRectangle(uiDrawPath $p, float $x, float $y, float $width, float $height)
+ * @method void drawPathEnd(uiDrawPath $p)
+ * @method void drawStroke(uiDrawContext $c, uiDrawPath $path, uiDrawBrush $b, uiDrawStrokeParams $p)
+ * @method void drawFill(uiDrawContext $c, uiDrawPath $path, uiDrawBrush $b)
+ * @method void drawMatrixSetIdentity(uiDrawMatrix $m)
+ * @method void drawMatrixTranslate(uiDrawMatrix $m, float $x, float $y)
+ * @method void drawMatrixScale(uiDrawMatrix $m, float $xCenter, float $yCenter, float $x, float $y)
+ * @method void drawMatrixRotate(uiDrawMatrix $m, float $x, float $y, float $amount)
+ * @method void drawMatrixSkew(uiDrawMatrix $m, float $x, float $y, float $xamount, float $yamount)
+ * @method void drawMatrixMultiply(uiDrawMatrix $dest, uiDrawMatrix $src)
+ * @method int drawMatrixInvertible(uiDrawMatrix $m)
+ * @method int drawMatrixInvert(uiDrawMatrix $m)
+ * @method void drawMatrixTransformPoint(uiDrawMatrix $m, float &$x, float &$y)
+ * @method void drawMatrixTransformSize(uiDrawMatrix $m, float &$x, float &$y)
+ * @method void drawTransform(uiDrawContext $c, uiDrawMatrix $m)
+ * @method void drawClip(uiDrawContext $c, uiDrawPath $path)
+ * @method void drawSave(uiDrawContext $c)
+ * @method void drawRestore(uiDrawContext $c)
+ * @method void freeAttribute(uiAttribute $a)
+ * @method uiattributetype attributeGetType(uiAttribute $a)
+ * @method uiAttribute newFamilyAttribute( string $family)
+ * @method string attributeFamily(uiAttribute $a)
+ * @method uiAttribute newSizeAttribute(float $size)
+ * @method double attributeSize(uiAttribute $a)
+ * @method uiAttribute newWeightAttribute(uiTextWeight $weight)
+ * @method uitextweight attributeWeight(uiAttribute $a)
+ * @method uiAttribute newItalicAttribute(uiTextItalic $italic)
+ * @method uitextitalic attributeItalic(uiAttribute $a)
+ * @method uiAttribute newStretchAttribute(uiTextStretch $stretch)
+ * @method uitextstretch attributeStretch(uiAttribute $a)
+ * @method uiAttribute newColorAttribute(float $r, float $g, float $b, float $a)
+ * @method void attributeColor(uiAttribute $a, float &$r, float &$g, float &$b, float &$alpha)
+ * @method uiAttribute newBackgroundAttribute(float $r, float $g, float $b, float $a)
+ * @method uiAttribute newUnderlineAttribute(uiUnderline $u)
+ * @method uiunderline attributeUnderline(uiAttribute $a)
+ * @method uiAttribute newUnderlineColorAttribute(uiUnderlineColor $u, float $r, float $g, float $b, float $a)
+ * @method void attributeUnderlineColor(uiAttribute $a, uiUnderlineColor $u, float &$r, float &$g, float &$b, float &$alpha)
+ * @method uiOpenTypeFeatures newOpenTypeFeatures()
+ * @method void freeOpenTypeFeatures(uiOpenTypeFeatures $otf)
+ * @method uiOpenTypeFeatures openTypeFeaturesClone(uiOpenTypeFeatures $otf)
+ * @method void openTypeFeaturesAdd(uiOpenTypeFeatures $otf, char $a, char $b, char $c, char $d, int $value)
+ * @method void openTypeFeaturesRemove(uiOpenTypeFeatures $otf, char $a, char $b, char $c, char $d)
+ * @method int openTypeFeaturesGet(uiOpenTypeFeatures $otf, char $a, char $b, char $c, char $d, int &$value)
+ * @method void openTypeFeaturesForEach(uiOpenTypeFeatures $otf, callable $f, $data = null)
+ * @method uiAttribute newFeaturesAttribute(uiOpenTypeFeatures $otf)
+ * @method openTypeFeatures uiAttributeFeatures(uiAttribute $a)
+ * @method uiAttributedString newAttributedString( string $initialString)
+ * @method void freeAttributedString(uiAttributedString $s)
+ * @method string attributedStringString(uiAttributedString $s)
+ * @method size_t attributedStringLen(uiAttributedString $s)
+ * @method void attributedStringAppendUnattributed(uiAttributedString $s,  string $str)
+ * @method void attributedStringInsertAtUnattributed(uiAttributedString $s,  string $str, size_t $at)
+ * @method void attributedStringDelete(uiAttributedString $s, size_t $start, size_t $end)
+ * @method void attributedStringSetAttribute(uiAttributedString $s, uiAttribute $a, size_t $start, size_t $end)
+ * @method void attributedStringForEachAttribute(uiAttributedString $s, callable $f, $data = null)
+ * @method size_t attributedStringNumGraphemes(uiAttributedString $s)
+ * @method size_t attributedStringByteIndexToGrapheme(uiAttributedString $s, size_t $pos)
+ * @method size_t attributedStringGraphemeToByteIndex(uiAttributedString $s, size_t $pos)
+ * @method uiDrawTextLayout drawNewTextLayout(uiDrawTextLayoutParams $params)
+ * @method void drawFreeTextLayout(uiDrawTextLayout $tl)
+ * @method void drawText(uiDrawContext $c, uiDrawTextLayout $tl, float $x, float $y)
+ * @method void drawTextLayoutExtents(uiDrawTextLayout $tl, float &$width, float &$height)
 
- * @method void fontButtonFont(uiFontButton *b, uiFontDescriptor *desc);
- * @method void fontButtonOnChanged(uiFontButton *b, void (*f)(uiFontButton *, void *), void *data);
- * @method uiFontButton *newFontButton(void);
- * @method void freeFontButtonFont(uiFontDescriptor *desc);
- * @method void colorButtonColor(uiColorButton *b, double *r, double *g, double *bl, double *a);
- * @method void colorButtonSetColor(uiColorButton *b, double r, double g, double bl, double a);
- * @method void colorButtonOnChanged(uiColorButton *b, void (*f)(uiColorButton *, void *), void *data);
- * @method uiColorButton *newColorButton(void);
- * @method void formAppend(uiForm *f, const char *label, uiControl *c, int stretchy);
- * @method void formDelete(uiForm *f, int index);
- * @method int formPadded(uiForm *f);
- * @method void formSetPadded(uiForm *f, int padded);
- * @method uiForm *newForm(void);
- * @method void gridAppend(uiGrid *g, uiControl *c, int left, int top, int xspan, int yspan, int hexpand, uiAlign halign, int vexpand, uiAlign valign);
- * @method void gridInsertAt(uiGrid *g, uiControl *c, uiControl *existing, uiAt at, int xspan, int yspan, int hexpand, uiAlign halign, int vexpand, uiAlign valign);
- * @method int gridPadded(uiGrid *g);
- * @method void gridSetPadded(uiGrid *g, int padded);
- * @method uiGrid *newGrid(void);
- * @method uiImage *newImage(double width, double height);
- * @method void freeImage(uiImage *i);
- * @method void imageAppend(uiImage *i, void *pixels, int pixelWidth, int pixelHeight, int byteStride);
- * @method void freeTableValue(uiTableValue *v);
- * @method uitablevaluetype tableValueGetType(const uiTableValue *v);
- * @method uiTableValue *newTableValueString(const char *str);
- * @method string *tableValueString(const uiTableValue *v);
- * @method uiTableValue *newTableValueImage(uiImage *img);
- * @method uiImage *tableValueImage(const uiTableValue *v);
- * @method uiTableValue *newTableValueInt(int i);
- * @method int tableValueInt(const uiTableValue *v);
- * @method uiTableValue *newTableValueColor(double r, double g, double b, double a);
- * @method void tableValueColor(const uiTableValue *v, double *r, double *g, double *b, double *a);
- * @method uiTableModel *newTableModel(uiTableModelHandler *mh);
- * @method void freeTableModel(uiTableModel *m);
- * @method void tableModelRowInserted(uiTableModel *m, int newIndex);
- * @method void tableModelRowChanged(uiTableModel *m, int index);
- * @method void tableModelRowDeleted(uiTableModel *m, int oldIndex);
- * @method void tableAppendTextColumn(uiTable *t,const char *name,int textModelColumn,int textEditableModelColumn,uiTableTextColumnOptionalParams *textParams);
- * @method void tableAppendImageColumn(uiTable *t,const char *name,int imageModelColumn);
- * @method void tableAppendImageTextColumn(uiTable *t,const char *name,int imageModelColumn,int textModelColumn,int textEditableModelColumn,uiTableTextColumnOptionalParams *textParams);
- * @method void tableAppendCheckboxColumn(uiTable *t,const char *name,int checkboxModelColumn,int checkboxEditableModelColumn);
- * @method void tableAppendCheckboxTextColumn(uiTable *t,const char *name,int checkboxModelColumn,int checkboxEditableModelColumn,int textModelColumn,int textEditableModelColumn,uiTableTextColumnOptionalParams *textParams);
- * @method void tableAppendProgressBarColumn(uiTable *t,const char *name,int progressModelColumn);
- * @method void tableAppendButtonColumn(uiTable *t,const char *name,int buttonModelColumn,int buttonClickableModelColumn);
- * @method uiTable *newTable(uiTableParams *params);
+ * @method void fontButtonFont(uiFontButton $b, uiFontDescriptor $desc)
+ * @method void fontButtonOnChanged(uiFontButton $b, callable $f, $data = null)
+ * @method uiFontButton newFontButton()
+ * @method void freeFontButtonFont(uiFontDescriptor $desc)
+ * @method void colorButtonColor(uiColorButton $b, float &$r, float &$g, float &$bl, float &$a)
+ * @method void colorButtonSetColor(uiColorButton $b, float $r, float $g, float $bl, float $a)
+ * @method void colorButtonOnChanged(uiColorButton $b, callable $f, $data = null)
+ * @method uiColorButton newColorButton()
+ * @method void formAppend(uiForm $f,  string $label, uiControl $c, int $stretchy)
+ * @method void formDelete(uiForm $f, int $index)
+ * @method int formPadded(uiForm $f)
+ * @method void formSetPadded(uiForm $f, int $padded)
+ * @method uiForm newForm()
+ * @method void gridAppend(uiGrid $g, uiControl $c, int $left, int $top, int $xspan, int $yspan, int $hexpand, uiAlign $halign, int $vexpand, uiAlign $valign)
+ * @method void gridInsertAt(uiGrid $g, uiControl $c, uiControl $existing, uiAt $at, int $xspan, int $yspan, int $hexpand, uiAlign halign, int $vexpand, uiAlign $valign)
+ * @method int gridPadded(uiGrid $g)
+ * @method void gridSetPadded(uiGrid $g, int $padded)
+ * @method uiGrid newGrid()
+ * @method uiImage newImage(float $width, float $height)
+ * @method void freeImage(uiImage $i)
+ * @method void imageAppend(uiImage $i, $pixels, int $pixelWidth, int $pixelHeight, int $byteStride)
+ * @method void freeTableValue(uiTableValue $v)
+ * @method uitablevaluetype tableValueGetType(uiTableValue $v)
+ * @method uiTableValue newTableValueString( string $str)
+ * @method string tableValueString(uiTableValue $v)
+ * @method uiTableValue newTableValueImage(uiImage $img)
+ * @method uiImage tableValueImage(uiTableValue $v)
+ * @method uiTableValue newTableValueInt(int $i)
+ * @method int tableValueInt(uiTableValue $v)
+ * @method uiTableValue newTableValueColor(float $r, float $g, float $b, float $a)
+ * @method void tableValueColor(uiTableValue $v, float &$r, float &$g, float &$b, float &$a)
+ * @method uiTableModel newTableModel(uiTableModelHandler $mh)
+ * @method void freeTableModel(uiTableModel $m)
+ * @method void tableModelRowInserted(uiTableModel $m, int $newIndex)
+ * @method void tableModelRowChanged(uiTableModel $m, int $index)
+ * @method void tableModelRowDeleted(uiTableModel $m, int $oldIndex)
+ * @method void tableAppendTextColumn(uiTable $t, string $name,int $textModelColumn,int $textEditableModelColumn,uiTableTextColumnOptionalParams $textParams)
+ * @method void tableAppendImageColumn(uiTable $t, string $name,int $imageModelColumn)
+ * @method void tableAppendImageTextColumn(uiTable $t, string $name,int $imageModelColumn,int $textModelColumn,int $textEditableModelColumn,uiTableTextColumnOptionalParams $textParams)
+ * @method void tableAppendCheckboxColumn(uiTable $t, string $name,int $checkboxModelColumn,int $checkboxEditableModelColumn)
+ * @method void tableAppendCheckboxTextColumn(uiTable $t, string $name,int $checkboxModelColumn,int $checkboxEditableModelColumn,int $textModelColumn,int $textEditableModelColumn,uiTableTextColumnOptionalParams $textParams)
+ * @method void tableAppendProgressBarColumn(uiTable $t, string $name,int $progressModelColumn)
+ * @method void tableAppendButtonColumn(uiTable $t, string $name,int $buttonModelColumn,int $buttonClickableModelColumn)
+ * @method uiTable newTable(uiTableParams $params)
  */
 class UI
 {
@@ -438,7 +438,6 @@ class UI
             $dll = $this->findDll();
         }
         self::$ffi = FFI::cdef($code, $dll);
-        $this->struct = $this->struct();
         $this->autoload();
     }
 
@@ -517,7 +516,7 @@ class UI
         if ($msg) {
             return $this->string($msg);
         }
-        return $msg;
+        return '';
     }
 
     public function string(FFI\CData $data): string
@@ -591,7 +590,7 @@ class UI
 
     public function struct(): Struct
     {
-        return new Struct;
+        return new Struct($this);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * libui (http://toknot.com)
  *
@@ -7,7 +8,9 @@
  * @link       https://github.com/chopins/php-libui
  */
 
- namespace UI\Struct;
+namespace UI\Struct;
+
+use UI\UI;
 
 class Struct
 {
@@ -79,7 +82,7 @@ class Struct
             'Width' => 'double',
             'Align' => 'int',
         ],
-        'uiAreaMouseEvent' =>    [
+        'uiAreaMouseEvent' => [
             'X' => 'double',
             'Y' => 'double',
             'AreaWidth' => 'double',
@@ -91,7 +94,6 @@ class Struct
             'Held1To64' => 'int',
         ],
         'uiAreaKeyEvent' => [
-
             'Key' => 'string',
             'ExtKey' => 'int',
             'Modifier' => 'int',
@@ -174,4 +176,5 @@ class Struct
             }
         }
     }
+
 }

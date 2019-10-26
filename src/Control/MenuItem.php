@@ -23,13 +23,13 @@ class MenuItem extends Menu
                 $this->instance = self::$ui->menuAppendCheckItem($parent->getUIInstance(), $this->attr['title']);
                 break;
             case 'quit':
-                $this->instance  = $this->menuAppendQuitItem();
+                $this->instance  = self::$ui->menuAppendQuitItem($parent->getUIInstance());
                 break;
             case 'about':
-                $this->instance =  $this->menuAppendAboutItem();
+                $this->instance =  self::$ui->menuAppendAboutItem($parent->getUIInstance());
                 break;
             case 'preferences':
-                $this->instance = $this->menuAppendPreferencesItem();
+                $this->instance = self::$ui->menuAppendPreferencesItem($parent->getUIInstance());
                 break;
             default:
                 $this->instance = self::$ui->menuAppendItem($parent->getUIInstance(), $this->attr['title']);

@@ -8,6 +8,7 @@ class Event
     protected $data;
     protected $before;
     protected $after;
+    protected $property = [];
 
     public function __construct(callable $callable, $data = null)
     {
@@ -53,6 +54,18 @@ class Event
     public function onAfter(callable $callable)
     {
         $this->after = $callable;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->property[$name] = $value;
+    }
+
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->property)) {
+            return $this->property[$name];
+        }
     }
 
 }

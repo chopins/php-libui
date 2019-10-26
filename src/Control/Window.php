@@ -34,9 +34,11 @@ use UI\Event;
 class Window extends Control
 {
     const CTL_NAME = 'window';
+
     public static $defWinWidth = 800;
     public static $defWinHeight = 640;
     public static $defWinTitle = 'No Win Title';
+
     public function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? self::$defWinTitle;
@@ -44,14 +46,12 @@ class Window extends Control
         $this->attr['height'] = $this->attr['height'] ?? self::$defWinHeight;
         $this->instance = self::$ui->newWindow($this->attr['title'], $this->attr['width'], $this->attr['height'], $this->attr['hasMenu']);
         if (isset($this->attr['border'])) {
-            $this->windowSetBorderless($this->instance, $this->attr['border']);
+            $this->windowSetBorderless($this->attr['border']);
         }
         if (isset($this->attr['margin'])) {
             $this->windowSetMargined($this->attr['margin']);
         }
-        if (isset($this->attr['quit'])) {
-            $this->onQuit($this->attr['quit']);
-        }
+
         if (isset($this->attr['close'])) {
             $this->onClose($this->attr['close']);
         }
@@ -76,11 +76,6 @@ class Window extends Control
         }
     }
 
-    public function onQuit(Event $callable)
-    {
-        $this->bindEvent('onShouldQuit', $callable);
-    }
-
     public function onClose(Event $callable)
     {
         $this->bindEvent('windowOnClosing', $callable);
@@ -95,11 +90,10 @@ class Window extends Control
     {
         $w = self::$ui->new('int*');
         $h = self::$ui->new('int*');
-        self::$ui->windowContentSize($this->instance, $w, $h);
+        self::$ui->windowContentSize($w, $h);
         $width = $w[0];
         $height = $h[0];
     }
-
 
     public function title($title = null)
     {
@@ -128,7 +122,7 @@ class Window extends Control
         $this->windowSetMargined($margin);
     }
 
-    public function addChild(Control $child)
+    public function addChild(Control $child, $option = [])
     {
         $uiControl = $child->getUIInstance();
         $this->windowSetChild($uiControl);
@@ -144,6 +138,7 @@ class Window extends Control
         }
         $this->windowSetContentSize($size['w'], $size['h']);
     }
+
     public function fullscreen($isFull = null)
     {
         if ($isFull === null) {
@@ -151,4 +146,5 @@ class Window extends Control
         }
         return $this->windowSetFullscreen($isFull);
     }
+
 }

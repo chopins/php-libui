@@ -12,6 +12,7 @@ use FFI\CData;
 class Group extends Control
 {
     const CTL_NAME = 'group';
+
     public function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? '';
@@ -21,7 +22,7 @@ class Group extends Control
         return $this->instance;
     }
 
-    protected function addChild(\UI\Control $childs)
+    protected function addChild(\UI\Control $childs, $option = [])
     {
         $this->setChild($childs);
     }
@@ -61,4 +62,5 @@ class Group extends Control
     {
         $this->groupSetTitle($title);
     }
+
 }

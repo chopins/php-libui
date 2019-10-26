@@ -12,14 +12,14 @@ use FFI\CData;
  */
 abstract class Control
 {
-    protected CData $instance = null;
+    protected ?CData $instance = null;
     protected array $attr = [];
-    protected UIBuild $build = null;
+    protected ?UIBuild $build = null;
 
     /**
      * @var \UI\UI
      */
-    protected static UI $ui;
+    protected static ?UI $ui = null;
 
     public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
@@ -50,11 +50,11 @@ abstract class Control
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         foreach ($this->attr['childs'] as $child) {
             $control = $this->build->createItem($child['name'], $child['attr']);
-            $this->addChild($control);
+            $this->addChild($control, $child);
         }
     }
 
-    protected function addChild(Control $child)
+    protected function addChild(Control $child, $options = [])
     {
         
     }
@@ -138,17 +138,11 @@ abstract class Control
 
     public function enable()
     {
-        if (self::CTL_NAME === 'menu') {
-            return $this->menuItemEnable();
-        }
         $this->controlEnable();
     }
 
     public function disbale()
     {
-        if (self::CTL_NAME === 'menu') {
-            return $this->menuItemDisable();
-        }
         $this->controlDisable();
     }
 
@@ -189,6 +183,7 @@ abstract class Control
             $data = $callable->getData();
             $before = $callable->getBefore();
             $after = $callable->getAfter();
+            $beforeResult = null;
             if ($before) {
                 $beforeResult = $before();
             }

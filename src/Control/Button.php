@@ -74,12 +74,12 @@ class Button extends Control
         $this->attr['click'] = $callable;
         if ($this->attr['type'] === 'file') {
             $callable->onBefore(function () {
-                return self::$ui->string(self::$ui->openFile($this->build->getWin()->getUIInstance()));
+                return $this->build->openFile();
             });
         }
         if ($this->attr['type'] === 'save') {
             $callable->onBefore(function () {
-                return self::$ui->string(self::$ui->saveFile($this->build->getWin()->getUIInstance()));
+                return $this->build->saveFile();
             });
         }
         if ($this->attr['type'] !== 'font' && $this->attr['type'] !== 'color') {

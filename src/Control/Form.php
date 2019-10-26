@@ -11,6 +11,7 @@ use UI\Control;
 class Form extends Control
 {
     const CTL_NAME = 'form';
+
     public function newControl(): CData
     {
         $this->instance = self::$ui->newForm();
@@ -18,9 +19,26 @@ class Form extends Control
         return $this->instance;
     }
 
-    public function addChild(\UI\Control $childs)
+    public function pushChilds()
     {
-        $this->append($childs);
+        $this->attr['childs'] = $this->attr['childs'] ?? [];
+        $allStretchy = $this->attr['stretchy'] ?? 0;
+        foreach ($this->attr['childs'] as $label => $child) {
+            $itemStretchy = $child['stretchy'] ?? $allStretchy;
+
+            foreach ($child as $k => $sub) {
+                if ($k === 'stretchy') {
+                    continue;
+                }
+                $control = $this->build->createItem($sub['name'], $sub['attr']);
+                $this->addChild($control, ['label' => $label, 'stretchy' => $sub['stretchy'] ?? $itemStretchy]);
+            }
+        }
+    }
+
+    protected function addChild(Control $child, $option = [])
+    {
+        $this->append($option['label'], $child, $option['stretchy']);
     }
 
     public function __set($name, $value)
@@ -43,14 +61,15 @@ class Form extends Control
         return $this->formPadded();
     }
 
-    public function append(Control $child)
+    public function append(string $label, Control $child, int $stretchy)
     {
-        $ui = $child->getUIInstance();
-        $this->formAppend($ui);
+        $control = $child->getUIInstance();
+        $this->formAppend($label, $control, $stretchy);
     }
 
     public function delete(int $idx)
     {
         $this->formDelete($idx);
     }
+
 }
