@@ -17,21 +17,22 @@ use UI\Control\Window;
 use UI\Control\Datetime;
 use UI\Control\Progress;
 use UI\UI;
+use ErrorException;
 
 class UIBuild
 {
     /**
      * @var \UI\UI
      */
-    protected static $ui = null;
-    protected $controls = [];
-    protected $controlsName = [];
-    protected $handles = [];
+    protected static UI $ui = null;
+    protected array $controls = [];
+    protected array $controlsName = [];
+    protected array $handles = [];
 
     /**
      * @var \UI\Control\Window
      */
-    protected $win = null;
+    protected Window $win = null;
 
     public function __construct(UI $ui, array $config = [])
     {
@@ -43,7 +44,7 @@ class UIBuild
         }
     }
 
-    public  function createMainWin($config)
+    public function createMainWin(array $config)
     {
         if (!isset($config['body']) || !is_array($config['body'])) {
             throw new \Exception('UI config must has \'body\' key and it is array');
@@ -70,6 +71,7 @@ class UIBuild
         $this->win->show();
         self::$ui->main();
     }
+
     public function menu($config)
     {
         foreach ($config as $menu) {
@@ -77,7 +79,7 @@ class UIBuild
         }
     }
 
-    public function getUI()
+    public function getUI(): UI
     {
         return self::$ui;
     }
@@ -99,7 +101,7 @@ class UIBuild
         }
     }
 
-    public function getBodyTags()
+    public function getBodyTags(): array
     {
         return ['button', 'tab', 'text', 'checkbox', 'label', 'select', 'file', 'radio'];
     }
@@ -107,7 +109,7 @@ class UIBuild
     /**
      * @return \UI\Control\Window
      */
-    public function getWin()
+    public function getWin(): Window
     {
         return $this->win;
     }
@@ -118,7 +120,7 @@ class UIBuild
      * @param bool  $hasMenu
      * @return \UI\Control\Window
      */
-    public function window($config, $hasMenu)
+    public function window($config, $hasMenu): Window
     {
         $config['hasMenu'] = $hasMenu;
         $this->win = new Window($this, $config);
@@ -140,7 +142,7 @@ class UIBuild
         return $this->handles[$handle];
     }
 
-    public function createItem($name, $config = [])
+    public function createItem($name, $config = []): Control
     {
         switch ($name) {
             case 'button':
@@ -177,4 +179,5 @@ class UIBuild
                 throw new Exception("UI Control name $name is invaild");
         }
     }
+
 }

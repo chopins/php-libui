@@ -74,12 +74,12 @@ class Button extends Control
         $this->attr['click'] = $callable;
         if ($this->attr['type'] === 'file') {
             $callable->onBefore(function () {
-                return self::$ui->string(self::$ui->openFile($this->build->getWin()));
+                return self::$ui->string(self::$ui->openFile($this->build->getWin()->getUIInstance()));
             });
         }
         if ($this->attr['type'] === 'save') {
             $callable->onBefore(function () {
-                return self::$ui->string(self::$ui->saveFile($this->build->getWin()));
+                return self::$ui->string(self::$ui->saveFile($this->build->getWin()->getUIInstance()));
             });
         }
         if ($this->attr['type'] !== 'font' && $this->attr['type'] !== 'color') {
@@ -120,10 +120,13 @@ class Button extends Control
 
     public function setValue($text)
     {
-        if ($this->attr['type'] === 'font') { } elseif ($this->attr['type'] === 'color') {
+        if ($this->attr['type'] === 'font') {
+            
+        } elseif ($this->attr['type'] === 'color') {
             $this->colorButtonSetColor($text['red'], $text['green'], $text['blue'], $text['alpha']);
         } else {
             $this->buttonSetText($text);
         }
     }
+
 }

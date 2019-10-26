@@ -10,8 +10,11 @@
 
 namespace UI;
 
-use UI\UIBuild;
 use FFI;
+use FFI\CData;
+use FFI\CType;
+use UI\UIBuild;
+use UI\Struct\Struct;
 
 /**
  *
@@ -285,15 +288,12 @@ class UI
      * @var float
      */
     const PI = 3.14159265358979323846264338327950288419716939937510582097494459;
-
     const ALIGN_FILL = 0;
     const ALIGN_START = 1;
     const ALIGN_CENTER = 2;
     const ALIGN_END = 3;
-
     const FOR_EACH_CONTINUE = 0;
     const FOR_EACH_STOP = 1;
-
     const WINDOW_RESIZE_EDGE_LEFT = 0;
     const WINDOW_RESIZE_EDGE_TOP = 1;
     const WINDOW_RESIZE_EDGE_RIGHT = 2;
@@ -302,23 +302,18 @@ class UI
     const WINDOW_RESIZE_EDGE_TOP_RIGHT = 5;
     const WINDOW_RESIZE_EDGE_BOTTOM_LEFT = 6;
     const WINDOW_RESIZE_EDGE_BOTTOM_RIGHT = 7;
-
     const DRAW_BRUSH_TYPE_SOLID = 0;
     const DRAW_BRUSH_TYPE_LINEAR_GRADIENT = 1;
     const DRAW_BRUSH_TYPE_RADIAL_GRADIENT = 2;
     const DRAW_BRUSH_TYPE_IMAGE = 3;
-
     const DRAW_LINE_CAP_FLAT = 0;
     const DRAW_LINE_CAP_ROUND = 1;
     const DRAW_LINE_CAP_SQUARE = 2;
-
     const DRAW_LINE_JOIN_MITER = 0;
     const DRAW_LINE_JOIN_ROUND = 1;
     const DRAW_LINE_JOIN_BEVEL = 2;
-
     const DRAW_FILL_MODE_WINDING = 0;
     const DRAW_FILL_MODE_ALTERNATE = 1;
-
     const ATTRIBUTE_TYPE_FAMILY = 0;
     const ATTRIBUTE_TYPE_SIZE = 1;
     const ATTRIBUTE_TYPE_WEIGHT = 2;
@@ -329,7 +324,6 @@ class UI
     const ATTRIBUTE_TYPE_UNDERLINE = 6;
     const ATTRIBUTE_TYPE_UNDERLINE_COLOR = 7;
     const ATTRIBUTE_TYPE_FEATURES = 8;
-
     const TEXT_WEIGHT_MINIMUM = 0;
     const TEXT_WEIGHT_THIN = 100;
     const TEXT_WEIGHT_ULTRA_LIGHT = 200;
@@ -343,11 +337,9 @@ class UI
     const TEXT_WEIGHT_HEAVY = 900;
     const TEXT_WEIGHT_ULTRA_HEAVY = 950;
     const TEXT_WEIGHT_MAXIMUM = 1000;
-
     const TEXT_ITALIC_NORMAL = 0;
     const TEXT_ITALIC_OBLIQUE = 1;
     const TEXT_ITALIC_ITALIC = 2;
-
     const TEXT_STRETCH_ULTRA_CONDENSED = 0;
     const TEXT_STRETCH_EXTRA_CONDENSED = 1;
     const TEXT_STRETCH_CONDENSED = 2;
@@ -357,26 +349,21 @@ class UI
     const TEXT_STRETCH_EXPANDED = 6;
     const TEXT_STRETCH_EXTRA_EXPANDED = 7;
     const TEXT_STRETCH_ULTRA_EXPANDED = 8;
-
     const UNDERLINE_NONE = 0;
     const UNDERLINE_SINGLE = 1;
     const UNDERLINE_DOUBLE = 2;
     const UNDERLINE_SUGGESTION = 3;
-
     const UNDERLINE_COLOR_CUSTOM = 0;
     const UNDERLINE_COLOR_SPELLING = 1;
     const UNDERLINE_COLOR_GRAMMAR = 2;
     const UNDERLINE_COLOR_AUXILIARY = 3;
-
     const DRAW_TEXT_ALIGN_LEFT = 0;
     const DRAW_TEXT_ALIGN_CENTER = 1;
     const DRAW_TEXT_ALIGN_RIGHT = 2;
-
     const MODIFIER_CTRL = 1 << 0;
     const MODIFIER_ALT = 1 << 1;
     const MODIFIER_SHIFT = 1 << 2;
     const MODIFIER_SUPER = 1 << 3;
-
     const EXT_KEY_ESCAPE = 1;
     const EXT_KEY_INSERT = 2;
     const EXT_KEY_DELETE = 3;
@@ -416,20 +403,18 @@ class UI
     const EXT_KEY_N_SUBTRACT = 37;
     const EXT_KEY_N_MULTIPLY = 38;
     const EXT_KEY_N_DIVIDE = 39;
-
     const AT_LEADING = 0;
     const AT_TOP = 1;
     const AT_TRAILING = 2;
     const AT_BOTTOM = 3;
-
     const TABLE_VALUE_TYPE_STRING = 0;
     const TABLE_VALUE_TYPE_IMAGE = 1;
     const TABLE_VALUE_TYPE_INT = 2;
     const TABLE_VALUE_TYPE_COLOR = 3;
-
     const DRAW_DEFAULT_MITER_LIMIT = 10.0;
     const TABLE_MODEL_COLUMN_NEVER_EDITABLE = -1;
     const TABLE_MODEL_COLUMN_ALWAYS_EDITABLE = -2;
+
     /**
      * @var FFI
      */
@@ -445,19 +430,19 @@ class UI
      */
     public function __construct(string $dll = '', bool $new = false)
     {
-        if(!$new && self::$ffi instanceof FFI) {
+        if (!$new && self::$ffi instanceof FFI) {
             return self::$ffi;
         }
         $code = file_get_contents(__DIR__ . '/include/libui.h');
         if (!$dll) {
             $dll = $this->findDll();
         }
-        self::$ffi  = FFI::cdef($code, $dll);
+        self::$ffi = FFI::cdef($code, $dll);
         $this->struct = $this->struct();
         $this->autoload();
     }
 
-    protected function findDll()
+    protected function findDll(): string
     {
         switch (PHP_OS_FAMILY) {
             case 'Linux':
@@ -524,26 +509,32 @@ class UI
      *
      * @return string
      */
-    public function init()
+    public function init(): string
     {
         $o = self::$ffi->new('uiInitOptions');
         FFI::memset(FFI::addr($o), 0, FFI::sizeof($o));
-        return self::$ffi->uiInit(FFI::addr($o));
+        $msg = self::$ffi->uiInit(FFI::addr($o));
+        if ($msg) {
+            return $this->string($msg);
+        }
+        return $msg;
     }
-    public function string(FFI\CData $data)
+
+    public function string(FFI\CData $data): string
     {
         return self::$ffi::string($data);
     }
 
-    public function addr($data)
+    public function addr($data): CData
     {
         return self::$ffi::addr($data);
     }
+
     /**
      *
      * @return FFI
      */
-    public function ffi()
+    public function ffi(): FFI
     {
         return self::$ffi;
     }
@@ -551,12 +542,12 @@ class UI
     /**
      * @return FFI\CData
      */
-    public function new($type, $owned = TRUE, $persistent = FALSE)
+    public function new($type, $owned = TRUE, $persistent = FALSE): CData
     {
         return self::$ffi->new($type, $owned, $persistent);
     }
 
-    public function ptr($type, $owned = true, $persistent = false)
+    public function ptr($type, $owned = true, $persistent = false): CData
     {
         return self::$ffi->new("$type*", $owned, $persistent);
     }
@@ -564,7 +555,7 @@ class UI
     /**
      * @return FFI\CType
      */
-    public function type($type)
+    public function type($type): CType
     {
         return self::$ffi->type($type);
     }
@@ -572,7 +563,7 @@ class UI
     /**
      * @return FFI\CData
      */
-    public function cast($type, &$ptr)
+    public function cast($type, &$ptr): CData
     {
         return self::$ffi->cast($type, $ptr);
     }
@@ -580,7 +571,7 @@ class UI
     /**
      * @return FFI\CData
      */
-    public function castPtr($dst, $t)
+    public function castPtr($dst, $t): CData
     {
         return FFI::addr($this->cast($dst, $t[0]));
     }
@@ -589,27 +580,18 @@ class UI
      *  @param bool $isPtr whether return pointer
      *
      */
-    public function newTm($isPtr = false)
+    public function newTm($isPtr = false): CData
     {
-        $type =  self::$ffi->new('tm');
+        $type = self::$ffi->new('tm');
         if (!$isPtr) {
             return $type;
         }
         return FFI::addr($type);
     }
 
-    public function struct()
+    public function struct(): Struct
     {
-        static $isLoad = false;
-        static $struct = null;
-        if (!$isLoad) {
-            include __DIR__ . '/Struct.php';
-            $isLoad = true;
-        }
-        if ($struct === null) {
-            $struct = new Struct($this);
-        }
-        return $struct;
+        return new Struct;
     }
 
     /**
@@ -626,7 +608,7 @@ class UI
      *    'resize' => ['resize_callable','data'],
      *    'menu' => [
      *                 [
-     *                    'title' => 'menu_name', 
+     *                   'title' => 'menu_name', 
      *                  'childs' => [], 
      *                  'click' => ['click_callable', 'callback_data'
      *                 ]
@@ -650,7 +632,7 @@ class UI
      *    ]
      * </code>
      */
-    public function build(array $config)
+    public function build(array $config): UIBuild
     {
         return new UIBuild($this, $config);
     }
@@ -658,13 +640,14 @@ class UI
     public function autoload()
     {
         spl_autoload_register(function ($class) {
-            $classInfo  = explode('\\', $class);
+            $classInfo = explode('\\', $class);
             array_shift($classInfo);
             array_unshift($classInfo, __DIR__);
-            $path  = join(DIRECTORY_SEPARATOR, $classInfo) . '.php';
+            $path = join(DIRECTORY_SEPARATOR, $classInfo) . '.php';
             if (file_exists($path)) {
                 include_once $path;
             }
         });
     }
+
 }

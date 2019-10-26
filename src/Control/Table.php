@@ -14,13 +14,15 @@ use FFI\CData;
 class Table extends Control
 {
     const CTL_NAME = 'table';
+    const DEF_FCOLOR = -1;
+
     protected $model = null;
     protected $modelHandle = null;
     protected $rowNum = 0;
     protected $columnNum = 0;
     protected $columnTypeList = [];
     protected $imgsList = [];
-    const DEF_FCOLOR = -1;
+
     public function newControl(): CData
     {
         $this->columnNum = count($this->attr['th']);
@@ -36,7 +38,6 @@ class Table extends Control
 
     public function pushChilds()
     {
-
         foreach ($this->attr['th'] as $index => $config) {
             $idx = $config['idx'] ?? $index;
             $editable = $config['editable'] ?? false;
@@ -113,6 +114,7 @@ class Table extends Control
     {
         return $this->rowNum;
     }
+
     public function columnNumCall($mh, $tm)
     {
         return $this->columnNum;
@@ -122,6 +124,7 @@ class Table extends Control
     {
         return $this->columnTypeList[$col];
     }
+
     public function cellValueCall($mh, $tm, $row, $col)
     {
         $rowColData = $this->attr['tbody'][$row][$col];
@@ -160,11 +163,12 @@ class Table extends Control
                 if (!is_string($rowColData)) {
                     $rowColData = (string) $rowColData;
                 }
-                $val =  self::$ui->newTableValueString($rowColData);
+                $val = self::$ui->newTableValueString($rowColData);
                 break;
         }
         return $val;
     }
+
     public function setCellValueCall($mh, $tm, $row, $col, $val)
     {
         $callback = $this->attr['change'][$row][$col];
@@ -230,18 +234,18 @@ class Table extends Control
             case 'checkboxtext':
                 if (is_array($id)) {
                     $this->uiTableAppendCheckboxTextColumn(
-                        $title,
-                        $id[0],
-                        $editable[0],
-                        $id[1],
-                        $editable[1],
-                        $tpPtr
+                            $title,
+                            $id[0],
+                            $editable[0],
+                            $id[1],
+                            $editable[1],
+                            $tpPtr
                     );
                 } else {
                     $this->uiTableAppendCheckboxTextColumn(
-                        $title,
-                        $id,
-                        $editable,
+                            $title,
+                            $id,
+                            $editable,
                     );
                 }
                 break;
@@ -252,4 +256,5 @@ class Table extends Control
                 $this->tableAppendTextColumn($title, $id, $editable, $tpPtr);
         }
     }
+
 }

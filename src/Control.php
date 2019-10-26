@@ -3,6 +3,7 @@
 namespace UI;
 
 use UI\UIBuild;
+use UI\UI;
 use FFI\CData;
 
 /**
@@ -18,8 +19,7 @@ abstract class Control
     /**
      * @var \UI\UI
      */
-    protected static $ui;
-    public static $idKey = 'id';
+    protected static UI $ui;
 
     public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
@@ -39,7 +39,7 @@ abstract class Control
 
     public static function uiControl(UIBuild $build, CData $control)
     {
-        $ins  = new static($build, [], $control);
+        $ins = new static($build, [], $control);
         return $ins;
     }
 
@@ -53,8 +53,11 @@ abstract class Control
             $this->addChild($control);
         }
     }
+
     protected function addChild(Control $child)
-    { }
+    {
+        
+    }
 
     public function appendChild(\UI\Control $child)
     {
@@ -66,7 +69,6 @@ abstract class Control
     {
         $this->attr['childs'][] = ['name' => $child::CTL_NAME, 'attr' => $child->getAttr()];
     }
-
 
     public function getAttr($key = null)
     {
@@ -149,6 +151,7 @@ abstract class Control
         }
         $this->controlDisable();
     }
+
     public function destroy()
     {
         $this->controlDestroy();
@@ -223,4 +226,5 @@ abstract class Control
             }
         }, null);
     }
+
 }
