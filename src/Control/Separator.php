@@ -5,6 +5,9 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read string $type  value is 'hr' or 'vr'
+ */
 class Separator extends Control
 {
     const CTL_NAME = 'sep';

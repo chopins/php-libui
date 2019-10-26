@@ -14,10 +14,12 @@ use FFI\CData;
  * @method void closeFigure()
  * @method void addRectangle(float $x, float $y, float $width, float $height)
  * @method void end()
+ * @property-read int $fillMode
  *
  */
 class Path extends Control
 {
+    const CTL_NAME = 'path';
     public function newControl(): CData
     {
         $this->instance = self::$ui->drawNewPath($this->attr['fillMode']);
@@ -33,25 +35,6 @@ class Path extends Control
     {
         $func = 'drawPath' . ucfirst($func);
         return parent::__call($func, $args);
-    }
-
-    public function fill(CData $context, Brush $brush)
-    {
-        self::$ui->drawFill($context, $this->instance, self::$ui->addr($brush->getBrush()));
-    }
-
-    /**
-     * stroke
-     *
-     * @param CData $context    The param from callable function that is Area::draw($handler, $area, $params) passed $params['context']
-     * @param Brush $brush      is new UI\Control\Draw\Brush
-     * @param StrokeParams $params  is new UI\Control\Draw\StrokeParams
-     * @return void
-     */
-    public function stroke(CData $context, Brush $brush, StrokeParams $params)
-    {
-        $paramType = $params->getStrokeParams();
-        self::$ui->drawStroke($context, $this->instance, self::$ui->addr($brush->getBrush()), self::$ui->addr($paramType));
     }
 
     public function newBrush() {

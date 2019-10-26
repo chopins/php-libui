@@ -5,6 +5,10 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read string $title
+ * @property int $margin
+ */
 class Group extends Control
 {
     const CTL_NAME = 'group';
@@ -17,13 +21,23 @@ class Group extends Control
         return $this->instance;
     }
 
-    public function addChild(\UI\Control $childs)
+    protected function addChild(\UI\Control $childs)
     {
         $this->setChild($childs);
     }
 
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'margin':
+                $this->setMargin($value);
+                break;
+        }
+    }
+
     public function setMargin(int $margin)
     {
+        $this->attr['margin'] = $margin;
         $this->groupSetMargined($margin);
     }
 
@@ -32,7 +46,7 @@ class Group extends Control
         return $this->groupMargined();
     }
 
-    public function setChild(Control $child)
+    protected function setChild(Control $child)
     {
         $ui = $child->getUIInstance();
         $this->groupSetChild($ui);

@@ -9,6 +9,8 @@ use FFI\CData;
 
 /**
  * Create window menu
+ * 
+ * @property-read string $title
  */
 class Menu extends Control
 {

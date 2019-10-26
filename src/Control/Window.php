@@ -4,13 +4,14 @@ namespace UI\Control;
 
 use FFI\CData;
 use UI\Control;
+use UI\Event;
 
 /**
  * @method void msgBox(string $title, string $msg)
  * @method void msgBoxError(string $title, string $msg)  error box
  * @method string openFile() open file box
  * @method string saveFile() save file box
- * @method string windowTitle()  get window title
+ * @method \FFI\CData windowTitle()  get window title
  * @method string windowSetTitle(string $title)   set window title
  * @method void windowSetContentSize(int $width, int $height)
  * @method int windowFullscreen()
@@ -22,7 +23,13 @@ use UI\Control;
  * @method void windowSetChild(FFI\CData $child)
  * @method int windowMargined()
  * @method void windowSetMargined(int $margin)
- * 
+ * @property string $title
+ * @property-read int $width
+ * @property-read int $height
+ * @property-read bool $hasMenu
+ * @property int $border
+ * @property int $margin
+ * @property-read \UI\Event $quit
  */
 class Window extends Control
 {
@@ -54,17 +61,32 @@ class Window extends Control
         return $this->instance;
     }
 
-    public function onQuit(array $callable)
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'title':
+                $this->title($value);
+                break;
+            case 'border':
+                $this->border($value);
+                break;
+            case 'margin':
+                $this->border($value);
+                break;
+        }
+    }
+
+    public function onQuit(Event $callable)
     {
         $this->bindEvent('onShouldQuit', $callable);
     }
 
-    public function onClose(array $callable)
+    public function onClose(Event $callable)
     {
         $this->bindEvent('windowOnClosing', $callable);
     }
 
-    public function onResize(array $callable)
+    public function onResize(Event $callable)
     {
         $this->bindEvent('windowOnContentSizeChanged', $callable);
     }
@@ -84,6 +106,7 @@ class Window extends Control
         if ($title === null) {
             return self::$ui->string($this->windowTitle());
         }
+        $this->attr['title'] = $title;
         $this->windowSetTitle($title);
     }
 
@@ -92,6 +115,7 @@ class Window extends Control
         if ($border === null) {
             return $this->windowBorderless();
         }
+        $this->attr['border'] = $border;
         $this->windowSetBorderless($border);
     }
 
@@ -100,6 +124,7 @@ class Window extends Control
         if ($margin === null) {
             return $this->windowMargined();
         }
+        $this->attr['margin'] = $margin;
         $this->windowSetMargined($margin);
     }
 

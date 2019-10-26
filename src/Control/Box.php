@@ -5,6 +5,11 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read string $dir
+ * @property int $padded
+ * @property-read int $child_fit
+ */
 class Box extends Control
 {
     const CTL_NAME = 'box';
@@ -21,6 +26,13 @@ class Box extends Control
         return $this->instance;
     }
 
+    public function __set($name, $value)
+    {
+        if ($name === 'padded') {
+            $this->setPadded($value);
+        }
+    }
+
     public function addChild(\UI\Control $childs)
     {
         $fit = $this->attr['child_fit'] ?? 0;
@@ -28,6 +40,7 @@ class Box extends Control
     }
     public function setPadded(int $padded)
     {
+        $this->attr['padded'] =  $padded;
         $this->boxSetPadded($padded);
     }
 

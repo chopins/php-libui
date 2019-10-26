@@ -530,7 +530,7 @@ class UI
         FFI::memset(FFI::addr($o), 0, FFI::sizeof($o));
         return self::$ffi->uiInit(FFI::addr($o));
     }
-    public function string(FFI\Data $data)
+    public function string(FFI\CData $data)
     {
         return self::$ffi::string($data);
     }
@@ -632,10 +632,10 @@ class UI
      *                 ]
      *               ],
      *    'body' => [
-     *        'box' => ['padded' => 0, 
+     *        [ 'name' =>'box', 'attr' => ['padded' => 0, 
      *                'dir' => 'v',
      *                'childs' => [....]],
-     *        'table' => [
+     *        ['name' => 'table', 'attr' => [
      *                    'th' => [
      *                        ['title' => 'Colum1', 'idx' => 0, 'type' => 'text'],
      *                         ['title' => 'Colum2', 'idx' => 1, 'type' => 'button'],

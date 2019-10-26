@@ -58,9 +58,8 @@ class UIBuild
         }
 
         $this->window($config, $hasMenu);
-        foreach ($config['body'] as $tagName => $item) {
-            $item['parent'] = $this->win;
-            $control = $this->createItem($tagName, $item);
+        foreach ($config['body'] as $item) {
+            $control = $this->createItem($item['name'], $item['attr']);
             $this->win->addChild($control);
         }
     }

@@ -5,6 +5,9 @@ namespace UI\Control;
 use FFI\CData;
 use UI\Control;
 
+/**
+ * @property int $padded
+ */
 class Form extends Control
 {
     const CTL_NAME = 'form';
@@ -20,8 +23,18 @@ class Form extends Control
         $this->append($childs);
     }
 
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'padded':
+                $this->setPadded($value);
+                break;
+        }
+    }
+
     public function setPadded(int $padded)
     {
+        $this->attr['padded'] = $padded;
         $this->formSetPadded($padded);
     }
 

@@ -5,6 +5,10 @@ namespace UI;
 use UI\UIBuild;
 use FFI\CData;
 
+/**
+ * @property-read string $id
+ * @property-read array $childs
+ */
 abstract class Control
 {
     protected $instance = null;
@@ -24,7 +28,7 @@ abstract class Control
             self::$ui = $build->getUI();
         }
         $this->attr = $attr;
-        if($instance === null) {
+        if ($instance === null) {
             $this->instance = $this->newControl();
         } else {
             $this->instance = $instance;
@@ -44,13 +48,25 @@ abstract class Control
     public function pushChilds()
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
-        foreach ($this->attr['childs'] as $key => $config) {
-            $control = $this->build->createItem($key, $config);
+        foreach ($this->attr['childs'] as $child) {
+            $control = $this->build->createItem($child['name'], $child['attr']);
             $this->addChild($control);
         }
     }
-    public function addChild(Control $childs)
+    protected function addChild(Control $child)
     { }
+
+    public function appendChild(\UI\Control $child)
+    {
+        $this->updateChildsList($child);
+        $this->addChild($child);
+    }
+
+    protected function updateChildsList(Control $child)
+    {
+        $this->attr['childs'][] = ['name' => $child::CTL_NAME, 'attr' => $child->getAttr()];
+    }
+
 
     public function getAttr($key = null)
     {
@@ -58,6 +74,11 @@ abstract class Control
             return $this->attr[$key] ?? null;
         }
         return $this->attr;
+    }
+
+    public function getBuild()
+    {
+        return $this->build;
     }
 
     public function getUI()
@@ -82,10 +103,10 @@ abstract class Control
 
     public function __get($name)
     {
-        return $this->$name;
+        return $this->getAttr($name);
     }
 
-    public function __call($func, $args)
+    public function __call($func, $args = [])
     {
         switch (count($args)) {
             case 0:
@@ -158,33 +179,42 @@ abstract class Control
         return $this->controlToplevel();
     }
 
-    public function bindEvent($event, array $callable)
+    public function bindEvent($event, Event $callable)
     {
         $this->$event(function (...$params) use ($callable) {
-            $func = $callable[0];
-            $data = $callable[1] ?? null;
+            $func = $callable->getFunc();
+            $data = $callable->getData();
+            $before = $callable->getBefore();
+            $after = $callable->getAfter();
+            if ($before) {
+                $beforeResult = $before();
+            }
             try {
                 switch (count($params)) {
                     case 0:
-                        $func($data);
+                        $func($data, $beforeResult);
                         break;
                     case 1:
-                        $func($data);
+                        $func($data, $beforeResult);
                         break;
                     case 2:
-                        $func($params[0], $data);
+                        $func($params[0], $data, $beforeResult);
                         break;
                     case 3:
-                        $func($params[0], $params[1], $data);
+                        $func($params[0], $params[1], $data, $beforeResult);
                         break;
                     case 4:
-                        $func($params[0], $params[1], $params[2], $data);
+                        $func($params[0], $params[1], $params[2], $data, $beforeResult);
                         break;
                     default:
                         array_pop($params);
                         $params[] = $data;
+                        $params[] = $beforeResult;
                         call_user_func_array($func, $params);
                         break;
+                }
+                if ($after) {
+                    $after();
                 }
             } catch (\Exception $e) {
                 echo $e;

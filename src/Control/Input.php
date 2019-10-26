@@ -4,9 +4,20 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Event;
 
 /**
  * Create password,search,radio,select,checkbox,text
+ * @property-read string $type
+ * @property-read bool $wrap
+ * @property-read array $option
+ * @property-read bool $editable
+ * @property-read string $title
+ * @property-read int $mix
+ * @property-read int $max
+ * @property-read bool $readonly
+ * @property-read \UI\Event $change
+ * @property-read \UI\Event $click
  */
 class Input extends Control
 {
@@ -179,7 +190,7 @@ class Input extends Control
         }
     }
 
-    public function onChange(array $callable)
+    public function onChange(Event $callable)
     {
         switch ($this->attr['type']) {
             case 'textarea':
@@ -200,7 +211,7 @@ class Input extends Control
     }
 
 
-    public function onClick(array $callable)
+    public function onClick(Event $callable)
     {
         switch ($this->attr['type']) {
             case 'radio':

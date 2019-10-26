@@ -4,7 +4,13 @@ namespace UI\Control;
 
 use UI\Control\Menu;
 use FFI\CData;
+use UI\Event;
 
+/**
+ * @property-read Menu $parent
+ * @property-read string $type
+ * @property-read \UI\Event $click
+ */
 class MenuItem extends Menu
 {
     public function newControl(): CData
@@ -34,16 +40,18 @@ class MenuItem extends Menu
         return $this->instance;
     }
 
-    public function onClick(array $callable)
+    public function onClick(Event $callable)
     {
         $this->bindEvent('menuItemOnClicked', $callable);
     }
 
-    public function isCheck() {
+    public function isCheck()
+    {
         return $this->menuItemChecked();
     }
 
-    public function setCheck(int $check = 1) {
+    public function setCheck(int $check = 1)
+    {
         $this->menuItemSetChecked($check);
     }
 }

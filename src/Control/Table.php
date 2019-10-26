@@ -5,6 +5,12 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read array $th
+ * @property-read array $tbody
+ * @property-read int $rowBgcolor
+ * @property-read array $change
+ */
 class Table extends Control
 {
     const CTL_NAME = 'table';

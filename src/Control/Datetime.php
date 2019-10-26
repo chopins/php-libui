@@ -5,6 +5,10 @@ namespace UI\Control;
 use FFI\CData;
 use UI\Control;
 
+/**
+ * @property-read string $type   'time', 'date' or 'datetime'
+ * @property \UI\Event $change
+ */
 class Datetime extends Control
 {
     const CTL_NAME = 'datetime';
@@ -64,8 +68,18 @@ class Datetime extends Control
         $this->dateTimePickerSetTime(self::$ui->addr($time));
     }
 
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'change':
+                $this->onChange($value);
+                break;
+        }
+    }
+
     public function onChange($callable)
     {
+        $this->attr['change'] = $callable;
         $this->bindEvent('dateTimePickerOnChanged', $callable);
     }
 }

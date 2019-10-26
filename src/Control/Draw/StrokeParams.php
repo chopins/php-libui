@@ -19,7 +19,7 @@ class StrokeParams
     {
         self::$ui = $build->getUI();
     }
-    public function getStrokeParams()
+    public function getStrokeParams($ptr = true)
     {
         $paramType = self::$ui->new('uiDrawStrokeParams');
         $paramType->Cap = $this->cap;
@@ -31,6 +31,6 @@ class StrokeParams
         $paramType->Dashes = self::$ui->addr($dashes);
         $paramType->NumDashes = $this->NumDashes;
         $paramType->DashPhase = $this->DashPhase;
-        return $paramType;
+        return $ptr ? self::$ui->addr($paramType) : $paramType;
     }
 }

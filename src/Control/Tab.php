@@ -5,6 +5,9 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read array $page
+ */
 class Tab extends Control
 {
     const CTL_NAME = 'tab';

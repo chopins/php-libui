@@ -4,12 +4,25 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Control\Draw\Matrix;
 use UI\Control\Draw\Path;
 
+/**
+ * @property-read string $type
+ * @property-read int $width
+ * @property-read int $height
+ * @property-read \UI\Event $draw
+ * @property-read \UI\Event $mouse\UI\Event
+ * @property-read \UI\Event $mouseCrossed
+ * @property-read \UI\Event $dragBroken
+ * @property-read \UI\Event $keyEvent
+ * 
+ */
 class Area extends Control
 {
     const CTL_NAME = 'canvas';
     private $handler = null;
+    protected $context = null;
     public function newControl(): CData
     {
         $handler = $this->areaHandler();
@@ -41,7 +54,7 @@ class Area extends Control
 
     public function draw($handler, $area, $params)
     {
-        if (!$this->attr['draw']) {
+        if (empty($this->attr['draw'])) {
             return;
         }
         $handlerArr = [
@@ -52,7 +65,8 @@ class Area extends Control
             'keyEvent' => $handler[0]->keyEvent
         ];
 
-        $func = $this->attr['draw'];
+        $func = $this->attr['draw']->getFunc();
+        $this->context = $params[0]->Context;
         $paramsArr = [
             'context' => $params[0]->Context,
             'areaWidth' => $params[0]->AreaWidth,
@@ -67,7 +81,7 @@ class Area extends Control
 
     public function mouseEvent($handler, $area, $mouseEvent)
     {
-        if (!$this->attr['mouseEvent']) {
+        if (empty($this->attr['mouseEvent'])) {
             return;
         }
         $handlerArr = [
@@ -88,13 +102,13 @@ class Area extends Control
             'modifiers' => $mouseEvent[0]->Modifiers,
             'held1To64' => $mouseEvent[0]->Held1To64,
         ];
-        $func = $this->attr['mouseEvent'];
+        $func = $this->attr['mouseEvent']->getFunc();
         $func($handlerArr, $this, $mouseEventArr);
     }
 
     public function mouseCrossed($handler, $area, $left)
     {
-        if (!$this->attr['mouseCrossed']) {
+        if (empty($this->attr['mouseCrossed'])) {
             return;
         }
         $handlerArr = [
@@ -104,13 +118,13 @@ class Area extends Control
             'dragBroken' => $handler[0]->dragBroken,
             'keyEvent' => $handler[0]->keyEvent
         ];
-        $func = $this->attr['mouseCrossed'];
+        $func = $this->attr['mouseCrossed']->getFunc();
         $func($handlerArr, $this, $left);
     }
 
     public function dragBroken($handler, $area)
     {
-        if (!$this->attr['dragBroken']) {
+        if (empty($this->attr['dragBroken'])) {
             return;
         }
         $handlerArr = [
@@ -120,13 +134,13 @@ class Area extends Control
             'dragBroken' => $handler[0]->dragBroken,
             'keyEvent' => $handler[0]->keyEvent
         ];
-        $func = $this->attr['mouseCrossed'];
+        $func = $this->attr['mouseCrossed']->getFunc();
         $func($handlerArr, $this);
     }
 
     public function keyEvent($handler, $area, $keyEvent)
     {
-        if (!$this->attr['keyEvent']) {
+        if (empty($this->attr['keyEvent'])) {
             return;
         }
         $handlerArr = [
@@ -143,7 +157,7 @@ class Area extends Control
             'modifiers' => $keyEvent[0]->modifiers,
             'up' => $keyEvent[0]->Up,
         ];
-        $func = $this->attr['keyEvent'];
+        $func = $this->attr['keyEvent']->getFunc();
         $func($handlerArr, $this, $keyEventAttr);
     }
 
@@ -187,5 +201,40 @@ class Area extends Control
     public function drawPath($config)
     {
         return new Path($this->build, $config);
+    }
+    public function drawfill(Path $path,  Brush $brush)
+    {
+        self::$ui->drawFill($this->context, $path->getUIInstance(), $brush->getBrush());
+    }
+
+    /**
+     * draw stroke
+     *
+     * @param Brush $brush      is new UI\Control\Draw\Brush
+     * @param StrokeParams $params  is new UI\Control\Draw\StrokeParams
+     * @return void
+     */
+    public function drawStroke(Path $path,  Brush $brush, StrokeParams $params)
+    {
+        $paramType = $params->getStrokeParams();
+        self::$ui->drawStroke($this->context, $path->getUIInstance(), $brush->getBrush(), $paramType);
+    }
+
+    public function drawTransform(Matrix $m)
+    {
+        self::$ui->drawTransform($this->context, $m->getMatrix());
+    }
+
+    public function drawClip(Path $path)
+    {
+        self::$ui->drawClip($this->context, $path->getUIInstance());
+    }
+    public function drawSave()
+    {
+        self::$ui->drawSave($this->context);
+    }
+    public function drawRestore()
+    {
+        self::$ui->drawRestore($this->context);
     }
 }

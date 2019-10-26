@@ -39,7 +39,10 @@ $build->show();
     'title' => 'window title name',
     'width' => 600,
     'menu' => [],
-    'body'  => []
+    'body'  => [
+        ['name' => 'box', 'attr' => []],
+        ['name' => 'grid', 'attr' => []]
+    ]
 ]
 ```
 
@@ -51,11 +54,9 @@ $build->show();
 | height | int           | window height   | 640          |
 | border | int           | window border   | 0            |
 | margin | int           | window margin   | 0            |
-| quit   | EventCallable | quit callback   | null         |
-| close  | EventCallable | close callback  | null         |
-| resize | EventCallable | resize callback | null         |
-
-上面的 `EventCallable` 类型实际上是 PHP 数组 `array` 类型, 其第0个元素是回调函数 `callable` 类型, 第一个元素是需要传给回调函数的数据. 结构类似 `['function_name', 'pass_data_string']`,  __注意: 本文档中的 EventCallable 类型都是如此__
+| quit   | \UI\Event | quit callback   | null         |
+| close  | \UI\Event | close callback  | null         |
+| resize | \UI\Event | resize callback | null         |
 
 ## 菜单数组 menu
 这个数组中的每一个元素为一个菜单配置，结构类似：
@@ -86,11 +87,11 @@ __当前UI配置中的菜单只支持下面的属性:__
 | ------ | ------------- | ----------------------------------------------------------- | ---- |
 | title  | string        | menu title                                                  | yes  |
 | type   | string        | menu type, value is `text` or `checkbox`, default is `text` | no   |
-| click  | EventCallable | click callback                                              | no   |
+| click  | \UI\Event | click callback                                              | no   |
 | childs | array         | child menu list                                             | no   |
 
 ## body 数组
-`body`数组的每一个元素为一个UI控件的配置，每一个元素键为控件名，值为配置，当前 __Build UI__ 配置只支持入如下控件名，
+`body`数组的每一个元素为一个UI控件的配置，元素中`name`子元素为控件名，`attr`子元数为配置，当前 __Build UI__ 配置只支持入如下控件名，
 
 1. `button`, Button control,包含下面的属性:
    
@@ -98,8 +99,8 @@ __当前UI配置中的菜单只支持下面的属性:__
    | ------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
    | type   | string        | 控件类型，类似HTML的`<button>`标签的`type`属性，可能值如下:<br />2. `file`, open file button<br />1. `save`, save file button<br />2. `font`, select font button<br />3. `color`, select color button<br />3. `button`, is default value | yes  |
    | title  | string        | button label name                                                                                                                                                                                                                        | yes  |
-   | chick  | EventCallable | when click callback, 当`type`为 `file` 或 `save` 时，选择文件后会被调用，并会将文件名传给回调函数                                                                                                                                        | no   |
-   | change | EventCallable | only when `color` and `font` available, select color or font be call                                                                                                                                                                     | no   |
+   | chick  | \UI\Event | when click callback, 当`type`为 `file` 或 `save` 时，选择文件后会被调用，并会将文件名传给回调函数                                                                                                                                        | no   |
+   | change | \UI\Event | only when `color` and `font` available, select color or font be call                                                                                                                                                                     | no   |
 2. `box` 盒布局 ,the following attr:
    | 属性名    | 类型   | 描述                                                                                  | 必须 |
    | --------- | ------ | ------------------------------------------------------------------------------------- | ---- |
@@ -119,9 +120,9 @@ __当前UI配置中的菜单只支持下面的属性:__
    | readonly | bool          |                                                                                                                                                                                                                                                                                                                              | no   |
    | wrap     | bool          | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                               | no   |
    | option   | array         | `radio` and `select` available,element value is option title, key is natural order number                                                                                                                                                                                                                                    | no   |
-   | change   | EventCallable | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                               | no   |
+   | change   | \UI\Event | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                               | no   |
    | title    | string        | checkbox` available                                                                                                                                                                                                                                                                                                          | no   |
-   | click    | EventCallable | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                        | no   |
+   | click    | \UI\Event | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                        | no   |
 8. `form` 表单布局, has `padded`, `childs` attr
 9.  `grid` 网格布局, the following attr:
     

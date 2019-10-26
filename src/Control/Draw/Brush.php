@@ -4,25 +4,6 @@ namespace UI\Control\Draw;
 
 use UI\UIBuild;
 
-/**
- * @property int $type
- * @property float $R
- * @property float $G
- * @property float $B
- * @property float $A
- * @property float $X0
- * @property float $Y0
- * @property float $X1
- * @property float $Y1
- * @property float $outerRadius
- * @property float $stopsPos
- * @property float $stopsR
- * @property float $stopsG
- * @property float $stopsB
- * @property float $stopsA
- * @property int $numStops
- *
- */
 class Brush
 {
     /**
@@ -50,7 +31,7 @@ class Brush
         self::$ui = $build->getUI();
     }
 
-    public function getBrush()
+    public function getBrush($ptr = true)
     {
         $stops = self::$ui->new('uiDrawBrushGradientStop');
         $stops->Pos = $this->stopsPos;
@@ -71,6 +52,6 @@ class Brush
         $brush->OuterRadius = $this->outerRadius;
         $brush->Stops = self::$ui->addr($stops);
         $brush->NumStops = $this->numStops;
-        return $brush;
+        return $ptr ? self::$ui->addr($brush) : $brush;
     }
 }

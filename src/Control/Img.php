@@ -5,6 +5,11 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 
+/**
+ * @property-read array $src
+ * @property-read int $width
+ * @property-read int $height
+ */
 class Img extends Control
 {
     const CTL_NAME = 'img';
@@ -40,6 +45,7 @@ class Img extends Control
      */
     public function appendImg(string $img)
     {
+        $this->attr['src'][] = $img;
         $size = \getimagesize($img);
         $data = \file_get_contents($img);
         $this->append($data, $size[0], $size[1], $size['bits']);

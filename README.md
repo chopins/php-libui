@@ -41,7 +41,10 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
     'title' => 'window title name',
     'width' => 600,
     'menu' => [],
-    'body'  => []
+    'body'  => [
+        ['name' => 'box', 'attr' => []]
+        ['name' => 'grid', 'attr' => []]
+    ]
 ]
 ```
 
@@ -53,11 +56,9 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
 | height | int           | window height   | 640           |
 | border | int           | window border   | 0             |
 | margin | int           | window margin   | 0             |
-| quit   | EventCallable | quit callback   | null          |
-| close  | EventCallable | close callback  | null          |
-| resize | EventCallable | resize callback | null          |
-
-above table type `EventCallable` is php `array`, element 0 is `callable`, element 1 is pass to callable data of user. similar `['function_name', 'pass_data_string']`,  __Note: The doc of EventCallable type is same as this__
+| quit   | \UI\Event | quit callback   | null          |
+| close  | \UI\Event | close callback  | null          |
+| resize | \UI\Event | resize callback | null          |
 
 ## menu array
 The array level 1 of item element is one menu, similar:
@@ -88,11 +89,11 @@ __current Build UI Config of submenu only contain the following attr:__
 | ------ | ------------- | ----------------------------------------------------------- | ------- |
 | title  | string        | menu title                                                  | yes     |
 | type   | string        | menu type, value is `text` or `checkbox`, default is `text` | no      |
-| click  | EventCallable | click callback                                              | no      |
+| click  | \UI\Event | click callback                                              | no      |
 | childs | array         | child menu list                                             | no      |
 
 ## body array
-every element key of `body` array is control config, the element key is control name and value is control config, __Build UI__ current only support the following control:
+every element key of `body` array is control config, `name` element is control name and `attr` element is control attr, __Build UI__ current only support the following control:
 
 1. `button`, Button control,contain the following attr:
 
@@ -100,8 +101,8 @@ every element key of `body` array is control config, the element key is control 
    | ------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
    | type   | string        | control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:<br />  1. `file`, open file button<br />2. `save`, save file button<br />3. `font`, select font button<br />4. `color`, select color button<br />5. `button`, is default value | yes     |
    | title  | string        | button label name                                                                                                                                                                                                                                                      | yes     |
-   | click  | EventCallable | when click callback, when type `file` and `save` is after select file call                                                                                                                                                                                             | no      |
-   | change | EventCallable | only when `color` and `font` available, select color or font be call                                                                                                                                                                                                   | no      |
+   | click  | \UI\Event | when click callback, when type `file` and `save` is after select file call                                                                                                                                                                                             | no      |
+   | change | \UI\Event | only when `color` and `font` available, select color or font be call                                                                                                                                                                                                   | no      |
    | id     | string        |                                                                                                                                                                                                                                                                        | no      |
 
 2. `box` box layout,the following attr:
@@ -126,9 +127,9 @@ every element key of `body` array is control config, the element key is control 
    | readonly | bool          | whether readonly                                                                                                                                                                                                                                                                                                                                                       | no      |
    | wrap     | bool          | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                                                                         | no      |
    | option   | array         | `radio` and `select` available, element value is option title, key is natural order number                                                                                                                                                                                                                                                                             | no      |
-   | change   | EventCallable | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                                                                         | no      |
+   | change   | \UI\Event | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                                                                         | no      |
    | title    | string        | `checkbox` available                                                                                                                                                                                                                                                                                                                                                   | yes     |
-   | click    | EventCallable | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                                                                  | no      |
+   | click    | \UI\Event | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                                                                  | no      |
    | min      | int           | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
    | max      | int           | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
    | id       | string        |                                                                                                                                                                                                                                                                                                                                                                        | no      |
@@ -174,10 +175,10 @@ every element key of `body` array is control config, the element key is control 
     | attr   | type          | description                                   | require |
     | ------ | ------------- | --------------------------------------------- | ------- |
     | type   | string        | specify one of value `time`,`date`,`datetime` | yes     |
-    | change | EventCallable |                                               | no      |
+    | change | \UI\Event |                                               | no      |
     | id     | string        |                                               | no      |
 
-15.  `progress`, has `id` attr
+14.  `progress`, has `id` attr
 15.  unsupport control must call libui C function by `UI\UI`
 
 ## Control common method:
