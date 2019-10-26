@@ -26,32 +26,35 @@ class Brush
     public float $stopsA;
     public int $numStops;
     protected static $ui;
+    protected $structInstance = null;
+    protected $stops = null;
     public function __construct(UIBuild $build)
     {
         self::$ui = $build->getUI();
+        $this->structInstance = self::$ui->new('uiDrawBrush');
+        $this->stops = self::$ui->new('uiDrawBrushGradientStop');
     }
 
     public function getBrush($ptr = true)
     {
-        $stops = self::$ui->new('uiDrawBrushGradientStop');
-        $stops->Pos = $this->stopsPos;
-        $stops->R = $this->stopsR;
-        $stops->G = $this->stopsG;
-        $stops->B = $this->stopsB;
-        $stops->A = $this->stopsA;
-        $brush = self::$ui->new('uiDrawBrush');
-        $brush->Type = $this->type;
-        $brush->R = $this->R;
-        $brush->G = $this->G;
-        $brush->B = $this->B;
-        $brush->A = $this->A;
-        $brush->X0 = $this->X0;
-        $brush->Y0 = $this->Y0;
-        $brush->X1 = $this->X1;
-        $brush->Y1 = $this->Y1;
-        $brush->OuterRadius = $this->outerRadius;
-        $brush->Stops = self::$ui->addr($stops);
-        $brush->NumStops = $this->numStops;
-        return $ptr ? self::$ui->addr($brush) : $brush;
+        $this->stops->Pos = $this->stopsPos;
+        $this->stops->R = $this->stopsR;
+        $this->stops->G = $this->stopsG;
+        $this->stops->B = $this->stopsB;
+        $this->stops->A = $this->stopsA;
+        
+        $this->structInstance->Type = $this->type;
+        $this->structInstance->R = $this->R;
+        $this->structInstance->G = $this->G;
+        $this->structInstance->B = $this->B;
+        $this->structInstance->A = $this->A;
+        $this->structInstance->X0 = $this->X0;
+        $this->structInstance->Y0 = $this->Y0;
+        $this->structInstance->X1 = $this->X1;
+        $this->structInstance->Y1 = $this->Y1;
+        $this->structInstance->OuterRadius = $this->outerRadius;
+        $this->structInstance->Stops = self::$ui->addr($this->stops);
+        $this->structInstance->NumStops = $this->numStops;
+        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
     }
 }

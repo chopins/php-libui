@@ -204,6 +204,22 @@ class Area extends Control
     {
         return new Path($this->build, $config);
     }
+
+    public function newBrush()
+    {
+        return new Brush($this->build);
+    }
+
+    public function newMatrix()
+    {
+        return new Matrix($this->build);
+    }
+
+    public function newStrokeParams()
+    {
+        return new StrokeParams($this->build);
+    }
+
     public function drawfill(Path $path,  Brush $brush)
     {
         self::$ui->drawFill($this->context, $path->getUIInstance(), $brush->getBrush());
@@ -212,8 +228,8 @@ class Area extends Control
     /**
      * draw stroke
      *
-     * @param Brush $brush      is new UI\Control\Draw\Brush
-     * @param StrokeParams $params  is new UI\Control\Draw\StrokeParams
+     * @param Brush $brush      is new UI\Control\Brush
+     * @param StrokeParams $params  is new UI\Struct\StrokeParams
      * @return void
      */
     public function drawStroke(Path $path,  Brush $brush, StrokeParams $params)
