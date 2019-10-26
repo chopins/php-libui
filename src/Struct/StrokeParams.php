@@ -1,6 +1,6 @@
 <?php
 
-namespace UI\Control\Draw;
+namespace UI\Struct;
 
 use UI\UIBuild;
 

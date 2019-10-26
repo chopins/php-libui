@@ -1,9 +1,11 @@
 <?php
 
-namespace UI\Control\Draw;
+namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Struct\Brush;
+use UI\Struct\StrokeParams;
 
 /**
  * @method void newFigure(float x, float y)

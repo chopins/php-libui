@@ -4,8 +4,10 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
-use UI\Control\Draw\Matrix;
-use UI\Control\Draw\Path;
+use UI\Struct\Matrix;
+use UI\Control\Path;
+use UI\Struct\StrokeParams;
+use UI\Struct\Brush;
 
 /**
  * @property-read string $type

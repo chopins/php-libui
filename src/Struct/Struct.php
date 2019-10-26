@@ -7,7 +7,7 @@
  * @link       https://github.com/chopins/php-libui
  */
 
- namespace UI;
+ namespace UI\Struct;
 
 class Struct
 {

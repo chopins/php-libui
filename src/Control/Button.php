@@ -5,6 +5,7 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 use UI\Event;
+use UI\Struct\FontDescriptor;
 
 /**
  * Create button,file,save-file,font,color by type in config
