@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -22,6 +31,7 @@ use UI\Event;
 class Input extends Control
 {
     const CTL_NAME = 'input';
+
     public function newControl(): CData
     {
         $this->attr['type'] = $this->attr['type'] ?? null;
@@ -33,6 +43,7 @@ class Input extends Control
                 $this->instance = self::$ui->newSearchEntry();
                 break;
             case 'textarea':
+                $this->attr['wrap'] = $this->attr['wrap'] ?? 0;
                 $this->instance = $this->attr['wrap'] ? self::$ui->newMultilineEntry() : self::$ui->newNonWrappingMultilineEntry();
                 break;
             case 'radio':
@@ -63,6 +74,7 @@ class Input extends Control
                 $this->attr['min'] = $this->attr['min'] ?? 0;
                 $this->attr['max'] = $this->attr['max'] ?? 100;
                 $this->instance = self::$ui->newSlider($this->attr['min'], $this->attr['max']);
+                break;
             case 'text':
             default:
                 $this->instance = self::$ui->newEntry();
@@ -87,6 +99,7 @@ class Input extends Control
             $this->comboboxAppend($value);
         }
     }
+
     public function getValue()
     {
         $isInt = false;
@@ -145,7 +158,7 @@ class Input extends Control
             case 'textarea':
                 $this->multilineEntrySetReadOnly($set);
                 break;
-            case 'radio' ||  'checkbox':
+            case 'radio' || 'checkbox':
                 break;
             default:
                 $this->entrySetReadOnly($set);
@@ -157,7 +170,7 @@ class Input extends Control
         switch ($this->attr['type']) {
             case 'textarea':
                 return $this->multilineEntryReadOnly();
-            case 'radio' ||  'checkbox':
+            case 'radio' || 'checkbox':
                 return null;
             default:
                 return $this->entryReadOnly();
@@ -210,7 +223,6 @@ class Input extends Control
         }
     }
 
-
     public function onClick(Event $callable)
     {
         switch ($this->attr['type']) {
@@ -222,4 +234,5 @@ class Input extends Control
                 break;
         }
     }
+
 }

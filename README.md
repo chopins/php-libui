@@ -42,8 +42,8 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
     'width' => 600,
     'menu' => [],
     'body'  => [
-        ['name' => 'box', 'attr' => []]
-        ['name' => 'grid', 'attr' => []]
+        ['name' => 'box']
+        ['name' => 'grid']
     ]
 ]
 ```

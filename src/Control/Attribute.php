@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -32,6 +41,10 @@ use UI\Control\OpenTypeFeatures;
 class Attribute extends Control
 {
     const CTL_NAME = 'attribute';
+
+    protected $callPrefix = 'attribute';
+    protected $callPrefixFuncList = ['getType', 'family', 'size', 'weight', 'italic', 'stretch', 'underline'];
+
     public function newControl(): CData
     {
         switch ($this->attr['type']) {
@@ -69,12 +82,6 @@ class Attribute extends Control
         return $this->instance;
     }
 
-    public function __call($func, $args = [])
-    {
-        $func = 'attribute' . ucfirst($func);
-        return parent::__call($func, $args);
-    }
-
     public function color(&$r, &$g, &$b, &$a)
     {
         $rptr = self::$ui->new('double*');
@@ -87,6 +94,7 @@ class Attribute extends Control
         $b = $bptr[0];
         $a = $aptr[0];
     }
+
     public function underlineColor(&$u, &$r, &$g, &$b, &$a)
     {
         $uptr = self::$ui->new('uiUnderlineColor*');
@@ -102,7 +110,7 @@ class Attribute extends Control
         $a = $aptr[0];
     }
 
-    public  function features()
+    public function features()
     {
         if ($this->attr['type'] === self::$ui::ATTRIBUTE_TYPE_FEATURES) {
             $control = self::$ui->attributeFeatures();
@@ -114,4 +122,5 @@ class Attribute extends Control
             return new OpenTypeFeatures($this->build, [], $control);
         }
     }
+
 }

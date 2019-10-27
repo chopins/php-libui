@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -19,6 +28,11 @@ use UI\Control\Attribute;
 class AttributeString extends Control
 {
     const CTL_NAME = 'string';
+    const IS_CONTROL = false;
+
+    protected $callPrefix = 'attributedString';
+    protected $callPrefixFuncList = ['string', 'len', 'appendUnattributed', 'insertAtUnattributed',
+        'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'];
 
     public function newControl(): CData
     {
@@ -45,12 +59,6 @@ class AttributeString extends Control
             return (int) $callable($this, $attr, $start, $end, $data);
         };
         $this->attributedStringForEachAttribute($func, null);
-    }
-
-    public function __call($func, $args = [])
-    {
-        $func = 'attributedString' . ucfirst($func);
-        return parent::__call($func, $args);
     }
 
 }

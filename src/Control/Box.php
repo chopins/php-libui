@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -13,6 +22,7 @@ use FFI\CData;
 class Box extends Control
 {
     const CTL_NAME = 'box';
+
     public function newControl(): CData
     {
         $this->attr['dir'] = $this->attr['dir'] ?? 'h';
@@ -33,14 +43,15 @@ class Box extends Control
         }
     }
 
-    public function addChild(\UI\Control $childs, $option)
+    public function addChild(\UI\Control $childs, $option = [])
     {
         $fit = $option['child_fit'] ?? $this->attr['child_fit'];
         $this->append($childs, $fit);
     }
+
     public function setPadded(int $padded)
     {
-        $this->attr['padded'] =  $padded;
+        $this->attr['padded'] = $padded;
         $this->boxSetPadded($padded);
     }
 
@@ -59,4 +70,5 @@ class Box extends Control
     {
         $this->boxDelete($idx);
     }
+
 }

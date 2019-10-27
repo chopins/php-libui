@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -16,12 +25,17 @@ use UI\Struct\StrokeParams;
  * @method void closeFigure()
  * @method void addRectangle(float $x, float $y, float $width, float $height)
  * @method void end()
- * @property-read int $fillMode
+ * @property-read int $fillMode  specify of value \UI\UI::DRAW_FILL_MODE_*
  *
  */
 class Path extends Control
 {
     const CTL_NAME = 'path';
+
+    protected $callPrefix = 'drawPath';
+    protected $callPrefixFuncList = ['newFigure', 'newFigureWithArc', 'lineTo', 'arcTo', 'bezierTo',
+        'closeFigure', 'addRectangle', 'end'];
+
     public function newControl(): CData
     {
         $this->instance = self::$ui->drawNewPath($this->attr['fillMode']);
@@ -33,17 +47,14 @@ class Path extends Control
         $this->drawFreePath();
     }
 
-    public function __call($func, $args)
+    public function newBrush()
     {
-        $func = 'drawPath' . ucfirst($func);
-        return parent::__call($func, $args);
-    }
-
-    public function newBrush() {
         return new Brush($this->build);
     }
 
-    public function newStrokeParams() {
+    public function newStrokeParams()
+    {
         return new StrokeParams($this->build);
     }
+
 }

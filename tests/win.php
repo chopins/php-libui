@@ -10,7 +10,6 @@ $config = [
     'width' => 320,
     'height' => 240,
     'margin' =>  1,
-    'close' => ['onClosing', null],
     'body' => []
 ];
 

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -8,18 +17,21 @@ use FFI\CData;
 class Progress extends Control
 {
     const CTL_NAME = 'progress';
+
     public function newControl(): CData
     {
         $this->instance = self::$ui->newProgressBar();
         return $this->instance;
     }
-    public  function setValue(int $v)
+
+    public function setValue(int $v)
     {
         $this->progressBarSetValue($v);
     }
 
-    public  function getValue(): int
+    public function getValue(): int
     {
         return $this->progressBarValue();
     }
+
 }

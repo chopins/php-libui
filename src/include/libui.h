@@ -1,3 +1,12 @@
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 struct tm {
     int tm_sec;
     int tm_min;
@@ -202,13 +211,13 @@ extern  int uiMultilineEntryReadOnly(uiMultilineEntry *e);
 extern  void uiMultilineEntrySetReadOnly(uiMultilineEntry *e, int readonly);
 extern  uiMultilineEntry *uiNewMultilineEntry(void);
 extern  uiMultilineEntry *uiNewNonWrappingMultilineEntry(void);
-typedef struct  uiControl uiMenuItem ;
+typedef struct  uiMenuItem uiMenuItem ;
 extern  void uiMenuItemEnable(uiMenuItem *m);
 extern  void uiMenuItemDisable(uiMenuItem *m);
 extern  void uiMenuItemOnClicked(uiMenuItem *m, void (*f)(uiMenuItem *sender, uiWindow *window, void *data), void *data);
 extern  int uiMenuItemChecked(uiMenuItem *m);
 extern  void uiMenuItemSetChecked(uiMenuItem *m, int checked);
-typedef struct  uiControl uiMenu ;
+typedef struct  uiMenu uiMenu ;
 extern  uiMenuItem *uiMenuAppendItem(uiMenu *m, const char *name);
 extern  uiMenuItem *uiMenuAppendCheckItem(uiMenu *m, const char *name);
 extern  uiMenuItem *uiMenuAppendQuitItem(uiMenu *m);
@@ -423,7 +432,7 @@ extern  int uiOpenTypeFeaturesGet(const uiOpenTypeFeatures *otf, char a, char b,
 extern  void uiOpenTypeFeaturesForEach(const uiOpenTypeFeatures *otf, uiOpenTypeFeaturesForEachFunc f, void *data);
 extern  uiAttribute *uiNewFeaturesAttribute(const uiOpenTypeFeatures *otf);
 extern  const uiOpenTypeFeatures *uiAttributeFeatures(const uiAttribute *a);
-typedef struct  uiControl uiAttributedString ;
+typedef struct  uiAttributedString uiAttributedString ;
 typedef uiForEach (*uiAttributedStringForEachAttributeFunc)(const uiAttributedString *s, const uiAttribute *a, size_t start, size_t end, void *data);
 extern  uiAttributedString *uiNewAttributedString(const char *initialString);
 extern  void uiFreeAttributedString(uiAttributedString *s);
@@ -444,7 +453,7 @@ struct uiFontDescriptor {    char *Family;
     uiTextItalic Italic;
     uiTextStretch Stretch;
 };
-typedef struct  uiControl uiDrawTextLayout ;
+typedef struct  uiDrawTextLayout uiDrawTextLayout ;
 typedef unsigned int uiDrawTextAlign; enum {
     uiDrawTextAlignLeft,
     uiDrawTextAlignCenter,
@@ -554,7 +563,7 @@ extern  void uiGridInsertAt(uiGrid *g, uiControl *c, uiControl *existing, uiAt a
 extern  int uiGridPadded(uiGrid *g);
 extern  void uiGridSetPadded(uiGrid *g, int padded);
 extern  uiGrid *uiNewGrid(void);
-typedef struct  uiControl uiImage ;
+typedef struct  uiImage uiImage ;
 extern  uiImage *uiNewImage(double width, double height);
 extern  void uiFreeImage(uiImage *i);
 extern  void uiImageAppend(uiImage *i, void *pixels, int pixelWidth, int pixelHeight, int byteStride);

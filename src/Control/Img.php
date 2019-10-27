@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -13,6 +22,8 @@ use FFI\CData;
 class Img extends Control
 {
     const CTL_NAME = 'img';
+    const IS_CONTROL = false;
+
     public function newControl(): CData
     {
         if (!empty($this->attr['src'][0])) {
@@ -22,6 +33,15 @@ class Img extends Control
         }
         $this->instance = self::$ui->newImage($this->attr['width'], $this->attr['height']);
         return $this->instance;
+    }
+
+    public function pushChilds()
+    {
+        if (!empty($this->attr['src'])) {
+            foreach ($this->attr['src'] as $src) {
+                $this->appendImg($src);
+            }
+        }
     }
 
     public function free()
@@ -37,7 +57,7 @@ class Img extends Control
      */
     public function append($imgData, int $width, int $height, int $byteStride)
     {
-        $this->imageAppend($imgData,  $width,  $height,  $byteStride);
+        $this->imageAppend($imgData, $width, $height, $byteStride);
     }
 
     /**
@@ -48,6 +68,11 @@ class Img extends Control
         $this->attr['src'][] = $img;
         $size = \getimagesize($img);
         $data = \file_get_contents($img);
-        $this->append($data, $size[0], $size[1], $size['bits']);
+        $len = strlen($data);
+        $bin = self::$ui->new("const char[$len]");
+        $ffi = self::$ui->ffi();
+        $ffi::memcpy($bin, $data, $len);
+        $this->append($bin, $size[0], $size[1], $size['bits']);
     }
+
 }

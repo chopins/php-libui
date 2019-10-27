@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -8,6 +17,7 @@ use FFI\CData;
 /**
  * @property-read string $title
  * @property int $margin
+ * @property-read aray $child
  */
 class Group extends Control
 {
@@ -20,6 +30,15 @@ class Group extends Control
         $this->instance = self::$ui->newGroup($this->attr['title']);
         $this->setMargin($this->attr['margin']);
         return $this->instance;
+    }
+
+    public function pushChilds()
+    {
+        $this->attr['child'] = $this->attr['child'] ?? [];
+        if ($this->attr['child']) {
+            $control = $this->build->createItem($this->attr['child']['name'], $this->attr['child']);
+            $this->addChild($control, $this->attr['child']);
+        }
     }
 
     protected function addChild(\UI\Control $childs, $option = [])
@@ -47,7 +66,7 @@ class Group extends Control
         return $this->groupMargined();
     }
 
-    protected function setChild(Control $child)
+    public function setChild(Control $child)
     {
         $ui = $child->getUIInstance();
         $this->groupSetChild($ui);

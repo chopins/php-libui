@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use FFI\CData;
@@ -12,6 +21,7 @@ use UI\Control;
 class Datetime extends Control
 {
     const CTL_NAME = 'datetime';
+
     public function newControl(): CData
     {
         switch ($this->attr['type']) {
@@ -24,7 +34,7 @@ class Datetime extends Control
             case 'datetime':
                 $this->instance = self::$ui->newDateTimePicker();
         }
-        if ($this->attr['change']) {
+        if (isset($this->attr['change'])) {
             $this->onChange($this->attr['change']);
         }
         return $this->instance;
@@ -82,4 +92,5 @@ class Datetime extends Control
         $this->attr['change'] = $callable;
         $this->bindEvent('dateTimePickerOnChanged', $callable);
     }
+
 }

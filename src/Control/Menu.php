@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use FFI\CData;
@@ -15,17 +24,15 @@ use UI\Control\MenuItem;
 class Menu extends Control
 {
     const CTL_NAME = 'menu';
+    const IS_CONTROL = false;
 
     protected $childs = [];
 
     public function newControl(): CData
     {
-        static $i = 0;
         if (empty($this->attr['title'])) {
             throw new RuntimeException('menu title can not empty');
         }
-        $this->attr['id'] = $this->attr['id'] ?? '_win_menu_' . $i;
-        $i++;
         $this->instance = self::$ui->newMenu($this->attr['title']);
         return $this->instance;
     }
@@ -50,7 +57,7 @@ class Menu extends Control
     public function addMenuItem(array $menus): MenuItem
     {
         $menus['parent'] = $this;
-        $menus['parent_id'] = $this->attr['id'];
+        $menus['parent_id'] = $this->handle;
         $menus['idx'] = count($this->childs);
         $item = new MenuItem($this->build, $menus);
         $this->childs[] = $item;
@@ -65,11 +72,6 @@ class Menu extends Control
     public function getChilds()
     {
         return $this->childs;
-    }
-
-    public function getHandle()
-    {
-        return $this->attr['id'];
     }
 
     public function enable()

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use FFI\CData;
@@ -20,7 +29,7 @@ class Grid extends Control
 {
     const CTL_NAME = 'grid';
 
-    protected array $attrList = ['child_left', 'child_left', 'child_top',
+    protected array $attrList = ['child_left', 'child_top',
         'child_width', 'child_height', 'child_hexpand',
         'child_haligin', 'child_vexpand', 'child_valign'];
 
@@ -63,7 +72,16 @@ class Grid extends Control
         foreach ($this->attrList as $k) {
             $this->initAttr($option, $k, null, $this->attr);
         }
-        $this->append($childs, $option['child_left'], $option['child_top'], $option['child_width'], $option['child_height'], $option['child_hexpand'], $option['child_haligin'], $option['child_vexpand'], $option['child_valign']);
+        $this->append(
+                $childs,
+                $option['child_left'],
+                $option['child_top'],
+                $option['child_width'],
+                $option['child_height'],
+                $option['child_hexpand'],
+                $option['child_haligin'],
+                $option['child_vexpand'],
+                $option['child_valign']);
     }
 
     public function getPadded()

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -23,6 +32,7 @@ class Button extends Control
     {
         $type = $this->attr['type'] ?? null;
         $this->attr['click'] = $this->attr['click'] ?? null;
+        $this->attr['change'] = $this->attr['change'] ?? null;
         switch ($type) {
             case 'file':
                 $this->instance = self::$ui->newButton($this->attr['title']);
@@ -47,6 +57,7 @@ class Button extends Control
                 if ($this->attr['click']) {
                     $this->onChange($this->attr['click']);
                 }
+                break;
             case 'button':
             default:
                 $this->instance = self::$ui->newButton($this->attr['title']);
@@ -72,60 +83,70 @@ class Button extends Control
     public function onClick(Event $callable)
     {
         $this->attr['click'] = $callable;
-        if ($this->attr['type'] === 'file') {
-            $callable->onBefore(function () {
-                return $this->build->openFile();
-            });
+        switch ($this->attr['type']) {
+            case 'file':
+                $callable->onBefore(function () {
+                    return $this->build->openFile();
+                });
+                break;
+            case 'save':
+                $callable->onBefore(function () {
+                    return $this->build->saveFile();
+                });
+                break;
         }
-        if ($this->attr['type'] === 'save') {
-            $callable->onBefore(function () {
-                return $this->build->saveFile();
-            });
-        }
-        if ($this->attr['type'] !== 'font' && $this->attr['type'] !== 'color') {
-            $this->bindEvent('buttonOnClicked', $callable);
-        }
+        $this->bindEvent('buttonOnClicked', $callable);
     }
 
     public function onChange(Event $callable)
     {
         $this->attr['change'] = $callable;
-        if ($this->attr['type'] == 'font') {
-            $this->bindEvent('fontButtonOnChanged', $callable);
-        } elseif ($this->attr['type'] === 'color') {
-            $this->bindEvent('colorButtonOnChanged', $callable);
+        switch ($this->attr['type']) {
+            case 'font':
+                $this->bindEvent('fontButtonOnChanged', $callable);
+                break;
+            case 'color':
+                $this->bindEvent('colorButtonOnChanged', $callable);
+                break;
         }
     }
 
     public function getValue()
     {
-        if ($this->attr['type'] === 'font') {
-            $fontDes = new FontDescriptor($this->build);
-            $this->fontButtonFont($fontDes->getFontDescriptor());
-            $fontDes->fill();
-            return $fontDes;
-        } elseif ($this->attr['type'] === 'color') {
-            $r = self::$ui->new('double*');
-            $g = self::$ui->new('double*');
-            $bl = self::$ui->new('double*');
-            $a = self::$ui->new('double*');
-            $this->colorButtonColor($r, $g, $bl, $a);
-            return [
-                'red' => $r[0], 'green' => $g[0], 'blue' => $bl[0], 'alpha' => $a[0]
-            ];
-        } else {
-            return $this->buttonText();
+        switch ($this->attr['type']) {
+            case 'font':
+                $fontDes = new FontDescriptor($this->build);
+                $fs = $fontDes->getFontDescriptor();
+                $this->fontButtonFont($fs);
+
+                $fontDes->fill();
+                
+                return $fontDes;
+            case 'color':
+                $r = self::$ui->new('double*');
+                $g = self::$ui->new('double*');
+                $bl = self::$ui->new('double*');
+                $a = self::$ui->new('double*');
+                $this->colorButtonColor($r, $g, $bl, $a);
+                return [
+                    'red' => $r[0], 'green' => $g[0], 'blue' => $bl[0], 'alpha' => $a[0]
+                ];
+            default:
+                return $this->buttonText();
         }
     }
 
     public function setValue($text)
     {
-        if ($this->attr['type'] === 'font') {
-            
-        } elseif ($this->attr['type'] === 'color') {
-            $this->colorButtonSetColor($text['red'], $text['green'], $text['blue'], $text['alpha']);
-        } else {
-            $this->buttonSetText($text);
+        switch ($this->attr['type']) {
+            case 'font':
+                break;
+            case'color':
+                $this->colorButtonSetColor($text['red'], $text['green'], $text['blue'], $text['alpha']);
+                break;
+            default:
+                $this->buttonSetText($text);
+                break;
         }
     }
 

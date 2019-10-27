@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control\Menu;
@@ -13,20 +22,20 @@ use UI\Event;
  */
 class MenuItem extends Menu
 {
+
     public function newControl(): CData
     {
-        $parent  = $this->attr['parent'];
-        $this->attr['id'] = $this->attr['id'] ?? $this->attr['parent_id'] . '_item_' . ($this->attr['idx'] - 1);
+        $parent = $this->attr['parent'];
         $this->attr['type'] = $this->attr['type'] ?? 'text';
         switch ($this->attr['type']) {
             case 'checkbox':
                 $this->instance = self::$ui->menuAppendCheckItem($parent->getUIInstance(), $this->attr['title']);
                 break;
             case 'quit':
-                $this->instance  = self::$ui->menuAppendQuitItem($parent->getUIInstance());
+                $this->instance = self::$ui->menuAppendQuitItem($parent->getUIInstance());
                 break;
             case 'about':
-                $this->instance =  self::$ui->menuAppendAboutItem($parent->getUIInstance());
+                $this->instance = self::$ui->menuAppendAboutItem($parent->getUIInstance());
                 break;
             case 'preferences':
                 $this->instance = self::$ui->menuAppendPreferencesItem($parent->getUIInstance());
@@ -37,6 +46,7 @@ class MenuItem extends Menu
         if (isset($this->attr['click'])) {
             $this->onClick($this->attr['click']);
         }
+        $this->handle = $this->attr['parent_id'] . spl_object_id($this->instance);
         return $this->instance;
     }
 
@@ -54,4 +64,5 @@ class MenuItem extends Menu
     {
         $this->menuItemSetChecked($check);
     }
+
 }

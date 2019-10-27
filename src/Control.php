@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI;
 
 use UI\UIBuild;
@@ -9,9 +18,13 @@ use FFI\CData;
 /**
  * @property-read string $id
  * @property-read array $childs
+ * @property-read string $name
  */
 abstract class Control
 {
+    const CTL_NAME = '';
+    const IS_CONTROL = true;
+
     protected ?CData $instance = null;
     protected array $attr = [];
     protected ?UIBuild $build = null;
@@ -20,6 +33,9 @@ abstract class Control
      * @var \UI\UI
      */
     protected static ?UI $ui = null;
+    protected $callPrefix = '';
+    protected $callPrefixFuncList = [];
+    protected $handle = 0;
 
     public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
@@ -33,6 +49,7 @@ abstract class Control
         } else {
             $this->instance = $instance;
         }
+        $this->handle = $this::CTL_NAME . spl_object_id($this->instance);
         $this->build->appendControl($this);
         $this->pushChilds();
     }
@@ -49,7 +66,7 @@ abstract class Control
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         foreach ($this->attr['childs'] as $child) {
-            $control = $this->build->createItem($child['name'], $child['attr']);
+            $control = $this->build->createItem($child['name'], $child);
             $this->addChild($control, $child);
         }
     }
@@ -67,7 +84,9 @@ abstract class Control
 
     protected function updateChildsList(Control $child)
     {
-        $this->attr['childs'][] = ['name' => $child::CTL_NAME, 'attr' => $child->getAttr()];
+        $attr = $child->getAttr();
+        $attr['name'] = $child::CTL_NAME;
+        $this->attr['childs'][] = $attr;
     }
 
     public function getAttr($key = null)
@@ -100,7 +119,11 @@ abstract class Control
 
     public function getHandle()
     {
-        return $this->controlHandle();
+        if ($this::IS_CONTROL) {
+            return $this->controlHandle();
+        } else {
+            return $this->handle;
+        }
     }
 
     public function __get($name)
@@ -110,6 +133,9 @@ abstract class Control
 
     public function __call($func, $args = [])
     {
+        if (in_array($func, $this->callPrefixFuncList)) {
+            $func = $this->callPrefix . ucfirst($func);
+        }
         switch (count($args)) {
             case 0:
                 return self::$ui->$func($this->instance);
@@ -122,6 +148,7 @@ abstract class Control
             case 4:
                 return self::$ui->$func($this->instance, $args[0], $args[1], $args[2], $args[3]);
             default:
+                array_unshift($args, $this->instance);
                 return call_user_func_array([self::$ui, $func], $args);
         }
     }
@@ -179,15 +206,16 @@ abstract class Control
     public function bindEvent($event, Event $callable)
     {
         $this->$event(function (...$params) use ($callable) {
-            $func = $callable->getFunc();
-            $data = $callable->getData();
-            $before = $callable->getBefore();
-            $after = $callable->getAfter();
-            $beforeResult = null;
-            if ($before) {
-                $beforeResult = $before();
-            }
             try {
+                $func = $callable->getFunc();
+                $data = $callable->getData();
+                $before = $callable->getBefore();
+                $after = $callable->getAfter();
+                $beforeResult = null;
+                if ($before) {
+                    $beforeResult = $before();
+                }
+
                 switch (count($params)) {
                     case 0:
                         $func($data, $beforeResult);

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -12,6 +21,9 @@ use FFI\CData;
 class OpenTypeFeatures extends Control
 {
     const CTL_NAME = 'feature';
+
+    protected $callPrefix = 'openTypeFeatures';
+    protected $callPrefixFuncList = ['add', 'remove'];
 
     public function newControl(): CData
     {
@@ -36,12 +48,6 @@ class OpenTypeFeatures extends Control
         $ret = $this->openTypeFeaturesGet($a, $b, $c, $d, $value);
         $v = $value[0];
         return $ret;
-    }
-
-    public function __call($func, $args = [])
-    {
-        $func = 'openTypeFeatures' . ucfirst($func);
-        return parent::__call($func, $args);
     }
 
     public function forEach(callable $callalbe, $data = null)

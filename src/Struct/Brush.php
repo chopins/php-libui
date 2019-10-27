@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Struct;
 
 use UI\UIBuild;
@@ -28,6 +37,7 @@ class Brush
     protected static $ui;
     protected $structInstance = null;
     protected $stops = null;
+
     public function __construct(UIBuild $build)
     {
         self::$ui = $build->getUI();
@@ -42,7 +52,7 @@ class Brush
         $this->stops->G = $this->stopsG;
         $this->stops->B = $this->stopsB;
         $this->stops->A = $this->stopsA;
-        
+
         $this->structInstance->Type = $this->type;
         $this->structInstance->R = $this->R;
         $this->structInstance->G = $this->G;
@@ -57,4 +67,5 @@ class Brush
         $this->structInstance->NumStops = $this->numStops;
         return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
     }
+
 }

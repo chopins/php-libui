@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI;
 
 use UI\Control\Area;
@@ -22,6 +31,7 @@ use UI\Control\DrawText;
 use UI\Control\Attribute;
 use UI\Control\AttributeString;
 use UI\Control\OpenTypeFeatures;
+use UI\Control\Img;
 use UI\UI;
 use ErrorException;
 
@@ -79,8 +89,8 @@ class UIBuild
         }
 
         $this->window($config, $hasMenu);
-        foreach ($config['body'] as $item) {
-            $control = $this->createItem($item['name'], $item['attr']);
+        if (isset($config['body']) && $config['body']) {
+            $control = $this->createItem($config['body']['name'], $config['body']);
             $this->win->addChild($control);
         }
     }
@@ -101,6 +111,9 @@ class UIBuild
     public function openFile()
     {
         $file = self::$ui->openFile($this->win->getUIInstance());
+        if ($file === null) {
+            return null;
+        }
         $path = self::$ui->string($file);
         self::$ui->freeText($file);
         return $path;
@@ -109,6 +122,9 @@ class UIBuild
     public function saveFile()
     {
         $file = self::$ui->saveFile($this->win->getUIInstance());
+        if ($file === null) {
+            return null;
+        }
         $path = self::$ui->string($file);
         self::$ui->freeText($file);
         return $path;
@@ -127,10 +143,12 @@ class UIBuild
     public function appendControl(Control $control)
     {
         $handle = $control->getHandle();
+
         $this->handles[$handle] = $control;
         $id = $control->getAttr('id') ?? $handle;
         $this->controls[$id] = $control;
         $name = $control::CTL_NAME;
+
         if ($name == 'sep') {
             $name = $control->getAttr('type');
         }
@@ -222,11 +240,11 @@ class UIBuild
             case 'attribute':
                 return new Attribute($this, $config);
             case 'string':
-                return new AttributeString($this,$config);
+                return new AttributeString($this, $config);
             case 'feature':
                 return new OpenTypeFeatures($this, $config);
             default:
-                throw new Exception("UI Control name $name is invaild");
+                throw new ErrorException("UI Control name $name is invaild");
         }
     }
 

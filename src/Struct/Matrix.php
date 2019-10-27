@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Struct;
 
 use UI\UIBuild;
@@ -14,7 +23,6 @@ use UI\UIBuild;
  */
 class Matrix
 {
-
     protected static $ui;
     public float $M11;
     public float $M12;
@@ -22,7 +30,6 @@ class Matrix
     public float $M22;
     public float $M31;
     public float $M32;
-
     protected $structInstance = null;
     protected $build = null;
 
@@ -36,36 +43,37 @@ class Matrix
     public function multiply()
     {
         $dstPtr = self::$ui->new('uiDrawMatrix*');
-        self::$ui->drawMatrixMultiply($dstPtr, $this->structInstance);
+        self::$ui->drawMatrixMultiply($dstPtr, $this->getMatrix());
         $dest = new static($this->build);
         $dest->structInstance = $dstPtr;
         return $dest;
     }
 
-    public function getMatrix() {
-        return $this->structInstance;
+    public function getMatrix($ptr = true)
+    {
+        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
     }
 
     public function setIdentity()
     {
-        $this->structInstance = self::$ui->new('uiDrawMatrix*');
-        self::$ui->drawMatrixSetIdentity($this->structInstance);
+        $this->structInstance = self::$ui->new('uiDrawMatrix');
+        self::$ui->drawMatrixSetIdentity($this->getMatrix());
     }
 
-    public function transformPoint(&$x,&$y) 
+    public function transformPoint(&$x, &$y)
     {
         $xfptr = self::$ui->new('float *');
         $yfptr = self::$ui->new('float *');
-        self::$ui->drawMatrixTransformPoint($this->structInstance, $xfptr, $yfptr);
+        self::$ui->drawMatrixTransformPoint($this->getMatrix(), $xfptr, $yfptr);
         $x = $xfptr[0];
         $y = $yfptr[0];
     }
 
-    public function transformSize(&$x, &$y) 
+    public function transformSize(&$x, &$y)
     {
         $xfptr = self::$ui->new('float *');
         $yfptr = self::$ui->new('float *');
-        self::$ui->drawMatrixTransformSize($this->structInstance, $xfptr, $yfptr);
+        self::$ui->drawMatrixTransformSize($this->getMatrix(), $xfptr, $yfptr);
         $x = $xfptr[0];
         $y = $yfptr[0];
     }
@@ -73,7 +81,8 @@ class Matrix
     public function __call($name, $arguments)
     {
         $func = 'drawMatrix' . ucfirst($name);
-        array_unshift($arguments, $this->structInstance);
+        array_unshift($arguments, $this->getMatrix());
         return call_user_func_array([self::$ui, $func], $arguments);
     }
+
 }

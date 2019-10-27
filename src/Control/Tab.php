@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use UI\Control;
@@ -22,7 +31,7 @@ class Tab extends Control
         $this->attr['page'] = $this->attr['page'] ?? [];
         foreach ($this->attr['page'] as $pageName => $childs) {
             foreach ($childs as $config) {
-                $control = $this->build->createItem($config['name'], $config['attr']);
+                $control = $this->build->createItem($config['name'], $config);
                 $this->appendPage($pageName, $control);
             }
         }

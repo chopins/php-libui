@@ -1,11 +1,12 @@
 <?php
 
 /**
- * libui (http://toknot.com)
+ * php-libui (http://toknot.com)
  *
- * @copyright  Copyright (c) 2011 - 2019 Toknot.com
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
+ * @version    0.1
  */
 
 namespace UI;
@@ -18,7 +19,7 @@ use UI\Struct\Struct;
 
 /**
  *
- * libui
+ * php-libui
  * All return C type is uiControll of CData instance
  *
  * @method void freeInitError( string $err)
@@ -613,10 +614,11 @@ class UI
      *                 ]
      *               ],
      *    'body' => [
-     *        [ 'name' =>'box', 'attr' => ['padded' => 0, 
+     *        [ 'name' =>'box', 'padded' => 0, 
      *                'dir' => 'v',
-     *                'childs' => [....]],
-     *        ['name' => 'table', 'attr' => [
+     *                'childs' => [....]
+     *        ],
+     *        ['name' => 'table',
      *                    'th' => [
      *                        ['title' => 'Colum1', 'idx' => 0, 'type' => 'text'],
      *                         ['title' => 'Colum2', 'idx' => 1, 'type' => 'button'],

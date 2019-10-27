@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * php-libui (http://toknot.com)
+ *
+ * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
+ * @license    http://toknot.com/LICENSE.txt New BSD License
+ * @link       https://github.com/chopins/php-libui
+ * @version    0.1
+ */
+
 namespace UI\Control;
 
 use FFI\CData;
@@ -30,7 +39,7 @@ class Form extends Control
                 if ($k === 'stretchy') {
                     continue;
                 }
-                $control = $this->build->createItem($sub['name'], $sub['attr']);
+                $control = $this->build->createItem($sub['name'], $sub);
                 $this->addChild($control, ['label' => $label, 'stretchy' => $sub['stretchy'] ?? $itemStretchy]);
             }
         }

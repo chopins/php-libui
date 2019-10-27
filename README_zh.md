@@ -40,8 +40,8 @@ $build->show();
     'width' => 600,
     'menu' => [],
     'body'  => [
-        ['name' => 'box', 'attr' => []],
-        ['name' => 'grid', 'attr' => []]
+        ['name' => 'box'],
+        ['name' => 'grid']
     ]
 ]
 ```
