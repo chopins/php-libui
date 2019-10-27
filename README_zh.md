@@ -40,8 +40,8 @@ $build->show();
     'width' => 600,
     'menu' => [],
     'body'  => [
-        ['name' => 'box'],
-        ['name' => 'grid']
+        'name' => 'box'
+        'childs' => []
     ]
 ]
 ```
@@ -108,7 +108,7 @@ __当前UI配置中的菜单只支持下面的属性:__
    | padded    | int    | padding value, default is `0`                                                         | no   |
    | child_fit | bool   | Whether to automatically adapt                                                        | no   |
    | childs    | array  | sub control list                                                                      | no   |
-3. `group` 组布局, have `title` and `margin`, `childs` attr
+3. `group` 组布局, have `title` and `margin`, `child` attr
 4. `label` 文本标签控件, only has `title` attr
 5. `hr`  水平分割线, no attr
 6. `vr`  垂直分割线, no attr

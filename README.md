@@ -42,8 +42,8 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
     'width' => 600,
     'menu' => [],
     'body'  => [
-        ['name' => 'box']
-        ['name' => 'grid']
+        'name' => 'box'
+        'childs' => []
     ]
 ]
 ```
@@ -115,7 +115,7 @@ every element key of `body` array is control config, `name` element is control n
    | childs    | array  | sub control list                                                                      | no      |
    | id        | string |                                                                                       | no      |
 
-3. `group` group layout, have `title` and `margin`, `childs`,`id` attr
+3. `group` group layout, have `title` and `margin`, `child`,`id` attr
 4. `label`  text control, only has `title` and `id` attr
 5. `hr`   horizontal separator, no attr
 6. `vr`   vertical separator, no attr
