@@ -206,9 +206,6 @@ abstract class Control
                     case 0:
                         $func($data, $beforeResult);
                         break;
-                    case 1:
-                        $func($data, $beforeResult);
-                        break;
                     default:
                         array_pop($params);
                         $params[] = $data;
