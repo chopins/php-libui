@@ -136,21 +136,8 @@ abstract class Control
         if (in_array($func, $this->callPrefixFuncList)) {
             $func = $this->callPrefix . ucfirst($func);
         }
-        switch (count($args)) {
-            case 0:
-                return self::$ui->$func($this->instance);
-            case 1:
-                return self::$ui->$func($this->instance, $args[0]);
-            case 2:
-                return self::$ui->$func($this->instance, $args[0], $args[1]);
-            case 3:
-                return self::$ui->$func($this->instance, $args[0], $args[1], $args[2]);
-            case 4:
-                return self::$ui->$func($this->instance, $args[0], $args[1], $args[2], $args[3]);
-            default:
-                array_unshift($args, $this->instance);
-                return call_user_func_array([self::$ui, $func], $args);
-        }
+        array_unshift($args, $this->instance);
+        return self::$ui->$func(...$args);
     }
 
     public function show()
@@ -215,7 +202,6 @@ abstract class Control
                 if ($before) {
                     $beforeResult = $before();
                 }
-
                 switch (count($params)) {
                     case 0:
                         $func($data, $beforeResult);
@@ -223,21 +209,12 @@ abstract class Control
                     case 1:
                         $func($data, $beforeResult);
                         break;
-                    case 2:
-                        $func($params[0], $data, $beforeResult);
-                        break;
-                    case 3:
-                        $func($params[0], $params[1], $data, $beforeResult);
-                        break;
-                    case 4:
-                        $func($params[0], $params[1], $params[2], $data, $beforeResult);
-                        break;
                     default:
                         array_pop($params);
                         $params[] = $data;
                         $params[] = $beforeResult;
-                        call_user_func_array($func, $params);
-                        break;
+                        $func(...$params);
+                    break;
                 }
                 if ($after) {
                     $after();

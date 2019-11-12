@@ -481,27 +481,12 @@ class UI
     {
         $name = 'ui' . ucfirst($name);
         $number = count($arg);
-        switch ($number) {
-            case 0:
-                return self::$ffi->$name();
-            case 1:
-                return self::$ffi->$name($arg[0]);
-            case 2:
-                return self::$ffi->$name($arg[0], $arg[1]);
-            case 3:
-                return self::$ffi->$name($arg[0], $arg[1], $arg[2]);
-            case 4:
-                return self::$ffi->$name($arg[0], $arg[1], $arg[2], $arg[3]);
-            case 5:
-                return self::$ffi->$name($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]);
-            default:
-                return call_user_func_array([$this->ffi(), $name], $arg);
-        }
+        return self::$ffi->$name(...$arg);
     }
 
     public static function __callStatic($name, $arguments)
     {
-        return call_user_func_array(['FFI', $name], $arguments);
+        return FFI::$name(...$arguments);
     }
 
     /**
