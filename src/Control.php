@@ -204,6 +204,7 @@ abstract class Control
                 }
                 switch (count($params)) {
                     case 0:
+                    case 1:
                         $func($data, $beforeResult);
                         break;
                     default:
