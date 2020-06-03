@@ -185,7 +185,7 @@ every element key of `body` array is control config, `name` element is control n
 * show()
 * hide()
 * enable()
-* disbale()
+* disable()
 * destroy()
 * parent()
 * setParent($parent)
