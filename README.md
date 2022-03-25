@@ -88,7 +88,7 @@ __current Build UI Config of submenu only contain the following attr:__
 | attr   | type          | Description                                                 | require |
 | ------ | ------------- | ----------------------------------------------------------- | ------- |
 | title  | string        | menu title                                                  | yes     |
-| type   | string        | menu type, value is `text` or `checkbox`, default is `text` | no      |
+| type   | string        | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no      |
 | click  | \UI\Event | click callback                                              | no      |
 | childs | array         | child menu list                                             | no      |
 

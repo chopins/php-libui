@@ -86,7 +86,7 @@ __当前UI配置中的菜单只支持下面的属性:__
 | 属性   | 类型          | 描述                                                        | 必须 |
 | ------ | ------------- | ----------------------------------------------------------- | ---- |
 | title  | string        | menu title                                                  | yes  |
-| type   | string        | menu type, value is `text` or `checkbox`, default is `text` | no   |
+| type   | string        | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no   |
 | click  | \UI\Event | click callback                                              | no   |
 | childs | array         | child menu list                                             | no   |
 
