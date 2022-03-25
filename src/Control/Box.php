@@ -27,6 +27,7 @@ class Box extends Control
     {
         $this->attr['dir'] = $this->attr['dir'] ?? 'h';
         $this->attr['padded'] = $this->attr['padded'] ?? 0;
+        $this->attr['child_fit'] = $this->attr['child_fit'] ?? 1;
         if ($this->attr['dir'] == 'v') {
             $this->instance = self::$ui->newVerticalBox();
         } else {

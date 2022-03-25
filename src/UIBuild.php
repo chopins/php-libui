@@ -147,6 +147,7 @@ class UIBuild
 
         $this->handles[$handle] = $control;
         $id = $control->getAttr('id') ?? $handle;
+
         $this->controls[$id] = $control;
         $name = $control::CTL_NAME;
 
