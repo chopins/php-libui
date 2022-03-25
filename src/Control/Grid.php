@@ -28,6 +28,7 @@ use UI\Control;
 class Grid extends Control
 {
     const CTL_NAME = 'grid';
+    protected $children =  0;
 
     protected array $attrList = ['child_left', 'child_top',
         'child_width', 'child_height', 'child_hexpand',
@@ -93,6 +94,7 @@ class Grid extends Control
     {
         $ui = $child->getUIInstance();
         $this->gridAppend($ui, $left, $top, $xspan, $yspan, $hexpand, $halign, $vexpand, $valign);
+        $this->children++;
     }
 
     public function insert(Control $child, Control $exist, int $at, int $xspan, int $yspan, int $hexpand, int $halign, int $vexpand, int $valign)
@@ -100,6 +102,7 @@ class Grid extends Control
         $ui = $child->getUIInstance();
         $eui = $exist->getUIInstance();
         $this->gridInsertAt($ui, $eui, $at, $xspan, $yspan, $hexpand, $halign, $vexpand, $valign);
+        $this->children++;
         $this->updateChildsList($child);
     }
 

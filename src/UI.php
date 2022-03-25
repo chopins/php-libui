@@ -434,7 +434,12 @@ class UI
     /**
      * @var Struct
      */
-    public $struct = null;
+    public $struct;
+    /**
+     *
+     * @var UIBuild
+     */
+    public $build;
 
     /**
      * @param string $dll The libui dynamic link library path
@@ -588,7 +593,8 @@ class UI
 
     public function struct(): Struct
     {
-        return new Struct($this);
+        $this->struct = new Struct($this);
+        return $this->struct;
     }
 
     public function event($callable, $data = null): Event
@@ -637,7 +643,8 @@ class UI
      */
     public function build(array $config): UIBuild
     {
-        return new UIBuild($this, $config);
+        $this->build = new UIBuild($this, $config);
+        return $this->build;
     }
 
     public function autoload()
