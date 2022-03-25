@@ -16,6 +16,7 @@ use FFI\CData;
 use FFI\CType;
 use UI\UIBuild;
 use UI\Struct\Struct;
+use UI\Event;
 
 /**
  *
@@ -416,7 +417,7 @@ class UI
     const TABLE_MODEL_COLUMN_NEVER_EDITABLE = -1;
     const TABLE_MODEL_COLUMN_ALWAYS_EDITABLE = -2;
     const CAST_STRUCT_TYPE = [
-        'uiWindow','uiControl', 'uiButton', 'uiBox',
+        'uiWindow', 'uiControl', 'uiButton', 'uiBox',
         'uiCheckbox', 'uiEntry', 'uiLabel',
         'uiTab', 'uiGroup', 'uiSpinbox', 'uiSlider',
         'uiProgressBar', 'uiSeparator', 'uiCombobox',
@@ -489,7 +490,7 @@ class UI
     public function __call($name, $arg = [])
     {
         $name = 'ui' . ucfirst($name);
-        if(in_array($name, self::CAST_STRUCT_TYPE)) {
+        if (in_array($name, self::CAST_STRUCT_TYPE)) {
             return $this->castPtr($name, $arg[0]);
         }
         return self::$ffi->$name(...$arg);
@@ -588,6 +589,11 @@ class UI
     public function struct(): Struct
     {
         return new Struct($this);
+    }
+
+    public function event($callable, $data = null): Event
+    {
+        return new Event($callable, $data);
     }
 
     /**

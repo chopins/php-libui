@@ -32,6 +32,7 @@ use UI\Control\Attribute;
 use UI\Control\AttributeString;
 use UI\Control\OpenTypeFeatures;
 use UI\Control\Img;
+use UI\Event;
 use UI\UI;
 use ErrorException;
 
@@ -70,15 +71,15 @@ class UIBuild
             throw new ErrorException($err);
         }
 
-        if (isset($config['quit'])) {
+        if (isset($config['quit']) && $config['quit'] instanceof Event) {
             self::$ui->onShouldQuit($config['quit']->getFunc(), $config['quit']->getData());
         }
 
-        if (isset($config['app_queue'])) {
+        if (isset($config['app_queue']) && $config['app_queue'] instanceof Event) {
             self::$ui->queueMain($config['app_queue']->getFunc(), $config['app_queue']->getData());
         }
 
-        if (isset($config['timer'])) {
+        if (isset($config['timer']) && $config['timer'] instanceof Event) {
             self::$ui->timer($config['timer']->time, $config['timer']->getFunc(), $config['timer']->getData());
         }
 
