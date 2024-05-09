@@ -36,7 +36,7 @@ class Group extends Control
     {
         $this->attr['child'] = $this->attr['child'] ?? [];
         if ($this->attr['child']) {
-            $control = $this->build->createItem($this->attr['child']['name'], $this->attr['child']);
+            $control = $this->build->createItem($this->attr['child']);
             $this->addChild($control, $this->attr['child']);
         }
     }

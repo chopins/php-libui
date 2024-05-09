@@ -1,5 +1,4 @@
 <?php
-
 include __DIR__ . '/loadui.php';
 
 main();
@@ -9,14 +8,22 @@ function main()
     global $ui;
     $config = [
         'title' => 'test',
-        'width' => 600,
-        'height' => 450,
+        'width' => 900,
+        'height' => 900,
+        'close' => $ui->event(function ($ui, $event, $uiWidget, $uiControl){
+            $ui->quit();
+            return 1;
+        }),
         'menu' => [
             [
                 'title' => 'File',
                 'childs' => [
                     ['title' => 'New File'],
                     ['title' => 'Open File'],
+                    ['title' => 'Quit', 'click' => $ui->event(function ($ui, $event, $uiWidget, $uiControl){
+                        $ui->quit();
+                        return 1;
+                    })],
                 ]
             ],
             [
@@ -27,16 +34,17 @@ function main()
             ]
         ],
         'body' => [
-            'box' => [
-                'name' => 'box',
+            [
+                'widget' => 'box',
                 'dir' => 'v',
                 'child_fit' => 1,
                 'childs' => [
-                    'table' => [
+                    [
+                        'widget' => 'table',
                         'th' => [
-                            ['title' => 'Colum1', 'idx' => 0, 'type' => 'text'],
-                            ['title' => 'Colum2', 'idx' => 1, 'type' => 'button'],
-                            ['title' => 'Colum3', 'idx' => 2, 'type' => 'text'],
+                            ['widget' => 'input', 'title' => 'Colum1', 'idx' => 0, 'type' => 'text'],
+                            ['widget' => 'input', 'title' => 'Colum2', 'idx' => 1, 'type' => 'button'],
+                            ['widget' => 'input', 'title' => 'Colum3', 'idx' => 2, 'type' => 'text'],
                         ],
                         'tbody' => [
                             [1, 'button0', 3],
@@ -48,7 +56,6 @@ function main()
             ],
         ]
     ];
-
 
     return $ui->build($config)->show();
 }

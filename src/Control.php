@@ -65,15 +65,14 @@ abstract class Control
     public function pushChilds()
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
-        foreach ($this->attr['childs'] as $name=> $child) {
-            $control = $this->build->createItem($name, $child);
+        foreach ($this->attr['childs'] as $child) {
+            $control = $this->build->createItem($child);
             $this->addChild($control, $child);
         }
     }
 
     protected function addChild(Control $child, $options = [])
     {
-        
     }
 
     public function appendChild(\UI\Control $child)
@@ -195,27 +194,19 @@ abstract class Control
         $this->$event(function (...$params) use ($callable) {
             try {
                 $func = $callable->getFunc();
-                $data = $callable->getData();
                 $before = $callable->getBefore();
                 $after = $callable->getAfter();
-                $beforeResult = null;
+                array_unshift($params, $callable);
+                array_unshift($params, self::$ui);
+
                 if ($before) {
-                    $beforeResult = $before();
+                    $params[] = $before(...$params);
                 }
-                switch (count($params)) {
-                    case 0:
-                    case 1:
-                        $func($data, $beforeResult);
-                        break;
-                    default:
-                        array_pop($params);
-                        $params[] = $data;
-                        $params[] = $beforeResult;
-                        $func(...$params);
-                    break;
-                }
+
+                $params[] = $func(...$params);
+
                 if ($after) {
-                    $after();
+                    $after(...$params);
                 }
             } catch (\Exception $e) {
                 echo $e;
@@ -224,5 +215,4 @@ abstract class Control
             }
         }, null);
     }
-
 }

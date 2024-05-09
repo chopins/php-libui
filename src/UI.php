@@ -14,6 +14,7 @@ namespace UI;
 use FFI;
 use FFI\CData;
 use FFI\CType;
+use UI\Control\Window;
 use UI\UIBuild;
 use UI\Struct\Struct;
 use UI\Event;
@@ -597,6 +598,12 @@ class UI
         return $this->struct;
     }
 
+    /**
+     * callable:
+     * function(UI $ui, Event $event, FFI\CData $uiWidget,FFI\CData $uiControl, ...) {
+     * 
+     * }
+     */
     public function event($callable, $data = null): Event
     {
         return new Event($callable, $data);

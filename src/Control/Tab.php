@@ -31,7 +31,7 @@ class Tab extends Control
         $this->attr['page'] = $this->attr['page'] ?? [];
         foreach ($this->attr['page'] as $pageName => $childs) {
             foreach ($childs as $config) {
-                $control = $this->build->createItem($config['name'], $config);
+                $control = $this->build->createItem($config);
                 $this->appendPage($pageName, $control);
             }
         }

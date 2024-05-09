@@ -91,8 +91,8 @@ class UIBuild
 
         $this->window($config, $hasMenu);
         if (isset($config['body']) && $config['body']) {
-            foreach ($config['body'] as $name => $sub) {
-                $control = $this->createItem($name, $sub);
+            foreach ($config['body'] as $idx=> $childConfig) {
+                $control = $this->createItem($childConfig, $idx);
                 $this->win->addChild($control);
             }
         }
@@ -204,9 +204,9 @@ class UIBuild
         return $this->handles[$handle];
     }
 
-    public function createItem($name, $config = []): Control
+    public function createItem($config, $idx = 0): Control
     {
-        switch ($name) {
+        switch ($config['widget']) {
             case 'button':
                 return new Button($this, $config);
             case 'box':
@@ -248,7 +248,7 @@ class UIBuild
             case 'feature':
                 return new OpenTypeFeatures($this, $config);
             default:
-                throw new ErrorException("UI Control name $name is invaild");
+                throw new ErrorException("UI widget {$config['widget']} is invaild at config array offset $idx");
         }
     }
 }

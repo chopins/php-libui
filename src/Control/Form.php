@@ -39,7 +39,7 @@ class Form extends Control
                 if ($k === 'stretchy') {
                     continue;
                 }
-                $control = $this->build->createItem($sub['name'], $sub);
+                $control = $this->build->createItem($sub);
                 $this->addChild($control, ['label' => $label, 'stretchy' => $sub['stretchy'] ?? $itemStretchy]);
             }
         }
