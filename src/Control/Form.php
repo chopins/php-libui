@@ -34,14 +34,8 @@ class Form extends Control
         $allStretchy = $this->attr['stretchy'] ?? 0;
         foreach ($this->attr['childs'] as $label => $child) {
             $itemStretchy = $child['stretchy'] ?? $allStretchy;
-
-            foreach ($child as $k => $sub) {
-                if ($k === 'stretchy') {
-                    continue;
-                }
-                $control = $this->build->createItem($sub);
-                $this->addChild($control, ['label' => $label, 'stretchy' => $sub['stretchy'] ?? $itemStretchy]);
-            }
+            $control = $this->build->createItem($child);
+            $this->addChild($control, ['label' => $label, 'stretchy' => $itemStretchy]);
         }
     }
 
