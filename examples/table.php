@@ -27,7 +27,7 @@ function main()
             ]
         ],
         'body' => [
-            [
+            'box' => [
                 'name' => 'box',
                 'dir' => 'v',
                 'child_fit' => 1,

@@ -91,7 +91,7 @@ __当前UI配置中的菜单只支持下面的属性:__
 | childs | array         | child menu list                                             | no   |
 
 ## body 数组
-`body`数组的每一个元素为一个UI控件的配置，元素中`name`子元素为控件名，`attr`子元数为配置，当前 __Build UI__ 配置只支持入如下控件名，
+`body`数组的每一个元素为一个UI控件的配置，元素的`key`子元素为控件名，`attr`子元数为配置。见`examples/table.php`。当前 __Build UI__ 配置只支持入如下控件名，
 
 1. `button`, Button control,包含下面的属性:
    

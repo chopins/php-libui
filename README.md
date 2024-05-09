@@ -93,7 +93,7 @@ __current Build UI Config of submenu only contain the following attr:__
 | childs | array         | child menu list                                             | no      |
 
 ## body array
-every element key of `body` array is control config, `name` element is control name and `attr` element is control attr, __Build UI__ current only support the following control:
+every element key of `body` array is control config, `key` element is control name and `attr` element is control attr. see `examples/table.php` __Build UI__ current only support the following control:
 
 1. `button`, Button control,contain the following attr:
 

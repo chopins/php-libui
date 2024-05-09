@@ -91,8 +91,10 @@ class UIBuild
 
         $this->window($config, $hasMenu);
         if (isset($config['body']) && $config['body']) {
-            $control = $this->createItem($config['body']['name'], $config['body']);
-            $this->win->addChild($control);
+            foreach ($config['body'] as $name => $sub) {
+                $control = $this->createItem($name, $sub);
+                $this->win->addChild($control);
+            }
         }
     }
 
@@ -249,5 +251,4 @@ class UIBuild
                 throw new ErrorException("UI Control name $name is invaild");
         }
     }
-
 }

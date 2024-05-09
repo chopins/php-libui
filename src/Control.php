@@ -65,8 +65,8 @@ abstract class Control
     public function pushChilds()
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
-        foreach ($this->attr['childs'] as $child) {
-            $control = $this->build->createItem($child['name'], $child);
+        foreach ($this->attr['childs'] as $name=> $child) {
+            $control = $this->build->createItem($name, $child);
             $this->addChild($control, $child);
         }
     }
