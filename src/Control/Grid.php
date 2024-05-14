@@ -32,7 +32,7 @@ class Grid extends Control
 
     protected array $attrList = ['child_left', 'child_top',
         'child_width', 'child_height', 'child_hexpand',
-        'child_haligin', 'child_vexpand', 'child_valign'];
+        'child_halign', 'child_vexpand', 'child_valign'];
 
     public function newControl(): CData
     {
@@ -80,7 +80,7 @@ class Grid extends Control
                 $option['child_width'],
                 $option['child_height'],
                 $option['child_hexpand'],
-                $option['child_haligin'],
+                $option['child_halign'],
                 $option['child_vexpand'],
                 $option['child_valign']);
     }

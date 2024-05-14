@@ -146,7 +146,7 @@ every element key of `body` array is control config, `widget` element is control
    | child_width   | int    |             | no      |
    | child_height  | int    |             | no      |
    | child_hexpand | int    |             | no      |
-   | child_haligin | int    |             | no      |
+   | child_halign | int    |             | no      |
    | child_vexpand | int    |             | no      |
    | child_valign  | int    |             | no      |
    | childs        | array  |             | no      |

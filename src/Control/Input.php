@@ -31,10 +31,11 @@ use UI\Event;
 class Input extends Control
 {
     const CTL_NAME = 'input';
-
+    public $name = '';
     public function newControl(): CData
     {
         $this->attr['type'] = $this->attr['type'] ?? null;
+        $this->name = $this->attr['name'] ?? '';
         switch ($this->attr['type']) {
             case 'password':
                 $this->instance = self::$ui->newPasswordEntry();

@@ -134,7 +134,7 @@ __当前UI配置中的菜单只支持下面的属性:__
    | child_width   | int   |      | no   |
    | child_height  | int   |      | no   |
    | child_hexpand | int   |      | no   |
-   | child_haligin | int   |      | no   |
+   | child_halign | int   |      | no   |
    | child_vexpand | int   |      | no   |
    | child_valign  | int   |      | no   |
    | childs        | array |      | no   |

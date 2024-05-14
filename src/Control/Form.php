@@ -20,7 +20,6 @@ use UI\Control;
 class Form extends Control
 {
     const CTL_NAME = 'form';
-
     public function newControl(): CData
     {
         $this->instance = self::$ui->newForm();
@@ -35,7 +34,7 @@ class Form extends Control
         foreach ($this->attr['childs'] as $label => $child) {
             $itemStretchy = $child['stretchy'] ?? $allStretchy;
             $control = $this->build->createItem($child);
-            $this->addChild($control, ['label' => $label, 'stretchy' => $itemStretchy]);
+            $this->addChild($control, ['label' => is_string($label) ? $label : '', 'stretchy' => $itemStretchy]);
         }
     }
 
@@ -74,5 +73,4 @@ class Form extends Control
     {
         $this->formDelete($idx);
     }
-
 }
