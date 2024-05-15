@@ -56,6 +56,7 @@ build config is array, main key contain `body`,`menu` and *window attribute key*
 | height | int           | window height   | 640           |
 | border | int           | window border   | 0             |
 | margin | int           | window margin   | 0             |
+| fullscreen | int           | window margin   | 0             |
 | quit   | \UI\Event | quit callback   | null          |
 | close  | \UI\Event | close callback  | null          |
 | resize | \UI\Event | resize callback | null          |

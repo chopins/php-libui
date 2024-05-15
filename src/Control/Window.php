@@ -67,6 +67,9 @@ class Window extends Control
         if (isset($this->attr['resize'])) {
             $this->onResize($this->attr['resize']);
         }
+        if(isset($this->attr['fullscreen'])) {
+            $this->fullscreen($this->attr['fullscreen']);
+        }
         return $this->instance;
     }
 
