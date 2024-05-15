@@ -9,6 +9,7 @@ libui 一个轻量级的且可移植的GUI库，其使用了原生的GUI技术�
 * libui 最新版本
 
 ### A Simple Example
+比较完整的例子 https://github.com/chopins/http-request
 首先从  https://github.com/andlabs/libui/releases 下载 libui 动态库，或者检出代码自行编译，然后使用后面例子的方法加载
 ```php
 include '/src/UI.php';

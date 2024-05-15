@@ -10,6 +10,7 @@ libui is a lightweight, portable GUI library that uses the native GUI technologi
 * libui latest version
 
 ### A Simple Example
+see https://github.com/chopins/http-request
 first download libui dynamic library from https://github.com/andlabs/libui/releases or checkout source for self-build, then load in php code use following code
 ```php
 include '/src/UI.php';
