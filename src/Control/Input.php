@@ -84,7 +84,7 @@ class Input extends Control
             $this->entrySetReadOnly($this->attr['readonly']);
         }
         if (isset($this->attr['change'])) {
-            $this->onChage($this->attr['change']);
+            $this->onChange($this->attr['change']);
         }
         if (isset($this->attr['click'])) {
             $this->onClick($this->attr['click']);
@@ -209,7 +209,8 @@ class Input extends Control
         switch ($this->attr['type']) {
             case 'textarea':
                 return $this->bindEvent('multilineEntryOnChanged', $callable);
-            case 'radio' || 'checkbox':
+            case 'radio':
+            case 'checkbox':
                 return;
             case 'slider':
                 return $this->bindEvent('sliderOnChanged', $callable);
