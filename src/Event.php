@@ -13,21 +13,22 @@ namespace UI;
 
 class Event
 {
-    protected $func;
-    protected $data;
-    protected $before;
-    protected $after;
+    protected $call = null;
+    protected $data = null;
+    protected $before = null;
+    protected $after = null;
+    protected $result = ['after' => null, 'before' => null, 'call' => null];
     protected $property = [];
 
     public function __construct(callable $callable, $data = null)
     {
-        $this->func = $callable;
+        $this->call = $callable;
         $this->data = $data;
     }
 
-    public function getFunc()
+    public function getCall()
     {
-        return $this->func;
+        return $this->call;
     }
 
     public function getData()
@@ -47,7 +48,7 @@ class Event
 
     public function onEvent(callable $callable)
     {
-        $this->func = $callable;
+        $this->call = $callable;
     }
 
     public function setData($data)
@@ -64,6 +65,34 @@ class Event
     {
         $this->after = $callable;
     }
+    public function beforeInvoke($params)
+    {
+        $this->triggerEvent('before', $params);
+    }
+    public function afterInvoke($params)
+    {
+        $this->triggerEvent('after', $params);
+    }
+    public function invoke($params)
+    {
+        $this->triggerEvent('call', $params);
+    }
+
+    protected function triggerEvent($type, $params)
+    {
+        if ($this->$type) {
+            $callable = $this->$type;
+            $this->result[$type] = $callable(...$params);
+        }
+    }
+    public function getBeforeResult()
+    {
+        return $this->result['before'];
+    }
+    public function getAfterResult()
+    {
+        return $this->result['after'];
+    }
 
     public function __set($name, $value)
     {
@@ -76,5 +105,4 @@ class Event
             return $this->property[$name];
         }
     }
-
 }

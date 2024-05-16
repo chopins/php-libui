@@ -48,13 +48,13 @@ $build->show();
 ```
 
 ## window 属性列表:
-| 属性名 | 类型          | 描述            | 默认值       |
-| ------ | ------------- | --------------- | ------------ |
-| title  | string        | window title    | No Win Title |
-| width  | int           | window width    | 800          |
-| height | int           | window height   | 640          |
-| border | int           | window border   | 0            |
-| margin | int           | window margin   | 0            |
+| 属性名 | 类型      | 描述            | 默认值       |
+| ------ | --------- | --------------- | ------------ |
+| title  | string    | window title    | No Win Title |
+| width  | int       | window width    | 800          |
+| height | int       | window height   | 640          |
+| border | int       | window border   | 0            |
+| margin | int       | window margin   | 0            |
 | quit   | \UI\Event | quit callback   | null         |
 | close  | \UI\Event | close callback  | null         |
 | resize | \UI\Event | resize callback | null         |
@@ -84,22 +84,22 @@ $build->show();
 顶级菜单只有 `title`, `id`, `childs` 几个子键(属性), `title`值为菜单名,`childs`数组是子菜单即下拉菜单。如果`childs`的元素是字符串且等于`hr`将显示分割线
 __当前UI配置中的菜单只支持下面的属性:__
 
-| 属性   | 类型          | 描述                                                        | 必须 |
-| ------ | ------------- | ----------------------------------------------------------- | ---- |
-| title  | string        | menu title                                                  | yes  |
-| type   | string        | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no   |
-| click  | \UI\Event | click callback                                              | no   |
-| childs | array         | child menu list                                             | no   |
+| 属性   | 类型      | 描述                                                                                     | 必须 |
+| ------ | --------- | ---------------------------------------------------------------------------------------- | ---- |
+| title  | string    | menu title                                                                               | yes  |
+| type   | string    | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no   |
+| click  | \UI\Event | click callback                                                                           | no   |
+| childs | array     | child menu list                                                                          | no   |
 
 ## body 数组
 `body`数组的每一个元素为一个UI控件的配置，元素的`widget`子元素为控件名，`attr`子元数为配置。见`examples/table.php`。当前 __Build UI__ 配置只支持入如下控件名，
 
 1. `button`, Button control,包含下面的属性:
    
-   | 属性名 | 类型          | 描述                                                                                                                                                                                                                                     | 必须 |
-   | ------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-   | type   | string        | 控件类型，类似HTML的`<button>`标签的`type`属性，可能值如下:<br />2. `file`, open file button<br />1. `save`, save file button<br />2. `font`, select font button<br />3. `color`, select color button<br />3. `button`, is default value | yes  |
-   | title  | string        | button label name                                                                                                                                                                                                                        | yes  |
+   | 属性名 | 类型      | 描述                                                                                                                                                                                                                                     | 必须 |
+   | ------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+   | type   | string    | 控件类型，类似HTML的`<button>`标签的`type`属性，可能值如下:<br />2. `file`, open file button<br />1. `save`, save file button<br />2. `font`, select font button<br />3. `color`, select color button<br />3. `button`, is default value | yes  |
+   | title  | string    | button label name                                                                                                                                                                                                                        | yes  |
    | chick  | \UI\Event | when click callback, 当`type`为 `file` 或 `save` 时，选择文件后会被调用，并会将文件名传给回调函数                                                                                                                                        | no   |
    | change | \UI\Event | only when `color` and `font` available, select color or font be call                                                                                                                                                                     | no   |
 2. `box` 盒布局 ,the following attr:
@@ -115,14 +115,14 @@ __当前UI配置中的菜单只支持下面的属性:__
 6. `vr`  垂直分割线, no attr
 7. `input`  输入类控件, the following attr:
    
-   | 属性名   | 类型          | 描述                                                                                                                                                                                                                                                                                                                         | 必须 |
-   | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-   | type     | string        | 类似HTML的`<input>`标签的`type`属性，specify one of the following value:<br />1. `password`  password entry control<br />2. `search`   search entry control<br />3. `textarea` multiline entry control<br />4. `radio`    radio<br />5. `select`   select<br />6. `checkbox` checkbox<br />7. `text`, is default value<br /> | yes  |
-   | readonly | bool          |                                                                                                                                                                                                                                                                                                                              | no   |
-   | wrap     | bool          | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                               | no   |
-   | option   | array         | `radio` and `select` available,element value is option title, key is natural order number                                                                                                                                                                                                                                    | no   |
+   | 属性名   | 类型      | 描述                                                                                                                                                                                                                                                                                                                         | 必须 |
+   | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+   | type     | string    | 类似HTML的`<input>`标签的`type`属性，specify one of the following value:<br />1. `password`  password entry control<br />2. `search`   search entry control<br />3. `textarea` multiline entry control<br />4. `radio`    radio<br />5. `select`   select<br />6. `checkbox` checkbox<br />7. `text`, is default value<br /> | yes  |
+   | readonly | bool      |                                                                                                                                                                                                                                                                                                                              | no   |
+   | wrap     | bool      | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                               | no   |
+   | option   | array     | `radio` and `select` available,element value is option title, key is natural order number                                                                                                                                                                                                                                    | no   |
    | change   | \UI\Event | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                               | no   |
-   | title    | string        | checkbox` available                                                                                                                                                                                                                                                                                                          | no   |
+   | title    | string    | checkbox` available                                                                                                                                                                                                                                                                                                          | no   |
    | click    | \UI\Event | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                        | no   |
 8. `form` 表单布局, has `padded`, `childs` attr
 9.  `grid` 网格布局, the following attr:
@@ -135,7 +135,7 @@ __当前UI配置中的菜单只支持下面的属性:__
    | child_width   | int   |      | no   |
    | child_height  | int   |      | no   |
    | child_hexpand | int   |      | no   |
-   | child_halign | int   |      | no   |
+   | child_halign  | int   |      | no   |
    | child_vexpand | int   |      | no   |
    | child_valign  | int   |      | no   |
    | childs        | array |      | no   |
@@ -146,8 +146,19 @@ __当前UI配置中的菜单只支持下面的属性:__
    | ------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
    | th     | array | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`                            | yes  |
    | tbody  | array | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes  |
+   表格单元格变更回调函数签名如下:
 
-11. `tab` 可切换页控件, has `page` sub array, `page` array every element value is page child control and key is page title
+```php
+/**
+ * @param UI\Control\Table  $table    The tablel object instance
+ * @param int $row          table row number
+ * @param int $col          table column number
+ * @param mixed $value      table cell value of after changed
+ * 
+ * */
+function(UI\Control\Table $table, int $row, int $col, mixed $value){}
+```
+11.  `tab` 可切换页控件, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img` 图片控件， has flowing attr:
     
    | 属性   | 类型  | 描述                                                                                     | 必须 |
@@ -155,8 +166,26 @@ __当前UI配置中的菜单只支持下面的属性:__
    | src    | array | is image paths list, every element value is image file path, key is natural order number | yes  |
    | width  | int   | the image control width, default is `src` first element image width                      | no   |
    | height | int   | the image control heigth, default is `src` first element image width                     | no   |
+13. `datetime` datetime control
+    
+    | attr   | type          | description                                   | require |
+    | ------ | ------------- | --------------------------------------------- | ------- |
+    | type   | string        | specify one of value `time`,`date`,`datetime` | yes     |
+    | change | \UI\Event |                                               | no      |
+    | id     | string        |                                               | no      |
 
-13. 构建配置未支持控件使用`UI\UI`直接访问`libui` C 函数
+14.  `progress`, has `id` attr
+15. 构建配置未支持控件使用`UI\UI`直接访问`libui` C 函数
+16.  `UI\Event`, all event callback class, The signature of the callback is as follows:
+```php
+/**
+ * @param UI\Event $callable   The object instance of current event 
+ * @param UI\Control $widget  The Control object of trigger widget
+ * @param $data         passed data
+ * 
+ * */
+function (UI\Event $callable, FFI\CData $widget, $data) {}
+```
 
 ## Control common method:
 * show()

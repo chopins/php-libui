@@ -193,26 +193,15 @@ abstract class Control
     {
         $this->$event(function (...$params) use ($callable) {
             try {
-                $func = $callable->getFunc();
-                $before = $callable->getBefore();
-                $after = $callable->getAfter();
-                array_unshift($params, $callable);
-                array_unshift($params, self::$ui);
-
-                if ($before) {
-                    $params[] = $before(...$params);
-                }
-
-                $params[] = $func(...$params);
-
-                if ($after) {
-                    $after(...$params);
-                }
+                $args = [$callable, $this, $params[1]];
+                $callable->beforeInvoke($args);
+                $callable->invoke($args);
+                $callable->afterInvoke($args);
             } catch (\Exception $e) {
                 echo $e;
             } catch (\Error $e) {
                 echo $e;
             }
-        }, null);
+        }, $callable->getData());
     }
 }

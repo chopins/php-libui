@@ -10,7 +10,8 @@ libui is a lightweight, portable GUI library that uses the native GUI technologi
 * libui latest version
 
 ### A Simple Example
-see https://github.com/chopins/http-request
+see https://github.com/chopins/http-request  
+
 first download libui dynamic library from https://github.com/andlabs/libui/releases or checkout source for self-build, then load in php code use following code
 ```php
 include '/src/UI.php';
@@ -161,7 +162,18 @@ every element key of `body` array is control config, `widget` element is control
     | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`                            | yes     |
     | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes     |
     | id    | string |                                                                                                                                                                                                                                                                                                                           | no      |
-   
+   table change callback function, signature is as follows:
+```php
+/**
+ * @param UI\Control\Table  $table    The tablel object instance
+ * @param int $row          table row number
+ * @param int $col          table column number
+ * @param mixed $value      table cell value of after changed
+ * 
+ * */
+function(UI\Control\Table $table, int $row, int $col, mixed $value){}
+```
+
 11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img`   image control, has flowing attr:
 
@@ -182,6 +194,16 @@ every element key of `body` array is control config, `widget` element is control
 
 14.  `progress`, has `id` attr
 15.  unsupport control must call libui C function by `UI\UI`
+16.  `UI\Event`, all event callback class, The signature of the callback is as follows:
+```php
+/**
+ * @param UI\Event $callable   The object instance of current event 
+ * @param UI\Control $widget  The Control object of trigger widget
+ * @param $data         passed data
+ * 
+ * */
+function (UI\Event $callable, FFI\CData $widget, $data) {}
+```
 
 ## Control common method:
 * show()

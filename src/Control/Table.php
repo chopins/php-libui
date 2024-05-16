@@ -228,7 +228,7 @@ class Table extends Control
         }
         if (isset($this->attr['change'][$col])) {
             $callable = $this->attr['change'][$col];
-            $callable($tableModelHandler, $tableModel, $row, $col, $value);
+            $callable($this, $row, $col, $value);
         }
     }
 
