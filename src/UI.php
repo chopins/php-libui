@@ -648,7 +648,7 @@ class UI
      *    ]
      * </code>
      */
-    public function build(array $config): UIBuild
+    public function build($config): UIBuild
     {
         $this->build = new UIBuild($this, $config);
         return $this->build;
