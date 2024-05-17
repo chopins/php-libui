@@ -226,9 +226,8 @@ class Table extends Control
                 }
                 break;
         }
-        if (isset($this->attr['change'][$col])) {
-            $callable = $this->attr['change'][$col];
-            $callable($this, $row, $col, $value);
+        if (isset($this->attr['th'][$col]['change'])) {
+            $this->attr['th'][$col]['change']->trigger($this, ['row' => $row, 'col' => $col, 'value' => $value]);
         }
     }
 

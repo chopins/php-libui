@@ -33,8 +33,9 @@ $build->show();
 ```
 
 ## 构建配置数组结构
-
-构建配置数组第一层包含`body` `menu` 以及 window 属性；在配置数组中键为属性，值为属性值。 类似后面代码所展示的结构。
+* 配置文件现在支持XML结构，例子见`tests/uibuild.xml`
+* XML配置，事件属性名必须以`on`开头，值为`callable`,无需`Event`, 值支持`$var`,`func_name`,`CLASS::method`几种模式，不支持数组
+* 构建配置数组第一层包含`body` `menu` 以及 window 属性；在配置数组中键为属性，值为属性值。 类似后面代码所展示的结构。
 ```php
 [
     'title' => 'window title name',
@@ -140,7 +141,7 @@ __当前UI配置中的菜单只支持下面的属性:__
    | child_valign  | int   |      | no   |
    | childs        | array |      | no   |
 
-10. `table`  表格控件, has following sub key :
+10. `table`  表格控件, table cell has `change` event has following sub key :
     
    | 属性名 | 类型  | 描述                                                                                                                                                                                                                                                                                                                      | 必须 |
    | ------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
@@ -148,25 +149,15 @@ __当前UI配置中的菜单只支持下面的属性:__
    | tbody  | array | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes  |
    表格单元格变更回调函数签名如下:
 
-```php
-/**
- * @param UI\Control\Table  $table    The tablel object instance
- * @param int $row          table row number
- * @param int $col          table column number
- * @param mixed $value      table cell value of after changed
- * 
- * */
-function(UI\Control\Table $table, int $row, int $col, mixed $value){}
-```
-11.  `tab` 可切换页控件, has `page` sub array, `page` array every element value is page child control and key is page title
-12. `img` 图片控件， has flowing attr:
+1.   `tab` 可切换页控件, has `page` sub array, `page` array every element value is page child control and page control has title attr
+2.  `img` 图片控件， has flowing attr:
     
    | 属性   | 类型  | 描述                                                                                     | 必须 |
    | ------ | ----- | ---------------------------------------------------------------------------------------- | ---- |
    | src    | array | is image paths list, every element value is image file path, key is natural order number | yes  |
    | width  | int   | the image control width, default is `src` first element image width                      | no   |
    | height | int   | the image control heigth, default is `src` first element image width                     | no   |
-13. `datetime` datetime control
+3.  `datetime` datetime control
     
     | attr   | type          | description                                   | require |
     | ------ | ------------- | --------------------------------------------- | ------- |
@@ -174,9 +165,9 @@ function(UI\Control\Table $table, int $row, int $col, mixed $value){}
     | change | \UI\Event |                                               | no      |
     | id     | string        |                                               | no      |
 
-14.  `progress`, has `id` attr
-15. 构建配置未支持控件使用`UI\UI`直接访问`libui` C 函数
-16.  `UI\Event`, all event callback class, The signature of the callback is as follows:
+4.   `progress`, has `id` attr
+5.  构建配置未支持控件使用`UI\UI`直接访问`libui` C 函数
+6.   `UI\Event`, all event callback class, The signature of the callback is as follows:
 ```php
 /**
  * @param UI\Event $callable   The object instance of current event 
@@ -184,7 +175,7 @@ function(UI\Control\Table $table, int $row, int $col, mixed $value){}
  * @param $data         passed data
  * 
  * */
-function (UI\Event $callable, FFI\CData $widget, $data) {}
+function (UI\Event $callable) {}
 ```
 
 ## Control common method:

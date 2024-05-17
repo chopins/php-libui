@@ -87,12 +87,12 @@ class Button extends Control
             case 'file':
                 $callable->onBefore(function () {
                     return $this->build->openFile();
-                });
+                }, 'file');
                 break;
             case 'save':
                 $callable->onBefore(function () {
                     return $this->build->saveFile();
-                });
+                }, 'file');
                 break;
         }
         $this->bindEvent('buttonOnClicked', $callable);
@@ -120,7 +120,7 @@ class Button extends Control
                 $this->fontButtonFont($fs);
 
                 $fontDes->fill();
-                
+
                 return $fontDes;
             case 'color':
                 $r = self::$ui->new('double*');
@@ -141,7 +141,7 @@ class Button extends Control
         switch ($this->attr['type']) {
             case 'font':
                 break;
-            case'color':
+            case 'color':
                 $this->colorButtonSetColor($text['red'], $text['green'], $text['blue'], $text['alpha']);
                 break;
             default:
@@ -149,5 +149,4 @@ class Button extends Control
                 break;
         }
     }
-
 }

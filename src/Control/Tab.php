@@ -28,11 +28,11 @@ class Tab extends Control
 
     public function pushChilds()
     {
-        $this->attr['page'] = $this->attr['page'] ?? [];
-        foreach ($this->attr['page'] as $pageName => $childs) {
-            foreach ($childs as $config) {
+        $this->attr['childs'] = $this->attr['childs'] ?? [];
+        foreach ($this->attr['childs'] as $childs) {
+            foreach ($childs['childs'] as $config) {
                 $control = $this->build->createItem($config);
-                $this->appendPage($pageName, $control);
+                $this->appendPage($childs['title'], $control);
             }
         }
     }

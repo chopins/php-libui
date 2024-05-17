@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window title="Test uibuild" width="900" height="640" marign="0" border="0" onquit="quit"
+    onclose="$close">
+    <menu>
+        <i title="File">
+            <i type="openfile" onclick="openfile">open file</i>
+            <i>New File</i>
+            <hr></hr>
+            <i type="quit"></i>
+        </i>
+        <i title="Edit">
+            <i type="checkbox">Fullscreen</i>
+            <i type="preferences"></i>
+        </i>
+        <i title="Help">
+            <i type="about"></i>
+        </i>
+    </menu>
+    <body>
+        <tab>
+            <page title="From Page">
+                <form padded="1" stretchy="1">
+                    <button stretchy="1">Button1</button>
+                    <input type="text"></input>
+                    <hr></hr>
+                    <label>Label Control</label>
+                    <progress id="progress_id" stretchy="0"></progress>
+                    <datetime type="date"></datetime>
+                    <datetime type="time"></datetime>
+                    <datetime type="datetime"></datetime>
+                </form>
+            </page>
+            <page title="Grid Page">
+                <grid padded="1"
+                    child_left="1"
+                    child_top="1"
+                    child_width="20"
+                    child_height="10"
+                    child_hexpand="10"
+                    child_haligin="1"
+                    child_vexpand="20"
+                    child_valign="1">
+                    <button type="file" child_left="1" onclick="buttonOpenFile">Open File</button>
+                    <button type="save" child_left="10" onclick="buttonSaveFile">Save File</button>
+                    <hr></hr>
+                    <button type="font" child_left="20" id="font-btn-test">Select Font</button>
+                    <button type="color" child_top="2" child_left="10">Select Color</button>
+                    <input type="text" child_top="3"></input>
+                </grid>
+            </page>
+            <page title="Group Page">
+                <group title="Group 1 Title" marign="1">
+                    <box dir="h" child_fit="1">
+                        <form padded="1">
+                            <label>FormLabel1</label>
+                            <input type="textarea" wrap="0"></input>
+                            <input type="password"></input>
+                            <input type="number" min="0" max="100"></input>
+                            <input type="slider" min="0" max="60"></input>
+                            <input type="search"></input>
+                            <input type="radio">
+                                <option>Radio 1</option>
+                                <option>Radio 2</option>
+                            </input>
+                            <input type="select">
+                                <option>Select item 1</option>
+                                <option>Select item 2</option>
+                            </input>
+                            <input type="checkbox">CheckBoxItme1</input>
+                            <input type="checkbox">CheckBoxItme2</input>
+                            <input type="checkbox">CheckBoxItme3</input>
+                        </form>
+                    </box>
+                </group>
+            </page>
+            <page title="table A">
+                <table>
+                    <th>
+                        <input type="text" onchange="$tableChange" editable="1">Cloumn 1</input>
+                        <input type="text" onchange="$tableChange" editable="1">Cloumn 2</input>
+                        <input type="checkbox" onchange="$tableCheck" editable="1">Cloumn 2</input>
+                    </th>
+                    <tbody>
+                        <tr><c>row 1 cell 1</c><c>dddd</c><c>1</c></tr>
+                        <tr><c>row 2 cell 1</c><c>ddssss</c><c>1</c></tr>
+                    </tbody>
+                   </table>
+            </page>
+            <page title="group">
+                <group title="Group 2 Title A" margin="1">
+                    <canvas ondraw="drawText"></canvas>
+                </group>
+                <group title="Group 2 Title B" margin="1">
+                   
+                </group>
+            </page>
+        </tab>
+    </body>
+</window>

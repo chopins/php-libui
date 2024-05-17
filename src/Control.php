@@ -193,15 +193,12 @@ abstract class Control
     {
         $this->$event(function (...$params) use ($callable) {
             try {
-                $args = [$callable, $this, $params[1]];
-                $callable->beforeInvoke($args);
-                $callable->invoke($args);
-                $callable->afterInvoke($args);
+                $callable->trigger($this, ['data' => $params[1]]);
             } catch (\Exception $e) {
                 echo $e;
             } catch (\Error $e) {
                 echo $e;
             }
-        }, $callable->getData());
+        }, $callable->getBindParams());
     }
 }

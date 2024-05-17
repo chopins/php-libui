@@ -10,8 +10,8 @@ function main()
         'title' => 'test',
         'width' => 900,
         'height' => 900,
-        'close' => $ui->event(function ($ui, $event, $uiWidget, $uiControl){
-            $ui->quit();
+        'close' => $ui->event(function ($e){
+            $e->ui()->quit();
             return 1;
         }),
         'menu' => [
@@ -20,8 +20,8 @@ function main()
                 'childs' => [
                     ['title' => 'New File'],
                     ['title' => 'Open File'],
-                    ['title' => 'Quit', 'click' => $ui->event(function ($ui, $event, $uiWidget, $uiControl){
-                        $ui->quit();
+                    ['title' => 'Quit', 'click' => $ui->event(function ($e){
+                        $e->ui()->quit();
                         return 1;
                     })],
                 ]

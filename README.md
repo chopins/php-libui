@@ -36,8 +36,9 @@ $build->show();
 ```
 
 ## build config structure
-
-build config is array, main key contain `body`,`menu` and *window attribute key*; in config array, element key is attr name, element value is attr value,similar the following:
+* build config is xml file, see `tests/uibuild.xml`
+* **In xml file, all event attribute name must be prefix `on`**, `onclick`,`onchange`,`ondraw`, value is callable name, it is not Event instance, callable name support php variable and php callable:`$var`,`func_name`,`CLASS::method`, do not support array callable. variable is GLOBALS
+* also build config support array, main key contain `body`,`menu` and *window attribute key*; in config array, element key is attr name, element value is attr value,similar the following:
 ```php
 [
     'title' => 'window title name',
@@ -155,24 +156,13 @@ every element key of `body` array is control config, `widget` element is control
    | childs        | array  |             | no      |
    | id            | string |             | no      |
  
-10. `table`  table control, has following sub key :
+10. `table`  table control, table cell has change event, it is following sub key :
 
     | attr  | type   | Description                                                                                                                                                                                                                                                                                                               | require |
     | ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-    | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text`                            | yes     |
-    | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`<br />4. `change` is `array`, every element is one row change callback list, column is `callable` | yes     |
+    | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text` <br />5. widget has `change` attr, for row column change callback                            | yes     |
+    | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor` | yes     |
     | id    | string |                                                                                                                                                                                                                                                                                                                           | no      |
-   table change callback function, signature is as follows:
-```php
-/**
- * @param UI\Control\Table  $table    The tablel object instance
- * @param int $row          table row number
- * @param int $col          table column number
- * @param mixed $value      table cell value of after changed
- * 
- * */
-function(UI\Control\Table $table, int $row, int $col, mixed $value){}
-```
 
 11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img`   image control, has flowing attr:
@@ -198,11 +188,9 @@ function(UI\Control\Table $table, int $row, int $col, mixed $value){}
 ```php
 /**
  * @param UI\Event $callable   The object instance of current event 
- * @param UI\Control $widget  The Control object of trigger widget
- * @param $data         passed data
  * 
  * */
-function (UI\Event $callable, FFI\CData $widget, $data) {}
+function (UI\Event $callable) {}
 ```
 
 ## Control common method:

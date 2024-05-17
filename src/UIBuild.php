@@ -35,6 +35,7 @@ use UI\Control\Img;
 use UI\Event;
 use UI\UI;
 use ErrorException;
+use RuntimeException;
 
 class UIBuild
 {
@@ -51,14 +52,119 @@ class UIBuild
      */
     protected ?Window $win = null;
 
-    public function __construct(UI $ui, array $config = [])
+    protected $xml = [];
+
+    public function __construct(UI $ui, $config = '')
     {
         if (is_null(self::$ui)) {
             self::$ui = $ui;
         }
-        if ($config) {
+        if (is_array($config)) {
+            $this->createMainWin($config);
+        } elseif (file_exists($config)) {
+            $this->loadXML($config);
+            $config = $this->parseXmlStruct();
             $this->createMainWin($config);
         }
+    }
+    public function loadXML($file)
+    {
+        $parser = xml_parser_create();
+        xml_parse_into_struct($parser, file_get_contents($file), $vals, $index);
+        xml_parser_free($parser);
+        $this->xml = ['vals' => $vals, 'index' => $index];
+    }
+    public function parseXmlStruct()
+    {
+        $start = 0;
+        $configXml = $this->parseChild(1, $start);
+        $config = $configXml[0];
+        unset($config['childs']);
+        $config['menu'] = $configXml[0]['childs'][0]['childs'];
+        $config['body'] = $configXml[0]['childs'][1]['childs'];
+        return $config;
+    }
+    public function createEventFromXml($callable)
+    {
+        if (strpos($callable, '$') === 0) {
+            $varname = substr($callable, 1);
+            $callable = $GLOBALS[$varname];
+        }
+        return self::$ui->event($callable);
+    }
+
+    public function getWidgetConfig($tags)
+    {
+        $tag = strtolower($tags['tag']);
+        $widgetConfig = $tags['attributes'] ?? [];
+        foreach ($widgetConfig as $k => $v) {
+            unset($widgetConfig[$k]);
+            $k = strtolower($k);
+            $widgetConfig[$k] = trim($v);
+            if (strpos($k, 'on') === 0) {
+                $k = substr($k, 2);
+                $widgetConfig[$k] = $this->createEventFromXml($v);
+            }
+        }
+        $widgetConfig['value'] = '';
+        if (!empty($tags['value'])) {
+            $widgetConfig['value'] = trim($tags['value']);
+        }
+
+        $widgetConfig['childs'] = [];
+        $widgetConfig['widget'] = $tag;
+        return $widgetConfig;
+    }
+    public function parseTable($tags)
+    {
+        $table = $tags;
+        unset($table['childs']);
+        foreach ($tags['childs'] as $row) {
+            if ($row['widget'] == 'th') {
+                $table['th'] = $row['childs'];
+            } else if ($row['widget'] == 'tbody') {
+                $table['tbody'] = [];
+                foreach ($row['childs'] as $tr) {
+                    $table['tbody'][] = array_column($tr['childs'], 'value');
+                }
+            }
+        }
+        return $table;
+    }
+
+    public function parseChild($level, &$end)
+    {
+        $arr = [];
+        $ltag = [];
+        for ($i = $end; $i < count($this->xml['vals']); $i++) {
+            $tags = $this->xml['vals'][$i];
+            if ($tags['level'] == $level && $tags['type'] == 'open') {
+                $ltag = $this->getWidgetConfig($tags);
+            } else if ($tags['level'] == $level && $tags['type'] == 'complete') {
+                $ltag = $this->getWidgetConfig($tags);
+                $ltag['title'] = $ltag['title'] ?? $ltag['value'];
+                $arr[] = $ltag;
+                $ltag = [];
+            } else if ($tags['level'] == $level && $tags['type'] == 'close' && strtoupper($ltag['widget']) == $tags['tag']) {
+                $ltag['title'] = $ltag['title'] ?? $ltag['value'];
+                if ($ltag['widget'] == 'table') {
+                    $ltag = $this->parseTable($ltag);
+                }
+                $arr[] = $ltag;
+                $ltag = [];
+            } elseif ($tags['level'] > $level) {
+                $end = $i;
+                $childs = $this->parseChild($level + 1, $end);
+                $ltag['childs'] = array_merge($ltag['childs'], $childs);
+                $i = $end;
+            } else if ($tags['level'] == $level && $tags['type'] == 'cdata') {
+                $ltag['value'] .= trim($tags['value']);
+            } else if ($tags['level'] < $level) {
+                $end = --$i;
+                break;
+            }
+        }
+        return $arr;
     }
 
     public function createMainWin(array $config)
@@ -72,15 +178,16 @@ class UIBuild
         }
 
         if (isset($config['quit']) && $config['quit'] instanceof Event) {
-            self::$ui->onShouldQuit($config['quit']->getFunc(), $config['quit']->getData());
+
+            self::$ui->onShouldQuit($config['quit']->getCall(), $config['quit']->getBindParams());
         }
 
         if (isset($config['app_queue']) && $config['app_queue'] instanceof Event) {
-            self::$ui->queueMain($config['app_queue']->getFunc(), $config['app_queue']->getData());
+            self::$ui->queueMain($config['app_queue']->getCall(), $config['app_queue']->getBindParams());
         }
 
         if (isset($config['timer']) && $config['timer'] instanceof Event) {
-            self::$ui->timer($config['timer']->time, $config['timer']->getFunc(), $config['timer']->getData());
+            self::$ui->timer($config['timer']->time, $config['timer']->getCall(), $config['timer']->getBindParams());
         }
 
         $hasMenu = 0;
@@ -91,7 +198,7 @@ class UIBuild
 
         $this->window($config, $hasMenu);
         if (isset($config['body']) && $config['body']) {
-            foreach ($config['body'] as $idx=> $childConfig) {
+            foreach ($config['body'] as $idx => $childConfig) {
                 $control = $this->createItem($childConfig, $idx);
                 $this->win->addChild($control);
             }
@@ -204,8 +311,11 @@ class UIBuild
         return $this->handles[$handle];
     }
 
-    public function createItem($config, $idx = 0): Control
+    public function createItem(array $config, $idx = 0): Control
     {
+        if (!isset($config['widget'])) {
+            throw new RuntimeException("widget config error at ($idx) config is " . var_export($config, true));
+        }
         switch ($config['widget']) {
             case 'button':
                 return new Button($this, $config);
@@ -248,7 +358,7 @@ class UIBuild
             case 'feature':
                 return new OpenTypeFeatures($this, $config);
             default:
-                throw new ErrorException("UI widget {$config['widget']} is invaild at config array offset $idx");
+                throw new RuntimeException("UI widget {$config['widget']} is invaild at ($idx), config is " . var_export($config, true));
         }
     }
 }

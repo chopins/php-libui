@@ -41,10 +41,10 @@ class Menu extends Control
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         foreach ($this->attr['childs'] as $child) {
-            if (is_array($child)) {
-                $this->childs[] = $this->addMenuItem($child);
-            } else if ($child == 'hr') {
+            if (isset($child['widget']) && $child['widget'] == 'hr') {
                 $this->addSep();
+            } else {
+                $this->childs[] = $this->addMenuItem($child);
             }
         }
     }
@@ -83,5 +83,4 @@ class Menu extends Control
     {
         return $this->menuItemDisable();
     }
-
 }

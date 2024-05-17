@@ -52,6 +52,15 @@ class MenuItem extends Menu
 
     public function onClick(Event $callable)
     {
+        if ($this->attr['type'] == 'file') {
+            $callable->onBefore(function () {
+                return $this->build->openFile();
+            }, 'file');
+        } else if ($this->attr['type'] == 'save') {
+            $callable->onBefore(function () {
+                return $this->build->saveFile();
+            }, 'file');
+        }
         $this->bindEvent('menuItemOnClicked', $callable);
     }
 
@@ -64,5 +73,4 @@ class MenuItem extends Menu
     {
         $this->menuItemSetChecked($check);
     }
-
 }
