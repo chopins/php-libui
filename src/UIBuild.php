@@ -79,21 +79,18 @@ class UIBuild
         $start = 0;
         $configXml = $this->parseChild(1, $start);
         $config = $configXml[0];
+        var_dump($config);
         unset($config['childs']);
         $config['menu'] = $configXml[0]['childs'][0]['childs'];
         $config['body'] = $configXml[0]['childs'][1]['childs'];
         return $config;
-    }
-    public function createEventFromXml($callable)
-    {
-        return self::$ui->event($callable);
     }
 
     public function getWidgetConfig($tags)
     {
         $tag = strtolower($tags['tag']);
         $widgetConfig = $tags['attributes'] ?? [];
-        foreach ($widgetConfig as $k => &$v) {
+        foreach ($widgetConfig as $k => $v) {
             unset($widgetConfig[$k]);
             $k = strtolower($k);
             $v = trim($v);
@@ -105,7 +102,9 @@ class UIBuild
             }
             if (strpos($k, 'on') === 0) {
                 $k = substr($k, 2);
-                $widgetConfig[$k] = $this->createEventFromXml($v);
+                $widgetConfig[$k] = self::$ui->event($v);
+            } else {
+                $widgetConfig[$k] = $v;
             }
         }
         $widgetConfig['value'] = '';
