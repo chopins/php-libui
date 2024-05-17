@@ -38,6 +38,7 @@ $build->show();
 ## build config structure
 * build config is xml file, see `tests/uibuild.xml`
 * **In xml file, all event attribute name must be prefix `on`**, `onclick`,`onchange`,`ondraw`, value is callable name, it is not Event instance, callable name support php variable and php callable:`$var`,`func_name`,`CLASS::method`, do not support array callable. variable is GLOBALS
+* attr value support GLOBALS variable and constant, prefix `$``@` as `$var` or `@CONST`
 * also build config support array, main key contain `body`,`menu` and *window attribute key*; in config array, element key is attr name, element value is attr value,similar the following:
 ```php
 [
@@ -139,7 +140,7 @@ every element key of `body` array is control config, `widget` element is control
    | id       | string        |                                                                                                                                                                                                                                                                                                                                                                        | no      |
    | editable | bool          | `select` available                                                                                                                                                                                                                                                                                                                                                     | no      |
    
-8. `form`   form layout, has `padded`, `childs`,`id` attr
+8. `form`   form layout, has `padded`, `childs`,`id` attr, child widget has label attr
 9. `grid`   grid layout, the following attr:
 
    | attr          | type   | Description | require |

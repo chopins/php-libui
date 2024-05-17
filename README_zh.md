@@ -35,6 +35,7 @@ $build->show();
 ## 构建配置数组结构
 * 配置文件现在支持XML结构，例子见`tests/uibuild.xml`
 * XML配置，事件属性名必须以`on`开头，值为`callable`,无需`Event`, 值支持`$var`,`func_name`,`CLASS::method`几种模式，不支持数组
+* 属性值支持php GLOBALS变量与常量，分别以`$``@`开头， 类似 `$var` `@CONST`
 * 构建配置数组第一层包含`body` `menu` 以及 window 属性；在配置数组中键为属性，值为属性值。 类似后面代码所展示的结构。
 ```php
 [
@@ -125,7 +126,7 @@ __当前UI配置中的菜单只支持下面的属性:__
    | change   | \UI\Event | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                               | no   |
    | title    | string    | checkbox` available                                                                                                                                                                                                                                                                                                          | no   |
    | click    | \UI\Event | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                        | no   |
-8. `form` 表单布局, has `padded`, `childs` attr
+8. `form` 表单布局, has `padded`, `childs` attr, 添加的子控件具备`label`属性
 9.  `grid` 网格布局, the following attr:
     
    | 属性名        | 类型  | 描述 | 必须 |

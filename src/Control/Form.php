@@ -31,10 +31,10 @@ class Form extends Control
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         $allStretchy = $this->attr['stretchy'] ?? 0;
-        foreach ($this->attr['childs'] as $label => $child) {
+        foreach ($this->attr['childs'] as $i => $child) {
             $itemStretchy = $child['stretchy'] ?? $allStretchy;
             $control = $this->build->createItem($child);
-            $this->addChild($control, ['label' => is_string($label) ? $label : '', 'stretchy' => $itemStretchy]);
+            $this->addChild($control, ['label' => $child['label'] ?? $i, 'stretchy' => $itemStretchy]);
         }
     }
 

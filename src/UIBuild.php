@@ -86,10 +86,6 @@ class UIBuild
     }
     public function createEventFromXml($callable)
     {
-        if (strpos($callable, '$') === 0) {
-            $varname = substr($callable, 1);
-            $callable = $GLOBALS[$varname];
-        }
         return self::$ui->event($callable);
     }
 
@@ -97,10 +93,16 @@ class UIBuild
     {
         $tag = strtolower($tags['tag']);
         $widgetConfig = $tags['attributes'] ?? [];
-        foreach ($widgetConfig as $k => $v) {
+        foreach ($widgetConfig as $k => &$v) {
             unset($widgetConfig[$k]);
             $k = strtolower($k);
-            $widgetConfig[$k] = trim($v);
+            $v = trim($v);
+            if(strpos($v, '@') === 0) {
+                $v = constant(substr($v, 1));
+            } else if(strpos($v, '$') === 0) {
+                $vn = substr($v, 1);
+                $v = $GLOBALS[$vn];
+            }
             if (strpos($k, 'on') === 0) {
                 $k = substr($k, 2);
                 $widgetConfig[$k] = $this->createEventFromXml($v);
