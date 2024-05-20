@@ -23,4 +23,4 @@ if(!$so) {
 if (!file_exists($so)) {
     throw new \Exception("libui dynamic library not found in $so, set 'LIBUI_PATH' environment variables or defined LIBUI_PATH constant assign libui.so path");
 }
-//$ui = new UI($so);
+$ui = new UI($so);
