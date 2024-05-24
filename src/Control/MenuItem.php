@@ -23,7 +23,7 @@ use UI\Event;
 class MenuItem extends Menu
 {
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $parent = $this->attr['parent'];
         $this->attr['type'] = $this->attr['type'] ?? 'text';

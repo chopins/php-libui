@@ -22,7 +22,7 @@ class Datetime extends Control
 {
     const CTL_NAME = 'datetime';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         switch ($this->attr['type']) {
             case 'time':

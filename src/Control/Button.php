@@ -28,7 +28,7 @@ class Button extends Control
 {
     const CTL_NAME = 'button';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $type = $this->attr['type'] ?? null;
         $this->attr['click'] = $this->attr['click'] ?? null;

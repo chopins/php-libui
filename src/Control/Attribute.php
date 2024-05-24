@@ -45,7 +45,7 @@ class Attribute extends Control
     protected $callPrefix = 'attribute';
     protected $callPrefixFuncList = ['getType', 'family', 'size', 'weight', 'italic', 'stretch', 'underline'];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         switch ($this->attr['type']) {
             case self::$ui::ATTRIBUTE_TYPE_FAMILY:

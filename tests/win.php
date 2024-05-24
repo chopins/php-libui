@@ -7,9 +7,14 @@ include_once dirname(__DIR__) . '/examples/loadui.php';
 
 $config = [
     'title' => 'hello',
-    'width' => 320,
-    'height' => 240,
+    'width' => 680,
+    'height' => 480,
     'margin' =>  1,
+    'close' => $ui->event(function ($e): int {
+        global $ui;
+        $ui->quit();
+        return 1;
+    }),
     'body' => []
 ];
 
@@ -24,14 +29,9 @@ if (!is_array($subControl)) {
 foreach ($subControl as $sub) {
     if (is_subclass_of($sub, '\UI\Control')) {
         $win->addChild($sub);
-    } elseif($sub instanceof FFI\CData) {
+    } elseif ($sub instanceof FFI\CData) {
         $win->windowSetChild($sub);
     }
 }
-function onClosing($w, $data): int
-{
-    global $ui;
-    $ui->quit();
-    return 1;
-}
+
 $build->show();

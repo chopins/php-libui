@@ -28,7 +28,7 @@ class Menu extends Control
 
     protected $childs = [];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         if (empty($this->attr['title'])) {
             throw new RuntimeException('menu title can not empty');

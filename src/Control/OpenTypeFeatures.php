@@ -25,7 +25,7 @@ class OpenTypeFeatures extends Control
     protected $callPrefix = 'openTypeFeatures';
     protected $callPrefixFuncList = ['add', 'remove'];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->newOpenTypeFeatures();
         return $this->instance;

@@ -20,7 +20,7 @@ use UI\Control;
 class Form extends Control
 {
     const CTL_NAME = 'form';
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->newForm();
         $this->setPadded($this->attr['padded']);

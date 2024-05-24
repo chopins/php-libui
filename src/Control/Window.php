@@ -48,7 +48,7 @@ class Window extends Control
     public static $defWinHeight = 640;
     public static $defWinTitle = 'No Win Title';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? self::$defWinTitle;
         $this->attr['width'] = $this->attr['width'] ?? self::$defWinWidth;

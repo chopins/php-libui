@@ -38,7 +38,7 @@ class Area extends Control
     private $handler = null;
     protected $context = null;
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $handler = $this->areaHandler();
         $this->attr['type'] = $this->attr['type'] ?? '';

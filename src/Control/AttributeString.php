@@ -34,7 +34,7 @@ class AttributeString extends Control
     protected $callPrefixFuncList = ['string', 'len', 'appendUnattributed', 'insertAtUnattributed',
         'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->newAttributedString($this->attr['string']);
         return $this->instance;

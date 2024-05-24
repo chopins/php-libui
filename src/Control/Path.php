@@ -36,7 +36,7 @@ class Path extends Control
     protected $callPrefixFuncList = ['newFigure', 'newFigureWithArc', 'lineTo', 'arcTo', 'bezierTo',
         'closeFigure', 'addRectangle', 'end'];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->drawNewPath($this->attr['fillMode']);
         return $this->instance;

@@ -18,7 +18,7 @@ class Progress extends Control
 {
     const CTL_NAME = 'progress';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->newProgressBar();
         return $this->instance;

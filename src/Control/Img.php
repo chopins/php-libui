@@ -24,7 +24,7 @@ class Img extends Control
     const CTL_NAME = 'img';
     const IS_CONTROL = false;
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         if (!empty($this->attr['src'][0])) {
             $size = \getimagesize($this->attr['src'][0]);

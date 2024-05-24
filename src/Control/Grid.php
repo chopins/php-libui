@@ -34,7 +34,7 @@ class Grid extends Control
         'child_width', 'child_height', 'child_hexpand',
         'child_halign', 'child_vexpand', 'child_valign'];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         foreach ($this->attrList as $k) {
             $this->initAttr($this->attr, $k, 0);

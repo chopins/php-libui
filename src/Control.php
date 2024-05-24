@@ -54,13 +54,7 @@ abstract class Control
         $this->pushChilds();
     }
 
-    public static function uiControl(UIBuild $build, CData $control)
-    {
-        $ins = new static($build, [], $control);
-        return $ins;
-    }
-
-    abstract public function newControl(): CData;
+    abstract protected function newControl(): CData;
 
     public function pushChilds()
     {

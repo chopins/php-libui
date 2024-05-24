@@ -21,7 +21,7 @@ class Separator extends Control
 {
     const CTL_NAME = 'sep';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         if ($this->attr['type'] == 'hr') {
             $this->instance = self::$ui->newHorizontalSeparator();

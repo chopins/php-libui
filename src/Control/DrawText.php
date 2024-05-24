@@ -22,7 +22,7 @@ class DrawText extends Control
     const CTL_NAME = 'text';
     const IS_CONTROL = false;
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->instance = self::$ui->drawNewTextLayout($this->attr['params']->getParams());
         return $this->instance;

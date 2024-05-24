@@ -21,7 +21,7 @@ class Tab extends Control
 {
     const CTL_NAME = 'tab';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         return self::$ui->newTab();
     }

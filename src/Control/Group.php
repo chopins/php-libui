@@ -23,7 +23,7 @@ class Group extends Control
 {
     const CTL_NAME = 'group';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->attr['title'] = $this->attr['title'] ?? '';
         $this->attr['margin'] = $this->attr['margin'] ?? 0;

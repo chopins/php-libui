@@ -32,7 +32,7 @@ class Input extends Control
 {
     const CTL_NAME = 'input';
     public $name = '';
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->attr['type'] = $this->attr['type'] ?? null;
         $this->name = $this->attr['name'] ?? '';

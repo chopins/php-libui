@@ -23,7 +23,7 @@ class Box extends Control
 {
     const CTL_NAME = 'box';
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->attr['dir'] = $this->attr['dir'] ?? 'h';
         $this->attr['padded'] = $this->attr['padded'] ?? 0;

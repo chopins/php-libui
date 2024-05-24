@@ -32,7 +32,7 @@ class Table extends Control
     protected $columnTypeList = [];
     protected $imgsList = [];
 
-    public function newControl(): CData
+    protected function newControl(): CData
     {
         $this->columnNum = count($this->attr['th']);
         $this->rowNum = count($this->attr['tbody']);
