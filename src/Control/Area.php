@@ -85,7 +85,7 @@ class Area extends Control
             $this->context = $params[0]->Context;
 
             $areaParam = new AreaDrawParams($this->build, $params[0]);
-            $this->attr['draw']->trigger($this, ['handler' => $handlerArr, 'params' => $areaParam]);
+            $this->attr['draw']->trigger('draw', $this, ['handler' => $handlerArr, 'params' => $areaParam]);
         } catch (\Error $e) {
             echo $e;
         }
@@ -116,7 +116,7 @@ class Area extends Control
                 'modifiers' => $mouseEvent[0]->Modifiers,
                 'held1To64' => $mouseEvent[0]->Held1To64,
             ];
-            $this->attr['mouseEvent']->trigger($this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            $this->attr['mouseEvent']->trigger('mouseEvent', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
         } catch (\Error $e) {
             echo $e;
         }
@@ -136,7 +136,7 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
-            $this->attr['mouseCrossed']->trigger($this, ['handler' => $handlerArr, 'left' => $left]);
+            $this->attr['mouseCrossed']->trigger('mouseCrossed', $this, ['handler' => $handlerArr, 'left' => $left]);
         } catch (\Error $e) {
             echo $e;
         }
@@ -156,7 +156,7 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
-            $this->attr['mouseCrossed']->trigger($this, ['handler' => $handlerArr]);
+            $this->attr['dragBroken']->trigger('dragBroken', $this, ['handler' => $handlerArr]);
         } catch (\Error $e) {
             echo $e;
         }

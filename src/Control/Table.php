@@ -227,7 +227,7 @@ class Table extends Control
                 break;
         }
         if (isset($this->attr['th'][$col]['change'])) {
-            $this->attr['th'][$col]['change']->trigger($this, ['row' => $row, 'col' => $col, 'value' => $value]);
+            $this->attr['th'][$col]['change']->trigger('change', $this, ['row' => $row, 'col' => $col, 'value' => $value]);
         }
     }
 

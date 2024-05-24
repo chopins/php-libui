@@ -22,6 +22,7 @@ class Event
     protected $after = null;
     protected $target = null;
     protected $eventData = [];
+    private $eventType = null;
     private $beforeDataKey = null;
     private $callDataKey = null;
     const EVENT_BEFORE = 'before';
@@ -49,7 +50,10 @@ class Event
     {
         return $this->call;
     }
-
+    public function type()
+    {
+        return $this->eventType;
+    }
     public function getBindParams()
     {
         return $this->bindParams;
@@ -97,8 +101,9 @@ class Event
     {
         $this->triggerEvent(self::EVENT_AFTER);
     }
-    public function trigger($target, $params)
+    public function trigger($type, $target, $params)
     {
+        $this->eventType = $type;
         $this->target = $target;
         $this->beforeInvoke();
         $this->eventData = $params;
@@ -113,7 +118,7 @@ class Event
     {
         if ($this->$type) {
             $f = Closure::fromCallable($this->$type);
-            if(($b = @$f->bindTo($this->target))) {
+            if (($b = @$f->bindTo($this->target))) {
                 $f = $b;
             }
             $this->eventData[$type] = $f($this);

@@ -185,9 +185,9 @@ abstract class Control
 
     public function bindEvent($event, Event $callable)
     {
-        $this->$event(function (...$params) use ($callable) {
+        $this->$event(function (...$params) use ($event, $callable) {
             try {
-                $callable->trigger($this, ['data' => $params[1]]);
+                $callable->trigger($event, $this, ['data' => $params[1]]);
             } catch (\Exception $e) {
                 echo $e;
             } catch (\Error $e) {
