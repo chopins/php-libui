@@ -183,7 +183,7 @@ class Area extends Control
                 'modifiers' => $keyEvent[0]->Modifiers,
                 'up' => $keyEvent[0]->Up,
             ];
-            $this->attr['keyEvent']->trrigger($this, ['handler' => $handlerArr, 'keyEvent' => $keyEventAttr]);
+            $this->attr['keyEvent']->trigger('keyEvent', $this, ['handler' => $handlerArr, 'keyEvent' => $keyEventAttr]);
         } catch (\Error $e) {
             echo $e;
         }
