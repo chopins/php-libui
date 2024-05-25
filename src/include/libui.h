@@ -7,7 +7,7 @@
  * @version    0.1
  */
 
-struct tm {
+typedef struct tm {
     int tm_sec;
     int tm_min;
     int tm_hour;
@@ -19,8 +19,7 @@ struct tm {
     int tm_isdst;
     long int tm_gmtoff;
     const char *tm_zone;
-};
-typedef struct tm tm;
+} tm;
 
 /**
  * Below Code license
