@@ -44,7 +44,7 @@
                     <button type="save" child_left="10" onclick="buttonSaveFile">Save File</button>
                     <hr></hr>
                     <button type="font" child_left="20" id="font-btn-test">Select Font</button>
-                    <button type="color" child_top="2" child_left="10">Select Color</button>
+                    <button type="color" child_top="2" id="color-btn-test" child_left="10">Select Color</button>
                     <input type="text" child_top="3"></input>
                 </grid>
             </page>

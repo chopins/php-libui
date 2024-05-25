@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use UI\Control;
 use FFI\CData;
 use UI\Event;
@@ -120,13 +121,14 @@ class Button extends Control
                 $this->fontButtonFont($fs);
                 return $fontDes;
             case 'color':
-                $r = self::$ui->new('double*');
-                $g = self::$ui->new('double*');
-                $bl = self::$ui->new('double*');
-                $a = self::$ui->new('double*');
-                $this->colorButtonColor($r, $g, $bl, $a);
+
+                $r = self::$ui->ptr('double');
+                $g = self::$ui->ptr('double');
+                $b = self::$ui->ptr('double');
+                $a = self::$ui->ptr('double');
+                $this->colorButtonColor($r, $g, $b, $a);
                 return [
-                    'red' => $r[0], 'green' => $g[0], 'blue' => $bl[0], 'alpha' => $a[0]
+                    'red' => $r[0], 'green' => $g[0], 'blue' => $b[0], 'alpha' => $a[0]
                 ];
             default:
                 return $this->buttonText();

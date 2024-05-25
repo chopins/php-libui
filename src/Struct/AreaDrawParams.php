@@ -14,18 +14,20 @@ namespace UI\Struct;
 use FFI;
 use UI\UIBuild;
 
+/**
+ * @property-read $context;
+ * @property-read float $areaWidth;
+ * @property-read float $areaHeight;
+ * @property-read float $clipX;
+ * @property-read float $clipY;
+ * @property-read float $clipWidth;
+ * @property-read float $clipHeight;
+ */
 class AreaDrawParams
 {
-    public $context = null;
-    public float $areaWidth = 0.0;
-    public float $areaHeight = 0.0;
-    public float $clipX = 0.0;
-    public float $clipY = 0.0;
-    public float $clipWidth = 0.0;
-    public float $clipHeight = 0.0;
-    protected static $ui;
     protected $structInstance = null;
     protected $build = null;
+    protected static $ui;
 
     public function __construct(UIBuild $build, $params = null)
     {
@@ -48,6 +50,11 @@ class AreaDrawParams
         $this->structInstance->ClipY = $clipY;
         $this->structInstance->ClipWidth = $clipWidth;
         $this->structInstance->ClipHeight = $clipHeight;
+    }
+    public function __get($name)
+    {
+        $name = ucfirst($name);
+        return  $this->structInstance->$name;
     }
 
     public function value($ptr = true)

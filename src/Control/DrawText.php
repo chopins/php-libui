@@ -17,6 +17,7 @@ use UI\UIBuild;
 use UI\Struct\AreaDrawParams;
 use UI\Struct\TextLayoutParams;
 use UI\Control\AttributeString;
+use UI\Struct\AttributeType;
 use UI\Struct\DrawTextAlign;
 use UI\Struct\FontDescriptor;
 
@@ -27,27 +28,23 @@ class DrawText extends Control
 {
     const CTL_NAME = 'text';
     const IS_CONTROL = false;
+    protected AttributeString $string;
 
     protected function newControl(): CData
     {
         $font = new FontDescriptor($this->build);
         $fontAttr = $this->attr['fonts'];
         $font->fill($fontAttr['family'], $fontAttr['size'], $fontAttr['weight'], $fontAttr['italic'], $fontAttr['stretch']);
-        $params = self::newLayoutParams($this->build, $this->attr['string'], $this->attr['width'], $this->attr['align'], $font);
+        $string = new AttributeString($this->build, $this->attr);
+        $params = new TextLayoutParams($this->build, $string, $font, $this->attr['width'], $this->attr['align'],);
         $this->instance = self::$ui->drawNewTextLayout($params->value());
         return $this->instance;
     }
+
     public static function newFromParams(UIBuild $build, TextLayoutParams $params)
     {
         $ins = self::$ui->drawNewTextLayout($params->value());
         return new static($build, [], $ins);
-    }
-
-    public static function newLayoutParams(UIBuild $build, string $text, float $width, DrawTextAlign $align, FontDescriptor $font)
-    {
-        $string = new AttributeString($build, ['string' => $text]);
-        $params = new TextLayoutParams($build, $string, $font, $width, $align);
-        return $params;
     }
 
     public function free()

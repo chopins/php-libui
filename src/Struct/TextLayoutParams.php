@@ -20,10 +20,12 @@ class TextLayoutParams
     private static $ui;
     protected $structInstance = null;
     protected $ptr = null;
+    protected AttributeString $string;
 
     public function __construct(UIBuild $build, AttributeString $string, FontDescriptor $defaultFont, float $width, DrawTextAlign $align)
     {
         self::$ui = $build->getUI();
+        $this->string = $string;
         $this->structInstance = self::$ui->new('uiDrawTextLayoutParams');
         $this->structInstance->String = $string->getUIInstance();
         $this->structInstance->DefaultFont = $defaultFont->value();
@@ -31,9 +33,13 @@ class TextLayoutParams
         $this->structInstance->Align = $align->value;
         $this->ptr = self::$ui->addr($this->structInstance);
     }
-    public function value($ptr = true) 
+    public function string()
     {
-        if($ptr) {
+        return $this->string;
+    }
+    public function value($ptr = true)
+    {
+        if ($ptr) {
             return $this->ptr;
         }
         return $this->structInstance;

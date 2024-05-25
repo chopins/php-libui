@@ -14,6 +14,10 @@ use UI\Control\Area;
 use UI\Control\DrawText;
 use UI\Struct\AreaDrawParams;
 use UI\Struct\DrawTextAlign;
+use UI\Control\Attribute;
+use UI\Control\AttributeString;
+use UI\Struct\AttributeType;
+use UI\Struct\TextLayoutParams;
 
 include_once dirname(__DIR__) . '/examples/loadui.php';
 
@@ -79,7 +83,11 @@ function drawText ($e){
         $build = $e->build();
         $txt = "Drawing strings with libui is done with the uiAttributedString and uiDrawTextLayout objects.\nuiAttributedString lets you have a variety of attributes: ";
         $font = $build->getControlById('font-btn-test')->getValue();
-        $textPrams = DrawText::newLayoutParams($build, $txt, $e->params->areaWidth, DrawTextAlign::DRAW_TEXT_ALIGN_LEFT, $font);
+        $color = $build->getControlById('color-btn-test')->getValue();
+
+        $string = new AttributeString($build, ['string' => $txt, 'color' => $color]);
+        var_dump($e->params->areaWidth);
+        $textPrams = new TextLayoutParams($build, $string, $font, $e->params->areaWidth, DrawTextAlign::DRAW_TEXT_ALIGN_CENTER);
         $layout = DrawText::newFromParams($build, $textPrams);
 
         $e->getTarget()->drawText($layout, 0, 0);

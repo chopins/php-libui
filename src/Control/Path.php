@@ -32,6 +32,7 @@ use UI\Struct\StrokeParams;
 class Path extends Control
 {
     const CTL_NAME = 'path';
+    const IS_CONTROL = false;
 
     protected $callPrefix = 'drawPath';
     protected $callPrefixFuncList = [

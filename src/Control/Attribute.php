@@ -13,6 +13,7 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use TypeError;
 use UI\Control\OpenTypeFeatures;
 use UI\Struct\AttributeType;
 use UI\Struct\TextItalic;
@@ -47,6 +48,7 @@ use UI\Struct\UnderlineColor;
 class Attribute extends Control
 {
     const CTL_NAME = 'attribute';
+    const IS_CONTROL = false;
 
     protected $callPrefix = 'attribute';
     protected $callPrefixFuncList = ['getType', 'family', 'size', 'weight', 'italic', 'stretch', 'underline'];
@@ -82,13 +84,15 @@ class Attribute extends Control
                 $this->instance = self::$ui->newUnderlineAttribute($this->attr['underline']->value);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_UNDERLINE_COLOR:
-                $this->assertEnum($this->attr['underline'], UnderlineColor::class);
+                $this->assertEnum($this->attr['underlineColor'], UnderlineColor::class);
                 $this->instance = self::$ui->newUnderlineColorAttribute($this->attr['underlineColor']->value, $this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_WEIGHT:
-                $this->assertEnum($this->attr['underline'], TextWeight::class);
+                $this->assertEnum($this->attr['weight'], TextWeight::class);
                 $this->instance = self::$ui->newWeightAttribute($this->attr['weight']->value);
                 break;
+            default:
+                throw new TypeError('Unknow AttributeType');
         }
         return $this->instance;
     }
@@ -133,5 +137,4 @@ class Attribute extends Control
             return new OpenTypeFeatures($this->build, [], $control);
         }
     }
-
 }

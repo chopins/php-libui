@@ -276,7 +276,6 @@ class UIBuild
     public function appendControl(Control $control)
     {
         $handle = $control->getHandle();
-
         $this->handles[$handle] = $control;
         $id = $control->getAttr('id') ?? $handle;
 

@@ -22,6 +22,7 @@ use UI\Struct\ForEachStatus;
 class OpenTypeFeatures extends Control
 {
     const CTL_NAME = 'feature';
+    const IS_CONTROL = false;
 
     protected $callPrefix = 'openTypeFeatures';
     protected $callPrefixFuncList = ['add', 'remove'];

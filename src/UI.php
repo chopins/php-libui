@@ -467,7 +467,7 @@ class UI
 
     public function ptr($type, $owned = true, $persistent = false): CData
     {
-        return self::$ffi->new("$type*", $owned, $persistent);
+        return FFI::addr(self::$ffi->new("$type", $owned, $persistent));
     }
 
     /**
