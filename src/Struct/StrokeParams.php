@@ -15,14 +15,14 @@ use UI\UIBuild;
 
 class StrokeParams
 {
-    public int $cap;
-    public int $join;
+    public DrawLineCap $cap;
+    public DrawLineJoin $join;
     public float $thickness;
     public float $miterLimit;
     public float $dashes;
     public int $numDashes;
     public float $dashPhase;
-    protected static $ui;
+    protected static UI\UI $ui;
 
     public function __construct(UIBuild $build)
     {
@@ -32,15 +32,15 @@ class StrokeParams
     public function getStrokeParams($ptr = true)
     {
         $paramType = self::$ui->new('uiDrawStrokeParams');
-        $paramType->Cap = $this->cap;
-        $paramType->Join = $this->join;
+        $paramType->Cap = $this->cap->value;
+        $paramType->Join = $this->join->value;
         $paramType->Thickness = $this->thickness;
-        $paramType->MiterLimit = $this->MiterLimit;
+        $paramType->MiterLimit = $this->miterLimit;
         $dashes = self::$ui->new('double');
         $dashes->cdata = $this->dashes;
         $paramType->Dashes = self::$ui->addr($dashes);
-        $paramType->NumDashes = $this->NumDashes;
-        $paramType->DashPhase = $this->DashPhase;
+        $paramType->NumDashes = $this->numDashes;
+        $paramType->DashPhase = $this->dashPhase;
         return $ptr ? self::$ui->addr($paramType) : $paramType;
     }
 

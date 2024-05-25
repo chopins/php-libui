@@ -13,6 +13,7 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Struct\ForEachStatus;
 
 /**
  * @method void add(char a, char b, char c, char d, uint32_t value)
@@ -52,11 +53,9 @@ class OpenTypeFeatures extends Control
 
     public function forEach(callable $callalbe, $data = null)
     {
-        $func = function ($otf, $a, $b, $c, $d, $value, $passdata) use ($callalbe, $data) {
-            $ret = $callalbe($this, $a, $b, $c, $d, $value, $data);
-            return \intval($ret);
+        $func = function ($otf, $a, $b, $c, $d, $value, $cdata) use ($callalbe, $data): ForEachStatus {
+            return $callalbe($this, $a, $b, $c, $d, $value, $data);
         };
         $this->openTypeFeaturesForEach($func, null);
     }
-
 }

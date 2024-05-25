@@ -1,4 +1,11 @@
 <?php
+
+use UI\Struct\TextItalic;
+use UI\Struct\TextStretch;
+use UI\Struct\TextWeight;
+use UI\Struct\Underline;
+use UI\Struct\UnderlineColor;
+
 include __DIR__ .'/loadui.php';
 $attrstr = FFI::addr($ui->new('uiAttributedString'));
 $fontButton = FFI::addr($ui->new('uiFontButton'));
@@ -36,15 +43,15 @@ function makeAttributedString()
     appendWithAttribute("font size", $attr, NULL);
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
-    $attr = $ui->newWeightAttribute($ui::TEXT_WEIGHT_BOLD);
+    $attr = $ui->newWeightAttribute(TextWeight::TEXT_WEIGHT_BOLD);
     appendWithAttribute("font weight", $attr, NULL);
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
-    $attr = $ui->newItalicAttribute($ui::TEXT_ITALIC_ITALIC);
+    $attr = $ui->newItalicAttribute(TextItalic::TEXT_ITALIC_ITALIC);
     appendWithAttribute("font italicness", $attr, NULL);
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
-    $attr = $ui->newStretchAttribute($ui::TEXT_STRETCH_CONDENSED);
+    $attr = $ui->newStretchAttribute(TextStretch::TEXT_STRETCH_CONDENSED);
     appendWithAttribute("font stretch", $attr, NULL);
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
@@ -57,19 +64,19 @@ function makeAttributedString()
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
 
-    $attr = $ui->newUnderlineAttribute($ui::UNDERLINE_SINGLE);
+    $attr = $ui->newUnderlineAttribute(Underline::UNDERLINE_SINGLE);
     appendWithAttribute("underline style", $attr, NULL);
     $ui->attributedStringAppendUnattributed($attrstr, ", ");
 
     $ui->attributedStringAppendUnattributed($attrstr, "and ");
-    $attr = $ui->newUnderlineAttribute($ui::UNDERLINE_DOUBLE);
-    $attr2 = $ui->newUnderlineColorAttribute($ui::UNDERLINE_COLOR_CUSTOM, 1.0, 0.0, 0.5, 1.0);
+    $attr = $ui->newUnderlineAttribute(Underline::UNDERLINE_DOUBLE);
+    $attr2 = $ui->newUnderlineColorAttribute(UnderlineColor::UNDERLINE_COLOR_CUSTOM, 1.0, 0.0, 0.5, 1.0);
     appendWithAttribute("underline color", $attr, $attr2);
     $ui->attributedStringAppendUnattributed($attrstr, ". ");
 
     $ui->attributedStringAppendUnattributed($attrstr, "Furthermore, there are attributes allowing for ");
-    $attr = $ui->newUnderlineAttribute($ui::UNDERLINE_SUGGESTION);
-    $attr2 = $ui->newUnderlineColorAttribute($ui::UNDERLINE_COLOR_SPELLING, 0, 0, 0, 0);
+    $attr = $ui->newUnderlineAttribute(Underline::UNDERLINE_SUGGESTION);
+    $attr2 = $ui->newUnderlineColorAttribute(UnderlineColor::UNDERLINE_COLOR_SPELLING, 0, 0, 0, 0);
     appendWithAttribute("special underlines for indicating spelling errors", $attr, $attr2);
     $ui->attributedStringAppendUnattributed($attrstr, " (and other types of errors) ");
 

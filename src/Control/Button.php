@@ -116,11 +116,8 @@ class Button extends Control
         switch ($this->attr['type']) {
             case 'font':
                 $fontDes = new FontDescriptor($this->build);
-                $fs = $fontDes->getFontDescriptor();
+                $fs = $fontDes->value();
                 $this->fontButtonFont($fs);
-
-                $fontDes->fill();
-
                 return $fontDes;
             case 'color':
                 $r = self::$ui->new('double*');

@@ -11,14 +11,13 @@
 
 namespace UI\Struct;
 
+use FFI;
+use UI\UI;
 use UI\UIBuild;
 
 class Brush
 {
-    /**
-     * @var int $type   specify of value UI\UI::DRAW_BRUSH_TYPE_*
-     */
-    public int $type;
+    public DrawBrushType $type;
     public float $R;
     public float $G;
     public float $B;
@@ -34,9 +33,9 @@ class Brush
     public float $stopsB;
     public float $stopsA;
     public int $numStops;
-    protected static $ui;
-    protected $structInstance = null;
-    protected $stops = null;
+    protected static UI\UI $ui;
+    protected FFI\CData $structInstance;
+    protected FFI\CData $stops;
 
     public function __construct(UIBuild $build)
     {
@@ -53,7 +52,7 @@ class Brush
         $this->stops->B = $this->stopsB;
         $this->stops->A = $this->stopsA;
 
-        $this->structInstance->Type = $this->type;
+        $this->structInstance->Type = $this->type->value;
         $this->structInstance->R = $this->R;
         $this->structInstance->G = $this->G;
         $this->structInstance->B = $this->B;

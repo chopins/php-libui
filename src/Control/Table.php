@@ -13,6 +13,7 @@ namespace UI\Control;
 
 use UI\Control;
 use FFI\CData;
+use UI\Struct\TableValueType;
 
 /**
  * @property-read array $th
@@ -61,35 +62,35 @@ class Table extends Control
             $idx = $config['idx'] ?? $index;
             switch ($config['type']) {
                 case 'button':
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_STRING;
                     break;
                 case 'image':
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_IMAGE;
                     break;
                 case 'imgtext':
-                    $this->columnTypeList[$idx[0]] = self::$ui::TABLE_VALUE_TYPE_IMAGE;
-                    $this->columnTypeList[$idx[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    $this->columnTypeList[$idx[0]] = TableValueType::TABLE_VALUE_TYPE_IMAGE;
+                    $this->columnTypeList[$idx[1]] = TableValueType::TABLE_VALUE_TYPE_STRING;
                     break;
                 case 'progress':
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_INT;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_INT;
                     break;
                 case 'checkbox':
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_INT;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_INT;
                     break;
                 case 'checkboxtext':
                     if (is_array($idx)) {
-                        $this->columnTypeList[$idx[0]] = self::$ui::TABLE_VALUE_TYPE_INT;
-                        $this->columnTypeList[$idx[1]] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                        $this->columnTypeList[$idx[0]] = TableValueType::TABLE_VALUE_TYPE_INT;
+                        $this->columnTypeList[$idx[1]] = TableValueType::TABLE_VALUE_TYPE_STRING;
                     } else {
-                        $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_INT;
+                        $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_INT;
                     }
                     break;
                 case 'color':
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_COLOR;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_COLOR;
                     break;
                 case 'text':
                 default:
-                    $this->columnTypeList[$idx] = self::$ui::TABLE_VALUE_TYPE_STRING;
+                    $this->columnTypeList[$idx] = TableValueType::TABLE_VALUE_TYPE_STRING;
             }
         }
     }
@@ -155,14 +156,14 @@ class Table extends Control
 
     public function columnTypeCall($mh, $tm, $col)
     {
-        return $this->columnTypeList[$col];
+        return $this->columnTypeList[$col]->value;
     }
 
     public function onGetCellValue($tableModelHandler, $tableModel, $row, $col)
     {
         $rowColData = $this->attr['tbody'][$row][$col];
         switch ($this->columnTypeList[$col]) {
-            case self::$ui::TABLE_VALUE_TYPE_IMAGE:
+            case TableValueType::TABLE_VALUE_TYPE_IMAGE:
                 $imgsrc = $rowColData['src'];
                 $key = $imgsrc;
                 $imgConfig = ['src' => $imgsrc,];
@@ -184,14 +185,14 @@ class Table extends Control
                 }
                 $val = self::$ui->newTableValueImage($img->getUIInstance());
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_INT:
+            case TableValueType::TABLE_VALUE_TYPE_INT:
                 $rowColData = (int) $rowColData;
                 $val = self::$ui->newTableValueInt($rowColData);
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_COLOR:
+            case TableValueType::TABLE_VALUE_TYPE_COLOR:
                 $val = self::$ui->newTableValueColor($rowColData['r'], $rowColData['g'], $rowColData['b'], $rowColData['a']);
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_STRING:
+            case TableValueType::TABLE_VALUE_TYPE_STRING:
             default:
                 if (!is_string($rowColData)) {
                     $rowColData = (string) $rowColData;
@@ -206,13 +207,13 @@ class Table extends Control
     {
         $value = null;
         switch ($this->columnTypeList[$col]) {
-            case self::$ui::TABLE_VALUE_TYPE_INT:
+            case TableValueType::TABLE_VALUE_TYPE_INT:
                 $value = self::$ui->tableValueInt($val);
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_IMAGE:
+            case TableValueType::TABLE_VALUE_TYPE_IMAGE:
                 $value = self::$ui->tableValueImage($val);
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_COLOR:
+            case TableValueType::TABLE_VALUE_TYPE_COLOR:
                 $r = self::$ui->new('double*');
                 $g = self::$ui->new('double*');
                 $b = self::$ui->new('double*');
@@ -220,7 +221,7 @@ class Table extends Control
                 self::$ui->tableValueColor($val, $r, $g, $b, $a);
                 $value = ['red' => $r[0], 'green' => $g[0], 'blue' => $b[0], 'alpha' => $a[0]];
                 break;
-            case self::$ui::TABLE_VALUE_TYPE_STRING:
+            case TableValueType::TABLE_VALUE_TYPE_STRING:
                 if ($val) {
                     $value = self::$ui->tableValueString($val);
                 }

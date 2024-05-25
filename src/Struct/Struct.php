@@ -12,7 +12,8 @@
 namespace UI\Struct;
 
 use UI\UI;
-
+use FFI;
+use TypeError;
 class Struct
 {
     const STRUCT_MAP = [
@@ -124,7 +125,7 @@ class Struct
         $this->ffi = $ui->ffi();
     }
 
-    public function getStruct($type)
+    public function value($type)
     {
         return self::STRUCT_MAP[$type];
     }

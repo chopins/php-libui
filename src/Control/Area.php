@@ -19,6 +19,10 @@ use UI\Struct\StrokeParams;
 use UI\Struct\Brush;
 use UI\Struct\TextLayoutParams;
 use UI\Struct\AreaDrawParams;
+use UI\Struct\EXT_KEY;
+use UI\Struct\ExtKey;
+use UI\Struct\KeyModifiers;
+use UI\Struct\WindowResizeEdge;
 
 /**
  * @property-read string $type
@@ -176,6 +180,7 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
+            var_dump($keyEvent[0]->Key);
             $keyEventAttr = [
                 'key' => $keyEvent[0]->Key,
                 'extKey' => $keyEvent[0]->ExtKey,
@@ -203,13 +208,9 @@ class Area extends Control
     {
         $this->areaBeginUserWindowMove();
     }
-
-    /**
-     * @param int $edge  The value specify of UI\UI::WINDOW_RESIZE_EDGE_*
-     */
-    public function beginUserWindowResize(int $edge)
+    public function beginUserWindowResize(WindowResizeEdge $edge)
     {
-        $this->uiAreaBeginUserWindowResize($edge);
+        $this->areaBeginUserWindowResize($edge->value);
     }
 
     public function scrollTo(float $x, float $y, float $w, float $h)
@@ -245,11 +246,6 @@ class Area extends Control
     public function newStrokeParams()
     {
         return new StrokeParams($this->build);
-    }
-
-    public function newTextLayoutParams()
-    {
-        return new TextLayoutParams($this->build);
     }
 
     public function drawfill(Path $path, Brush $brush)

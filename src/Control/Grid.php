@@ -13,6 +13,8 @@ namespace UI\Control;
 
 use FFI\CData;
 use UI\Control;
+use UI\Struct\UIAlign;
+use UI\Struct\UIAt;
 
 /**
  * @property int $padded
@@ -73,6 +75,8 @@ class Grid extends Control
         foreach ($this->attrList as $k) {
             $this->initAttr($option, $k, null, $this->attr);
         }
+        $this->assertEnum($option['child_halign'], UIAlign::class);
+        $this->assertEnum($option['child_valign'], UIAlign::class);
         $this->append(
                 $childs,
                 $option['child_left'],
@@ -90,18 +94,18 @@ class Grid extends Control
         return $this->gridPadded();
     }
 
-    protected function append(Control $child, int $left, int $top, int $xspan, int $yspan, int $hexpand, int $halign, int $vexpand, int $valign)
+    protected function append(Control $child, int $left, int $top, int $xspan, int $yspan, int $hexpand, UIAlign $halign, int $vexpand, UIAlign $valign)
     {
         $ui = $child->getUIInstance();
-        $this->gridAppend($ui, $left, $top, $xspan, $yspan, $hexpand, $halign, $vexpand, $valign);
+        $this->gridAppend($ui, $left, $top, $xspan, $yspan, $hexpand, $halign->value, $vexpand, $valign->value);
         $this->children++;
     }
 
-    public function insert(Control $child, Control $exist, int $at, int $xspan, int $yspan, int $hexpand, int $halign, int $vexpand, int $valign)
+    public function insert(Control $child, Control $exist, UIAt $at, int $xspan, int $yspan, int $hexpand, UIAlign $halign, int $vexpand, UIAlign $valign)
     {
         $ui = $child->getUIInstance();
         $eui = $exist->getUIInstance();
-        $this->gridInsertAt($ui, $eui, $at, $xspan, $yspan, $hexpand, $halign, $vexpand, $valign);
+        $this->gridInsertAt($ui, $eui, $at->value, $xspan, $yspan, $hexpand, $halign->value, $vexpand, $valign->value);
         $this->children++;
         $this->updateChildsList($child);
     }

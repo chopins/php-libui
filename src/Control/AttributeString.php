@@ -14,6 +14,7 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 use UI\Control\Attribute;
+use UI\Struct\ForEachStatus;
 
 /**
  * @method string string()
@@ -31,8 +32,10 @@ class AttributeString extends Control
     const IS_CONTROL = false;
 
     protected $callPrefix = 'attributedString';
-    protected $callPrefixFuncList = ['string', 'len', 'appendUnattributed', 'insertAtUnattributed',
-        'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'];
+    protected $callPrefixFuncList = [
+        'string', 'len', 'appendUnattributed', 'insertAtUnattributed',
+        'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'
+    ];
 
     protected function newControl(): CData
     {
@@ -52,13 +55,12 @@ class AttributeString extends Control
 
     public function forEachAttribute($callable, $data = null)
     {
-        $func = function ($s, $a, $start, $end, $passdata) use ($callable, $data) {
+        $func = function ($s, $a, $start, $end, $cdata) use ($callable, $data): ForEachStatus {
             $handle = self::$ui->controlHandle($a);
             $ac = $this->build->getControlByHandle($handle);
             $attr = $ac ?? new Attribute($this->build, [], $a);
-            return (int) $callable($this, $attr, $start, $end, $data);
+            return $callable($this, $attr, $start, $end, $data);
         };
         $this->attributedStringForEachAttribute($func, null);
     }
-
 }

@@ -1,4 +1,7 @@
 <?php
+
+use UI\Struct\UIAlign;
+
 include __DIR__ .'/loadui.php';
 
 $dtboth = $dtdate = $dttime = null;
@@ -88,28 +91,28 @@ function main() : int
 
     $ui->gridAppend($g, $dtboth,
         0, 0, 2, 1,
-        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_FILL->value, 0, UIAlign::ALIGN_FILL->value);
     $ui->gridAppend($g, $dtdate,
         0, 1, 1, 1,
-        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_FILL->value, 0, UIAlign::ALIGN_FILL->value);
     $ui->gridAppend($g, $dttime,
         1, 1, 1, 1,
-        1, $ui::ALIGN_FILL, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_FILL->value, 0, UIAlign::ALIGN_FILL->value);
 
     $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
         0, 2, 2, 1,
-        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_CENTER->value, 0, UIAlign::ALIGN_FILL->value);
     $ui->dateTimePickerOnChanged($dtboth, 'onChanged', $l);
     $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
         0, 3, 1, 1,
-        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_CENTER->value, 0, UIAlign::ALIGN_FILL->value);
     $ui->dateTimePickerOnChanged($dtdate, 'onChanged', $l);
     $l =$ui->newLabel("");
     $ui->gridAppend($g, $l,
         1, 3, 1, 1,
-        1, $ui::ALIGN_CENTER, 0, $ui::ALIGN_FILL);
+        1, UIAlign::ALIGN_CENTER->value, 0, UIAlign::ALIGN_FILL->value);
     $ui->dateTimePickerOnChanged($dttime, 'onChanged', $l);
 
     $b =$ui->newButton("Now");
@@ -117,13 +120,13 @@ function main() : int
     $ui->buttonOnClicked($b, 'onClicked',  FFI::cast('void *', 1));
     $ui->gridAppend($g, $b,
         0, 4, 1, 1,
-        1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
+        1, UIAlign::ALIGN_FILL->value, 1, UIAlign::ALIGN_END->value);
 
 	$b =$ui->newButton("Unix epoch");
     $ui->buttonOnClicked($b, 'onClicked', FFI::cast('void*', 0));
     $ui->gridAppend($g, $b,
         1, 4, 1, 1,
-        1, $ui::ALIGN_FILL, 1, $ui::ALIGN_END);
+        1, UIAlign::ALIGN_FILL->value, 1, UIAlign::ALIGN_END->value);
 
     $ui->windowOnClosing($w, 'onClosing', NULL);
     $ui->controlShow($w);

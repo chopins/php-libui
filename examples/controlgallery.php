@@ -1,5 +1,8 @@
 <?php
 
+use UI\Struct\UIAlign;
+use UI\Struct\UIAt;
+
 include __DIR__ . '/loadui.php';
 $spinbox = $pbar = $spinbox = null;
 
@@ -218,9 +221,9 @@ function makeDataChoosersPage()
         1,
         1,
         0,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
     $ui->gridAppend(
         $grid,
@@ -230,9 +233,9 @@ function makeDataChoosersPage()
         1,
         1,
         1,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
 
     $button = $ui->newButton("Save File");
@@ -247,9 +250,9 @@ function makeDataChoosersPage()
         1,
         1,
         0,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
     $ui->gridAppend(
         $grid,
@@ -259,9 +262,9 @@ function makeDataChoosersPage()
         1,
         1,
         1,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
 
     $msggrid = $ui->newGrid();
@@ -274,9 +277,9 @@ function makeDataChoosersPage()
         2,
         1,
         0,
-        $ui::ALIGN_CENTER,
+        UIAlign::ALIGN_CENTER->value,
         0,
-        $ui::ALIGN_START
+        UIAlign::ALIGN_START->value
     );
 
     $button = $ui->newButton("Message Box");
@@ -289,9 +292,9 @@ function makeDataChoosersPage()
         1,
         1,
         0,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
     $button = $ui->newButton("Error Box");
     $ui->buttonOnClicked($button, 'onMsgBoxErrorClicked', NULL);
@@ -303,9 +306,9 @@ function makeDataChoosersPage()
         1,
         1,
         0,
-        $ui::ALIGN_FILL,
+        UIAlign::ALIGN_FILL->value,
         0,
-        $ui::ALIGN_FILL
+        UIAlign::ALIGN_FILL->value
     );
 
     return $hbox;

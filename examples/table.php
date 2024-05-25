@@ -1,6 +1,5 @@
 <?php
 include __DIR__ . '/loadui.php';
-
 main();
 
 function main()

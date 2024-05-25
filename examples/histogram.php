@@ -1,4 +1,10 @@
 <?php
+
+use UI\Struct\DrawBrushType;
+use UI\Struct\DrawFillMode;
+use UI\Struct\DrawLineCap;
+use UI\Struct\DrawLineJoin;
+
 include __DIR__ . '/loadui.php';
 
 $manwin = $ui->new('uiWindow*');
@@ -27,7 +33,7 @@ main();
 function setSolidBrush($brush, $color,  $alpha)
 {
     global $ui;
-    $brush->Type = $ui::DRAW_BRUSH_TYPE_SOLID;
+    $brush->Type = DrawBrushType::DRAW_BRUSH_TYPE_SOLID->value;
     $component = (int) (($color >> 16) & 0xFF);
     $brush->R = ((float) $component) / 255;
     $component = (int) (($color >> 8) & 0xFF);
@@ -62,7 +68,7 @@ function constructGraph($width,  $height, $extend)
     $ys = [];
     pointLocations($width, $height, $xs, $ys);
 
-    $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
+    $path = $ui->drawNewPath(DrawFillMode::DRAW_FILL_MODE_WINDING);
 
     $ui->drawPathNewFigure($path, $xs[0], $ys[0]);
     for ($i = 1; $i < 10; $i++)
@@ -105,7 +111,7 @@ function handlerDraw($a, $area, $p)
 
         // fill the area with white
         setSolidBrush($brush, COLOR_WHITE, 1.0);
-        $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
+        $path = $ui->drawNewPath(DrawFillMode::DRAW_FILL_MODE_WINDING);
 
         $ui->drawPathAddRectangle($path, 0, 0, $p->AreaWidth, $p->AreaHeight);
         $ui->drawPathEnd($path);
@@ -117,17 +123,17 @@ function handlerDraw($a, $area, $p)
 
         // clear sp to avoid passing garbage to $ui->drawStroke()
         // for example, we don't use dashing
-        FFI::memset(FFI::addr($sp), 0, $ui->struct->getTypeSize('uiDrawStrokeParams'));
+        FFI::memset(FFI::addr($sp), 0, $ui->struct()->getTypeSize('uiDrawStrokeParams'));
 
         // make a stroke for both the axes and the histogram line
-        $sp->Cap = $ui::DRAW_LINE_CAP_FLAT;
-        $sp->Join = $ui::DRAW_LINE_JOIN_MITER;
+        $sp->Cap = DrawLineCap::DRAW_LINE_CAP_FLAT->value;
+        $sp->Join = DrawLineJoin::DRAW_LINE_JOIN_MITER->value;
         $sp->Thickness = 2;
         $sp->MiterLimit = $ui::DRAW_DEFAULT_MITER_LIMIT;
 
         // draw the axes
         setSolidBrush($brushPtr, COLOR_BLACK, 1.0);
-        $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
+        $path = $ui->drawNewPath(DrawFillMode::DRAW_FILL_MODE_WINDING);
         $ui->drawPathNewFigure(
             $path,
             X_OFF_LEFT,
@@ -154,7 +160,7 @@ function handlerDraw($a, $area, $p)
 
         // now get the color for the graph itself and set up the brush
         $ui->colorButtonColor($colorButton, FFI::addr($graphR), FFI::addr($graphG), FFI::addr($graphB), FFI::addr($graphA));
-        $brush->Type = $ui::DRAW_BRUSH_TYPE_SOLID;
+        $brush->Type = DrawBrushType::DRAW_BRUSH_TYPE_SOLID->value;
         $brush->R = $graphR->cdata;
         $brush->G = $graphG->cdata;
         $brush->B = $graphB->cdata;
@@ -178,7 +184,7 @@ function handlerDraw($a, $area, $p)
             $ys = [];
 
             pointLocations($graphWidth, $graphHeight, $xs, $ys);
-            $path = $ui->drawNewPath($ui::DRAW_FILL_MODE_WINDING);
+            $path = $ui->drawNewPath(DrawFillMode::DRAW_FILL_MODE_WINDING);
             $ui->drawPathNewFigureWithArc(
                 $path,
                 $xs[$currentPoint],
@@ -195,7 +201,7 @@ function handlerDraw($a, $area, $p)
         }
     } catch (Error $e) {
         echo $e;
-    } catch(Execption $e) {
+    } catch(\Execption $e) {
         echo $e;
     }
 }

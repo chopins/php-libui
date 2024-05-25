@@ -14,6 +14,7 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 use UI\Struct\Brush;
+use UI\Struct\DrawFillMode;
 use UI\Struct\StrokeParams;
 
 /**
@@ -33,12 +34,15 @@ class Path extends Control
     const CTL_NAME = 'path';
 
     protected $callPrefix = 'drawPath';
-    protected $callPrefixFuncList = ['newFigure', 'newFigureWithArc', 'lineTo', 'arcTo', 'bezierTo',
-        'closeFigure', 'addRectangle', 'end'];
+    protected $callPrefixFuncList = [
+        'newFigure', 'newFigureWithArc', 'lineTo', 'arcTo', 'bezierTo',
+        'closeFigure', 'addRectangle', 'end'
+    ];
 
     protected function newControl(): CData
     {
-        $this->instance = self::$ui->drawNewPath($this->attr['fillMode']);
+        $this->assertEnum($this->attr['fillMode'], DrawFillMode::class);
+        $this->instance = self::$ui->drawNewPath($this->attr['fillMode']->value);
         return $this->instance;
     }
 
@@ -56,5 +60,4 @@ class Path extends Control
     {
         return new StrokeParams($this->build);
     }
-
 }

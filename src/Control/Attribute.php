@@ -14,28 +14,34 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 use UI\Control\OpenTypeFeatures;
+use UI\Struct\AttributeType;
+use UI\Struct\TextItalic;
+use UI\Struct\TextStretch;
+use UI\Struct\TextWeight;
+use UI\Struct\Underline;
+use UI\Struct\UnderlineColor;
 
 /**
- * @method int getType()
+ * @method AttributeType getType():
  * @method string family()
  * @method float size()
- * @method int weight()
- * @method int italic()
- * @method int stretch()
- * @method int underline()
- * @property-read int $type     specify of \UI\UI::ATTRIBUTE_TYPE_*
+ * @method TextWeight weight()
+ * @method TextItalic italic()
+ * @method TextStretch stretch()
+ * @method Underline underline()
+ * @property-read AttributeType $type     specify of \UI\UI::ATTRIBUTE_TYPE_*
  * @property-read string $font
  * @property-read float $red
  * @property-read float $green
  * @property-read float $blue
  * @property-read float $alpha
  * @property-read \UI\Control\OpenTypeFeatures $control
- * @property-read int $italic   specify of \UI\UI::TEXT_ITALIC_*
+ * @property-read TextItalic $italic
  * @property-read float $size
- * @property-read int $stretch  specify of \UI\UI::TEXT_STRETCH_*
- * @property-read int $underline specify of \UI\UI::UNDERLINE_*
- * @property-read int $weight   specify of \UI\UI::TEXT_WEIGHT_*
- * @property-read int $underlineColor  specify of UI\UI::UNDERLINE_COLOR_*
+ * @property-read TextStretch $stretch
+ * @property-read Underline $underline 
+ * @property-read TextWeight $weight
+ * @property-read UnderlineColor $underlineColor
  * 
  */
 class Attribute extends Control
@@ -48,35 +54,40 @@ class Attribute extends Control
     protected function newControl(): CData
     {
         switch ($this->attr['type']) {
-            case self::$ui::ATTRIBUTE_TYPE_FAMILY:
+            case AttributeType::ATTRIBUTE_TYPE_FAMILY:
                 $this->instance = self::$ui->newFamilyAttribute($this->attr['font']);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_BACKGROUND:
+            case AttributeType::ATTRIBUTE_TYPE_BACKGROUND:
                 $this->instance = self::$ui->newBackgroundAttribute($this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_COLOR:
+            case AttributeType::ATTRIBUTE_TYPE_COLOR:
                 $this->instance = self::$ui->newColorAttribute($this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_FEATURES:
+            case AttributeType::ATTRIBUTE_TYPE_FEATURES:
                 $this->instance = self::$ui->newFeaturesAttribute($this->attr['control']->getUIInstance());
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_ITALIC:
-                $this->instance = self::$ui->newItalicAttribute($this->attr['italic']);
+            case AttributeType::ATTRIBUTE_TYPE_ITALIC:
+                $this->assertEnum($this->attr['italic'], TextItalic::class);
+                $this->instance = self::$ui->newItalicAttribute($this->attr['italic']->value);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_SIZE:
+            case AttributeType::ATTRIBUTE_TYPE_SIZE:
                 $this->instance = self::$ui->newSizeAttribute($this->attr['size']);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_STRETCH:
-                $this->instance = self::$ui->newStretchAttribute($this->attr['stretch']);
+            case AttributeType::ATTRIBUTE_TYPE_STRETCH:
+                $this->assertEnum($this->attr['stretch'], TextStretch::class);
+                $this->instance = self::$ui->newStretchAttribute($this->attr['stretch']->value);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_UNDERLINE:
-                $this->instance = self::$ui->newUnderlineAttribute($this->attr['underline']);
+            case AttributeType::ATTRIBUTE_TYPE_UNDERLINE:
+                $this->assertEnum($this->attr['underline'], Underline::class);
+                $this->instance = self::$ui->newUnderlineAttribute($this->attr['underline']->value);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_UNDERLINE_COLOR:
-                $this->instance = self::$ui->newUnderlineColorAttribute($this->attr['underlineColor'], $this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
+            case AttributeType::ATTRIBUTE_TYPE_UNDERLINE_COLOR:
+                $this->assertEnum($this->attr['underline'], UnderlineColor::class);
+                $this->instance = self::$ui->newUnderlineColorAttribute($this->attr['underlineColor']->value, $this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
                 break;
-            case self::$ui::ATTRIBUTE_TYPE_WEIGHT:
-                $this->instance = self::$ui->newWeightAttribute($this->attr['weight']);
+            case AttributeType::ATTRIBUTE_TYPE_WEIGHT:
+                $this->assertEnum($this->attr['underline'], TextWeight::class);
+                $this->instance = self::$ui->newWeightAttribute($this->attr['weight']->value);
                 break;
         }
         return $this->instance;
@@ -112,7 +123,7 @@ class Attribute extends Control
 
     public function features()
     {
-        if ($this->attr['type'] === self::$ui::ATTRIBUTE_TYPE_FEATURES) {
+        if ($this->attr['type'] === AttributeType::ATTRIBUTE_TYPE_FEATURES) {
             $control = self::$ui->attributeFeatures();
             $handle = self::$ui->controlHandle($control);
             $open = $this->build->getControlByHandle($handle);

@@ -11,6 +11,7 @@
 
 namespace UI\Struct;
 
+use FFI;
 use UI\UIBuild;
 
 class AreaDrawParams
@@ -33,26 +34,24 @@ class AreaDrawParams
 
         if ($params !== null) {
             $this->structInstance = $params;
-            $this->fill();
         } else {
             $this->structInstance = self::$ui->new('uiAreaDrawParams');
         }
     }
 
-    public function fill()
+    public function fill(FFI\CData $context, float $areaWidth, float $areaHeight, float $clipX, float $clipY, float $clipWidth, float $clipHeight)
     {
-        $this->context = $this->structInstance->Context;
-        $this->areaWidth = $this->structInstance->AreaWidth;
-        $this->areaHeight = $this->structInstance->AreaHeight;
-        $this->clipX = $this->structInstance->ClipX;
-        $this->clipY = $this->structInstance->ClipY;
-        $this->clipWidth = $this->structInstance->ClipWidth;
-        $this->clipHeight = $this->structInstance->ClipHeight;
+        $this->structInstance->Context = $context;
+        $this->structInstance->AreaWidth = $areaWidth;
+        $this->structInstance->AreaHeight = $areaHeight;
+        $this->structInstance->ClipX = $clipX;
+        $this->structInstance->ClipY = $clipY;
+        $this->structInstance->ClipWidth = $clipWidth;
+        $this->structInstance->ClipHeight = $clipHeight;
     }
 
-    public function getParams($ptr = true)
+    public function value($ptr = true)
     {
         return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
     }
-
 }

@@ -14,6 +14,7 @@ namespace UI;
 use UI\UIBuild;
 use UI\UI;
 use FFI\CData;
+use UI\Struct\AreaDrawParams;
 
 /**
  * @property-read string $id
@@ -181,6 +182,13 @@ abstract class Control
     public function getTopLevel()
     {
         return $this->controlToplevel();
+    }
+
+    public function assertEnum(&$v, $type)
+    {
+        if (!$v instanceof $type) {
+            $v = $type::from($v);
+        }
     }
 
     public function bindEvent($event, Event $callable)

@@ -15,11 +15,6 @@ use UI\UIBuild;
 
 class FontDescriptor
 {
-    protected string $family;
-    protected float $size;
-    protected int $weight;
-    protected int $italic;
-    protected int $stretch;
     protected $structInstance = null;
     private static $ui;
 
@@ -29,16 +24,16 @@ class FontDescriptor
         $this->structInstance = self::$ui->new('uiFontDescriptor');
     }
 
-    public function fill()
+    public function fill(string $family, float $size, TextWeight $weight, TextItalic $italic, TextStretch $stretch)
     {
-        $this->family = self::$ui->string($this->structInstance->Family);
-        $this->size = $this->structInstance->Size;
-        $this->weight = $this->structInstance->Weight;
-        $this->italic = $this->structInstance->Italic;
-        $this->stretch = $this->structInstance->Stretch;
+        $this->structInstance->Family = $family;
+        $this->structInstance->Size = $size;
+        $this->structInstance->Weight =  $weight->value;
+        $this->structInstance->Italic = $italic->value;
+        $this->structInstance->Stretch = $stretch->value;
     }
 
-    public function getFontDescriptor($ptr = true)
+    public function value($ptr = true)
     {
         return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
     }
@@ -52,5 +47,4 @@ class FontDescriptor
     {
         $this->free();
     }
-
 }

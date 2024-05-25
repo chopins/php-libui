@@ -234,7 +234,8 @@ typedef struct  uiAreaHandler uiAreaHandler ;
 typedef struct  uiAreaDrawParams uiAreaDrawParams ;
 typedef struct  uiAreaMouseEvent uiAreaMouseEvent ;
 typedef struct  uiAreaKeyEvent uiAreaKeyEvent ;
-typedef struct  uiControl uiDrawContext ;
+
+
 struct uiAreaHandler {
     void (*Draw)(uiAreaHandler *, uiArea *, uiAreaDrawParams *);
     void (*MouseEvent)(uiAreaHandler *, uiArea *, uiAreaMouseEvent *);
@@ -432,7 +433,34 @@ extern  int uiOpenTypeFeaturesGet(const uiOpenTypeFeatures *otf, char a, char b,
 extern  void uiOpenTypeFeaturesForEach(const uiOpenTypeFeatures *otf, uiOpenTypeFeaturesForEachFunc f, void *data);
 extern  uiAttribute *uiNewFeaturesAttribute(const uiOpenTypeFeatures *otf);
 extern  const uiOpenTypeFeatures *uiAttributeFeatures(const uiAttribute *a);
-typedef struct  uiAttributedString uiAttributedString ;
+
+typedef struct attr {
+	uiAttribute *val;
+	size_t start;
+	size_t end;
+	struct attr *prev;
+	struct attr *next;
+};
+
+typedef struct uiprivAttrList {
+	struct attr *first;
+	struct attr *last;
+} uiprivAttrList;
+typedef struct uiprivGraphemes {
+	size_t len;
+	size_t *pointsToGraphemes;
+	size_t *graphemesToPoints;
+} uiprivGraphemes;
+typedef struct uiAttributedString {
+	char *s;
+	size_t len;
+	uiprivAttrList *attrs;
+	uint16_t *u16;
+	size_t u16len;
+	size_t *u8tou16;
+	size_t *u16tou8;
+	uiprivGraphemes *graphemes;
+} uiAttributedString;
 typedef uiForEach (*uiAttributedStringForEachAttributeFunc)(const uiAttributedString *s, const uiAttribute *a, size_t start, size_t end, void *data);
 extern  uiAttributedString *uiNewAttributedString(const char *initialString);
 extern  void uiFreeAttributedString(uiAttributedString *s);

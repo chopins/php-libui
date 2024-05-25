@@ -80,10 +80,10 @@ class UIBuild
         $configXml = $this->parseChild(1, $start);
         $config = $configXml[0];
         unset($config['childs']);
-        if(count($configXml[0]['childs']) > 2) {
+        if (count($configXml[0]['childs']) > 1) {
             $config['menu'] = $configXml[0]['childs'][0]['childs'];
             $config['body'] = $configXml[0]['childs'][1]['childs'];
-        } else if(count($configXml[0]['childs']) == 1) {
+        } else if (count($configXml[0]['childs']) == 1) {
             $config['body'] = $configXml[0]['childs'][0]['childs'];
         } else {
             throw new RuntimeException('config error, must has body');
@@ -99,9 +99,9 @@ class UIBuild
             unset($widgetConfig[$k]);
             $k = strtolower($k);
             $v = trim($v);
-            if(strpos($v, '@') === 0) {
+            if (strpos($v, '@') === 0) {
                 $v = constant(substr($v, 1));
-            } else if(strpos($v, '$') === 0) {
+            } else if (strpos($v, '$') === 0) {
                 $vn = substr($v, 1);
                 $v = $GLOBALS[$vn];
             }
@@ -141,7 +141,7 @@ class UIBuild
     {
         $opt = $tag;
         unset($opt['childs']);
-        foreach($tag['childs'] as $r) {
+        foreach ($tag['childs'] as $r) {
             $opt['option'][] = $r['value'];
         }
         return $opt;
@@ -158,7 +158,7 @@ class UIBuild
             } else if ($tags['level'] == $level && $tags['type'] == 'complete') {
                 $ltag = $this->getWidgetConfig($tags);
                 $ltag['title'] = $ltag['title'] ?? $ltag['value'];
-                if($ltag['widget'] == 'select' || $ltag['widget'] == 'radio') {
+                if ($ltag['widget'] == 'select' || $ltag['widget'] == 'radio') {
                     $ltag = $this->parseOptionTag($ltag);
                 }
                 $arr[] = $ltag;
@@ -167,9 +167,9 @@ class UIBuild
                 $ltag['title'] = $ltag['title'] ?? $ltag['value'];
                 if ($ltag['widget'] == 'table') {
                     $ltag = $this->parseTable($ltag);
-                } else if($ltag['widget'] == 'input' && ($ltag['type'] == 'select' || $ltag['type'] == 'radio')) {
+                } else if ($ltag['widget'] == 'input' && ($ltag['type'] == 'select' || $ltag['type'] == 'radio')) {
                     $ltag = $this->parseOptionTag($ltag);
-                } else if($ltag['widget'] == 'group') {
+                } else if ($ltag['widget'] == 'group') {
                     $ltag['child'] = $ltag['childs'][0];
                     unset($ltag['childs']);
                 }
