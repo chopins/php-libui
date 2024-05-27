@@ -86,7 +86,6 @@ function drawText ($e){
         $color = $build->getControlById('color-btn-test')->getValue();
 
         $string = new AttributeString($build, ['string' => $txt, 'color' => $color]);
-        var_dump($e->params->areaWidth);
         $textPrams = new TextLayoutParams($build, $string, $font, $e->params->areaWidth, DrawTextAlign::DRAW_TEXT_ALIGN_CENTER);
         $layout = DrawText::newFromParams($build, $textPrams);
 
