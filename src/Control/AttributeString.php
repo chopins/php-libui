@@ -49,12 +49,19 @@ class AttributeString extends Control
         'string', 'len', 'appendUnattributed', 'insertAtUnattributed',
         'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'
     ];
+    protected $string = '';
 
     protected function newControl(): CData
     {
         $this->instance = self::$ui->newAttributedString($this->attr['string']);
+        $this->string = $this->attr['string'];
         $this->setAllAttr();
         return $this->instance;
+    }
+
+    public function __get($name)
+    {
+        return $this->$name;
     }
 
     public function free()
@@ -81,6 +88,13 @@ class AttributeString extends Control
             }
         }
     }
+
+    /**
+     * @param string $k   Attribute type name
+     * @param $value      Attribute value
+     * @param $start
+     * @param $end
+     */
     public function addAttr(string $k, $value, $start, $end)
     {
         $config = ['widget' => 'attribute', 'type' => self::TYPE_MAP[$k]];
