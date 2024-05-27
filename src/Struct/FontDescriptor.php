@@ -33,6 +33,22 @@ class FontDescriptor
         $this->structInstance->Stretch = $stretch->value;
     }
 
+    public function __get($name)
+    {
+        $name = ucfirst(strtolower($name));
+        if($name == 'Family' || $name == 'Size') {
+            return $this->structInstance->$name;
+        }
+        switch($name) {
+            case 'Weight':
+                return TextWeight::tryFrom($this->structInstance->$name);
+            case 'Italic':
+                return TextItalic::tryFrom($this->structInstance->$name);
+            case 'Stretch':
+                return TextStretch::tryFrom($this->structInstance->$name);
+        }
+    }
+
     public function value($ptr = true)
     {
         return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;

@@ -84,8 +84,7 @@ function drawText ($e){
         $txt = "Drawing strings with libui is done with the uiAttributedString and uiDrawTextLayout objects.\nuiAttributedString lets you have a variety of attributes: ";
         $font = $build->getControlById('font-btn-test')->getValue();
         $color = $build->getControlById('color-btn-test')->getValue();
-
-        $string = new AttributeString($build, ['string' => $txt, 'color' => $color]);
+        $string = $build->createItem(['widget' => 'string', 'string' => $txt, 'color' => $color]);
         $textPrams = new TextLayoutParams($build, $string, $font, $e->params->areaWidth, DrawTextAlign::DRAW_TEXT_ALIGN_CENTER);
         $layout = DrawText::newFromParams($build, $textPrams);
 

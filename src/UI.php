@@ -414,6 +414,7 @@ class UI
                 $v = $v->value;
             }
         }
+        $arg = array_values($arg);
         return self::$ffi->$name(...$arg);
     }
 

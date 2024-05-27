@@ -35,7 +35,7 @@ class DrawText extends Control
         $font = new FontDescriptor($this->build);
         $fontAttr = $this->attr['fonts'];
         $font->fill($fontAttr['family'], $fontAttr['size'], $fontAttr['weight'], $fontAttr['italic'], $fontAttr['stretch']);
-        $string = new AttributeString($this->build, $this->attr);
+        $string = $this->build->createItem(['widget' => 'string', ...$this->attr]);
         $params = new TextLayoutParams($this->build, $string, $font, $this->attr['width'], $this->attr['align'],);
         $this->instance = self::$ui->drawNewTextLayout($params->value());
         return $this->instance;

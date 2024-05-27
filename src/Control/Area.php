@@ -180,7 +180,7 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
-            var_dump($keyEvent[0]->Key);
+
             $keyEventAttr = [
                 'key' => $keyEvent[0]->Key,
                 'extKey' => $keyEvent[0]->ExtKey,
@@ -230,7 +230,8 @@ class Area extends Control
 
     public function drawPath($config)
     {
-        return new Path($this->build, $config);
+        $config['widget'] = 'path';
+        return $this->build->createItem($config);
     }
 
     public function newBrush()

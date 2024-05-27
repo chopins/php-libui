@@ -368,10 +368,11 @@ class UIBuild
             case 'datetime':
                 return new Datetime($this, $config);
             case 'canvas':
+            case 'area':
                 return new Area($this, $config);
             case 'path':
                 return new Path($this, $config);
-            case 'text':
+            case 'drawtext':
                 return new DrawText($this, $config);
             case 'attribute':
                 return new Attribute($this, $config);

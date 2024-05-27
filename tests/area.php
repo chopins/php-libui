@@ -8,9 +8,12 @@ include_once __DIR__ . '/win.php';
 
 function testControl(\UI\UI $ui, \UI\UIBuild $build)
 {
-   $box = new Box($build, ['dir' => 'v']);
+   $box = $build->createItem(
+      ['widget' => 'box', 'dir' => 'v']
+   );
 
-   $area = new Area($build, [
+   $area = $build->createItem([
+      'widget' => 'canvas',
       'type' => 'scroll',
       'width' => 100, 'height' => 200,
       'draw' => $ui->event(function ($e) {

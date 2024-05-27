@@ -53,7 +53,7 @@ class AttributeString extends Control
     protected function newControl(): CData
     {
         $this->instance = self::$ui->newAttributedString($this->attr['string']);
-        $this->addAllAttr();
+        $this->setAllAttr();
         return $this->instance;
     }
 
@@ -67,36 +67,30 @@ class AttributeString extends Control
         return strlen($this->attr['string']);
     }
 
-    protected function addAllAttr()
+    protected function setAllAttr()
     {
         foreach (self::TYPE_MAP as $k => $t) {
-
             if (isset($this->attr[$k])) {
-                $a = [$k => $t];
-                if ($k == 'color' || $k == 'bgcolor' || $k == 'underlineColor') {
-                    if (is_string($this->attr[$k])) {
-                        list($a['red'], $a['green'], $a['blue'], $a['alpha']) = explode(',', $this->attr[$k]);
-                        $a['red'] = floatval($a['red']);
-                        $a['green'] = floatval($a['green']);
-                        $a['blue'] = floatval($a['blue']);
-                        $a['alpha'] = floatval($a['alpha']);
-                    } elseif (is_array($this->attr[$k])) {
-                        $a = array_merge($a, $this->attr[$k]);
-                    }
+                $config = ['widget' => 'attribute', 'type' => $t];
+                $config[$k] = $this->attr[$k];
+                if ($k == 'underlineColor') {
+                    $config['underlineColorType'] = $this->attr['underlineColorType'];
                 }
-                $attType = new Attribute($this->build, ['type' => $t, ...$a]);
+                $attType = $this->build->createItem($config);
                 $this->setAttribute($attType, 0, $this->len());
             }
         }
     }
-    public function addAttr(string $k, $value)
+    public function addAttr(string $k, $value, $start, $end)
     {
-        $a = [$k => self::TYPE_MAP[$k]];
-        if ($k == 'color' || $k == 'bgcolor' || $k == 'underlineColor') {
-            list($a['red'], $a['green'], $a['blue'], $a['alpha']) = explode(',', $value);
+        $config = ['widget' => 'attribute', 'type' => self::TYPE_MAP[$k]];
+        $config[$k] = $value;
+        if ($k == 'underlineColor') {
+            $config['underlineColor'] = $value[0];
+            $config['underlineColorType'] = $value[1];
         }
-        $attType = new Attribute($this->build, ['type' => self::TYPE_MAP[$k], ...$a]);
-        $this->setAttribute($attType, 0, $this->len());
+        $attType = $this->build->createItem($config);
+        $this->setAttribute($attType, $start, $end);
     }
 
     public function setAttribute(Attribute $a, int $start, int $end)

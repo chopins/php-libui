@@ -21,6 +21,7 @@ use UI\Struct\TextStretch;
 use UI\Struct\TextWeight;
 use UI\Struct\Underline;
 use UI\Struct\UnderlineColor;
+use ValueError;
 
 /**
  * @method AttributeType getType():
@@ -60,10 +61,12 @@ class Attribute extends Control
                 $this->instance = self::$ui->newFamilyAttribute($this->attr['font']);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_BACKGROUND:
-                $this->instance = self::$ui->newBackgroundAttribute($this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
+                $color = self::convertColor($this->attr['bgcolor']);
+                $this->instance = self::$ui->newBackgroundAttribute(...$color);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_COLOR:
-                $this->instance = self::$ui->newColorAttribute($this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
+                $color = self::convertColor($this->attr['color']);
+                $this->instance = self::$ui->newColorAttribute(...$color);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_FEATURES:
                 $this->instance = self::$ui->newFeaturesAttribute($this->attr['control']->getUIInstance());
@@ -84,8 +87,9 @@ class Attribute extends Control
                 $this->instance = self::$ui->newUnderlineAttribute($this->attr['underline']->value);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_UNDERLINE_COLOR:
-                $this->assertEnum($this->attr['underlineColor'], UnderlineColor::class);
-                $this->instance = self::$ui->newUnderlineColorAttribute($this->attr['underlineColor']->value, $this->attr['red'], $this->attr['green'], $this->attr['blue'], $this->attr['alpha']);
+                $this->assertEnum($this->attr['underlineColorType'], UnderlineColor::class);
+                $color = self::convertColor($this->attr['underlineColor']);
+                $this->instance = self::$ui->newUnderlineColorAttribute($this->attr['underlineColorType']->value, ...$color);
                 break;
             case AttributeType::ATTRIBUTE_TYPE_WEIGHT:
                 $this->assertEnum($this->attr['weight'], TextWeight::class);
@@ -97,7 +101,48 @@ class Attribute extends Control
         return $this->instance;
     }
 
-    public function color(&$r, &$g, &$b, &$a)
+    /**
+     * string: rgba(1,3,45,5)
+     * string: 0.1,0.2,0.3,0.4
+     * string: #FFFFFF
+     * array('red' => 0.1, 'green'=> 0.2, 'blue'=> 0.3, 'alpha' => 0.4)
+     */
+    public static function convertColor(string|array $color): array
+    {
+        $c = [];
+        if(is_string($color)) {
+            if($color[0] == '#') {
+                $scolor = str_split(trim($color, '#'), 2);
+                list($c['red'], $c['green'], $c['blue']) = $scolor; 
+                if(count($scolor) != 3) {
+                    throw new ValueError('Color value invaild');
+                }
+                array_walk($c, function(&$v) {
+                    $v = base_convert($v,16,10)/255;
+                });
+                $c['alpha'] = 1;
+                return $c;
+            }
+           if(strpos($color, 'rgba') === 0) {
+                $color = trim(substr($color,4), '()');
+                $scolor = explode(',', $color);
+                list($c['red'], $c['green'], $c['blue']) = $scolor;
+                array_walk($c, function(&$v) {
+                    $v = $v/255;
+                });
+                if(count($scolor) < 4) {
+                    $c['alpha'] = 1;
+                } else if(count($scolor) == 4) {
+                    $c['alpha'] = $scolor[3] > 1 ? 1 : $scolor[1];
+                }
+                return $c;
+           }
+           list($c['red'], $c['green'], $c['blue'], $c['alpha']) = explode(',', $color);
+           return $c;
+        }
+        return $color;
+    }
+    public function getColor(&$r, &$g, &$b, &$a)
     {
         $rptr = self::$ui->new('double*');
         $gptr = self::$ui->new('double*');
@@ -110,7 +155,7 @@ class Attribute extends Control
         $a = $aptr[0];
     }
 
-    public function underlineColor(&$u, &$r, &$g, &$b, &$a)
+    public function getUnderlineColor(&$u, &$r, &$g, &$b, &$a)
     {
         $uptr = self::$ui->new('uiUnderlineColor*');
         $rptr = self::$ui->new('double*');
