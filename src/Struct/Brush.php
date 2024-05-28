@@ -62,9 +62,9 @@ class Brush
         $this->structInstance->X1 = $this->X1;
         $this->structInstance->Y1 = $this->Y1;
         $this->structInstance->OuterRadius = $this->outerRadius;
-        $this->structInstance->Stops = self::$ui->addr($this->stops);
+        $this->structInstance->Stops = FFI::addr($this->stops);
         $this->structInstance->NumStops = $this->numStops;
-        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
+        return $ptr ? FFI::addr($this->structInstance) : $this->structInstance;
     }
 
 }

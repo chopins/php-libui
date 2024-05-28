@@ -11,6 +11,7 @@
 
 namespace UI;
 
+use FFI;
 use UI\UIBuild;
 use UI\UI;
 use FFI\CData;
@@ -50,7 +51,6 @@ abstract class Control
         } else {
             $this->instance = $instance;
         }
-        $this->handle = $this::CTL_NAME . spl_object_id($this->instance);
         $this->build->appendControl($this);
         $this->pushChilds();
     }
@@ -111,12 +111,17 @@ abstract class Control
         return $this->instance;
     }
 
-    public function getHandle()
+    public static function controlPtr($instance)
+    {
+        return FFI::cast('uintptr_t', $instance)->cdata;
+    }
+
+    public function getControlHandle()
     {
         if ($this::IS_CONTROL) {
             return $this->controlHandle();
         } else {
-            return $this->handle;
+            return self::controlPtr($this->instance);
         }
     }
 

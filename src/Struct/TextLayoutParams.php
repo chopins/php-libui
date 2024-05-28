@@ -11,6 +11,7 @@
 
 namespace UI\Struct;
 
+use FFI;
 use UI\Struct\FontDescriptor;
 use UI\Control\AttributeString;
 use UI\UIBuild;
@@ -21,17 +22,19 @@ class TextLayoutParams
     protected $structInstance = null;
     protected $ptr = null;
     protected AttributeString $string;
+    protected FontDescriptor $font;
 
     public function __construct(UIBuild $build, AttributeString $string, FontDescriptor $defaultFont, float $width, DrawTextAlign $align)
     {
         self::$ui = $build->getUI();
         $this->string = $string;
+        $this->font = $defaultFont;
         $this->structInstance = self::$ui->new('uiDrawTextLayoutParams');
         $this->structInstance->String = $string->getUIInstance();
         $this->structInstance->DefaultFont = $defaultFont->value();
         $this->structInstance->Width = $width;
         $this->structInstance->Align = $align->value;
-        $this->ptr = self::$ui->addr($this->structInstance);
+        $this->ptr = FFI::addr($this->structInstance);
     }
     public function string()
     {
@@ -43,5 +46,11 @@ class TextLayoutParams
             return $this->ptr;
         }
         return $this->structInstance;
+    }
+
+    public function free()
+    {
+        $this->string->free();
+        $this->font->free();
     }
 }

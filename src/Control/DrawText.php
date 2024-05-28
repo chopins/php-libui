@@ -28,7 +28,8 @@ class DrawText extends Control
 {
     const CTL_NAME = 'text';
     const IS_CONTROL = false;
-    protected AttributeString $string;
+
+    protected TextLayoutParams $layoutParams;
 
     protected function newControl(): CData
     {
@@ -36,15 +37,22 @@ class DrawText extends Control
         $fontAttr = $this->attr['fonts'];
         $font->fill($fontAttr['family'], $fontAttr['size'], $fontAttr['weight'], $fontAttr['italic'], $fontAttr['stretch']);
         $string = $this->build->createItem(['widget' => 'string', ...$this->attr]);
-        $params = new TextLayoutParams($this->build, $string, $font, $this->attr['width'], $this->attr['align'],);
-        $this->instance = self::$ui->drawNewTextLayout($params->value());
+        $this->layoutParams = new TextLayoutParams($this->build, $string, $font, $this->attr['width'], $this->attr['align'],);
+        $this->instance = self::$ui->drawNewTextLayout($this->layoutParams->value());
         return $this->instance;
     }
 
     public static function newFromParams(UIBuild $build, TextLayoutParams $params)
     {
         $ins = self::$ui->drawNewTextLayout($params->value());
-        return new static($build, [], $ins);
+        $draw = new static($build, ['string' => ''], $ins);
+        $draw->layoutParams = $params;
+        return $draw;
+    }
+
+    public function getParams()
+    {
+        return $this->layoutParams;
     }
 
     public function free()

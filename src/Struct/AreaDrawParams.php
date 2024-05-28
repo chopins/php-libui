@@ -59,6 +59,6 @@ class AreaDrawParams
 
     public function value($ptr = true)
     {
-        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
+        return $ptr ? FFI::addr($this->structInstance) : $this->structInstance;
     }
 }

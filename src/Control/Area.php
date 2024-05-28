@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use UI\Control;
 use FFI\CData;
 use UI\Struct\Matrix;
@@ -42,6 +43,17 @@ class Area extends Control
     private $handler = null;
     protected $context = null;
 
+    public static $mousePriKey = 1;
+    public static $mouseMidKey = 2;
+    public static $mouseRightKey = 3;
+    public static $dragPriKey = 1;
+    public static $dragMidKey = 2;
+    public static $dragPriMidKey = 3;
+    public static $dragRightKey = 4;
+    public static $dragPriRightKey = 5;
+    public static $dragRightMidKey = 6;
+    public static $dragThreeKey = 7;
+
     protected function newControl(): CData
     {
         $handler = $this->areaHandler();
@@ -68,7 +80,7 @@ class Area extends Control
         $this->handler->DragBroken = [$this, 'dragBroken'];
         $this->handler->KeyEvent = [$this, 'keyEvent'];
 
-        return self::$ui->addr($this->handler);
+        return FFI::addr($this->handler);
     }
 
     public function draw($handler, $area, $params)
@@ -98,10 +110,6 @@ class Area extends Control
     public function mouseEvent($handler, $area, $mouseEvent)
     {
         try {
-            if (empty($this->attr['mouseEvent'])) {
-                return;
-            }
-
             $handlerArr = [
                 'draw' => $handler[0]->Draw,
                 'mouseEvent' => $handler[0]->MouseEvent,
@@ -118,18 +126,30 @@ class Area extends Control
                 'up' => $mouseEvent[0]->Up,
                 'count' => $mouseEvent[0]->Count,
                 'modifiers' => $mouseEvent[0]->Modifiers,
-                'held1To64' => $mouseEvent[0]->Held1To64,
+                'drag' => $mouseEvent[0]->Held1To64,
             ];
-            $this->attr['mouseEvent']->trigger('mouseEvent', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            if ($mouseEventArr['down'] == self::$mousePriKey && $mouseEventArr['count'] == 1 && isset($this->attr['click'])) {
+                $this->attr['click']->trigger('click', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            } else if ($mouseEventArr['down'] == self::$mousePriKey && $mouseEventArr['count'] == 2 && isset($this->attr['dblclick'])) {
+                $this->attr['dblclick']->trigger('click', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            } else if ($mouseEventArr['drag'] == self::$dragPriKey && isset($this->attr['drag'])) {
+                $this->attr['drag']->trigger('drag', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            } else if (isset($this->attr['mouseevent'])) {
+                $this->attr['mouseevent']->trigger('mouseEvent', $this, ['handler' => $handlerArr, 'mouseEvent' => $mouseEventArr]);
+            }
         } catch (\Error $e) {
             echo $e;
         }
     }
 
-    public function mouseCrossed($handler, $area, $left)
+    /**
+     * be called if mouse enter or out Area
+     * @param int $out  if out Area is 1, else is 0
+     */
+    public function mouseCrossed($handler, $area, $out)
     {
         try {
-            if (empty($this->attr['mouseCrossed'])) {
+            if (empty($this->attr['mousecrossed'])) {
                 return;
             }
 
@@ -140,16 +160,19 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
-            $this->attr['mouseCrossed']->trigger('mouseCrossed', $this, ['handler' => $handlerArr, 'left' => $left]);
+            $this->attr['mousecrossed']->trigger('mouseCrossed', $this, ['handler' => $handlerArr, 'out' => $out]);
         } catch (\Error $e) {
             echo $e;
         }
     }
 
+    /**
+     * Be called if a mouse drag is interrupted by the system
+     */
     public function dragBroken($handler, $area)
     {
         try {
-            if (empty($this->attr['dragBroken'])) {
+            if (empty($this->attr['dragbroken'])) {
                 return;
             }
 
@@ -160,7 +183,7 @@ class Area extends Control
                 'dragBroken' => $handler[0]->DragBroken,
                 'keyEvent' => $handler[0]->KeyEvent
             ];
-            $this->attr['dragBroken']->trigger('dragBroken', $this, ['handler' => $handlerArr]);
+            $this->attr['dragbroken']->trigger('dragBroken', $this, ['handler' => $handlerArr]);
         } catch (\Error $e) {
             echo $e;
         }
@@ -169,7 +192,7 @@ class Area extends Control
     public function keyEvent($handler, $area, $keyEvent)
     {
         try {
-            if (empty($this->attr['keyEvent'])) {
+            if (empty($this->attr['keyevent'])) {
                 return;
             }
 
@@ -188,7 +211,7 @@ class Area extends Control
                 'modifiers' => $keyEvent[0]->Modifiers,
                 'up' => $keyEvent[0]->Up,
             ];
-            $this->attr['keyEvent']->trigger('keyEvent', $this, ['handler' => $handlerArr, 'keyEvent' => $keyEventAttr]);
+            $this->attr['keyevent']->trigger('keyEvent', $this, ['handler' => $handlerArr, 'keyEvent' => $keyEventAttr]);
         } catch (\Error $e) {
             echo $e;
         }

@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use FFI\CData;
 use UI\Control;
 
@@ -55,7 +56,7 @@ class Datetime extends Control
             'tm_yday' => $time[0]->tm_yday,
             'tm_isdst' => $time[0]->tm_isdst,
             'tm_gmtoff' => $time[0]->tm_gmtoff,
-            'tm_zone' => self::$ui->string($time[0]->tm_zone),
+            'tm_zone' => FFI::string($time[0]->tm_zone),
         ];
     }
 
@@ -75,7 +76,7 @@ class Datetime extends Control
         $time->tm_isdst = $v['tm_isdst'] ?? $localtime['tm_isdst'];
         $time->tm_gmtoff = $v['tm_gmtoff'] ?? (new DateTime("now", new \DateTimeZone($timezone)))->getOffset();
         $time->tm_zone = $v['tm_zone'] ?? $timezone;
-        $this->dateTimePickerSetTime(self::$ui->addr($time));
+        $this->dateTimePickerSetTime(FFI::addr($time));
     }
 
     public function __set($name, $value)

@@ -434,19 +434,9 @@ class UI
         FFI::memset(FFI::addr($o), 0, FFI::sizeof($o));
         $msg = self::$ffi->uiInit(FFI::addr($o));
         if ($msg) {
-            return $this->string($msg);
+            return FFI::string($msg);
         }
         return '';
-    }
-
-    public function string(FFI\CData $data): string
-    {
-        return self::$ffi::string($data);
-    }
-
-    public function addr($data): CData
-    {
-        return self::$ffi::addr($data);
     }
 
     /**
@@ -464,6 +454,17 @@ class UI
     public function new($type, $owned = TRUE, $persistent = FALSE): CData
     {
         return self::$ffi->new($type, $owned, $persistent);
+    }
+
+    public function constChar($string, $ptr = true) : CData
+    {
+        $len = strlen($string);
+        $cdata = $this->new("char[$len]", false, true);
+        FFI::memcpy($cdata, $string, $len);
+        if($ptr) {
+            return FFI::addr($cdata[0]);
+        }
+        return $cdata;
     }
 
     public function ptr($type, $owned = true, $persistent = false): CData
@@ -501,7 +502,7 @@ class UI
      */
     public function newTm($isPtr = false): CData
     {
-        $type = self::$ffi->new('tm');
+        $type = $this->new('tm');
         if (!$isPtr) {
             return $type;
         }

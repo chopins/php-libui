@@ -53,6 +53,7 @@ class Attribute extends Control
 
     protected $callPrefix = 'attribute';
     protected $callPrefixFuncList = ['getType', 'family', 'size', 'weight', 'italic', 'stretch', 'underline'];
+    protected static $cacheColor = [];
 
     protected function newControl(): CData
     {
@@ -110,35 +111,38 @@ class Attribute extends Control
     public static function convertColor(string|array $color): array
     {
         $c = [];
-        if(is_string($color)) {
-            if($color[0] == '#') {
-                $scolor = str_split(trim($color, '#'), 2);
-                list($c['red'], $c['green'], $c['blue']) = $scolor; 
-                if(count($scolor) != 3) {
-                    throw new ValueError('Color value invaild');
-                }
-                array_walk($c, function(&$v) {
-                    $v = base_convert($v,16,10)/255;
-                });
+        if (is_string($color)) {
+            if (isset(self::$cacheColor[$color])) {
+                return self::$cacheColor[$color];
+            }
+            if ($color[0] == '#') {
+                $scolor = intval(trim($color, '#'), 16);
+                $c['red'] = ($scolor >> 16) / 255;
+                $c['green'] = ($scolor >> 8 & 0xFF) / 255;
+                $c['blue'] = ($scolor & 0xFF) / 255;
                 $c['alpha'] = 1;
+                self::$cacheColor[$color] = $c;
+                return $c;
+            } elseif (strpos($color, 'rgba') === 0) {
+                $matches = [];
+                if (!preg_match('/^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(,\s*(1|(0\.\d+)*)\s*)*\)$/i', $color, $matches)) {
+                    throw new ValueError('invaild rgba color value');
+                }
+                $matchesCnt = count($matches);
+                $alpha = null;
+                if ($matchesCnt == 4) {
+                    list(, $c['red'], $c['green'], $c['blue']) = $matches;
+                } else if ($matchesCnt >= 6) {
+                    list(, $c['red'], $c['green'], $c['blue'],, $alpha) = $matches;
+                }
+                array_walk($c, fn (&$v) => $v /= 255);
+                $c['alpha'] = $alpha === null || $alpha === '' ? 1 : $alpha;
+                self::$cacheColor[$color] = $c;
                 return $c;
             }
-           if(strpos($color, 'rgba') === 0) {
-                $color = trim(substr($color,4), '()');
-                $scolor = explode(',', $color);
-                list($c['red'], $c['green'], $c['blue']) = $scolor;
-                array_walk($c, function(&$v) {
-                    $v = $v/255;
-                });
-                if(count($scolor) < 4) {
-                    $c['alpha'] = 1;
-                } else if(count($scolor) == 4) {
-                    $c['alpha'] = $scolor[3] > 1 ? 1 : $scolor[1];
-                }
-                return $c;
-           }
-           list($c['red'], $c['green'], $c['blue'], $c['alpha']) = explode(',', $color);
-           return $c;
+            list($c['red'], $c['green'], $c['blue'], $c['alpha']) = explode(',', $color);
+            self::$cacheColor[$color] = $c;
+            return $c;
         }
         return $color;
     }
@@ -181,5 +185,14 @@ class Attribute extends Control
             }
             return new OpenTypeFeatures($this->build, [], $control);
         }
+    }
+
+    public function free()
+    {
+        $this->freeAttribute();
+    }
+    public function __destruct()
+    {
+        $this->free();
     }
 }

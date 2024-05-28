@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use UI\Control;
 use FFI\CData;
 use UI\Struct\TableValueType;
@@ -38,12 +39,12 @@ class Table extends Control
         $this->columnNum = count($this->attr['th']);
         $this->rowNum = count($this->attr['tbody']);
         $this->initModelHandler();
-        $this->model = self::$ui->newTableModel(self::$ui->addr($this->modelHandle));
+        $this->model = self::$ui->newTableModel(FFI::addr($this->modelHandle));
         $param = self::$ui->new('uiTableParams');
         $param->Model = $this->model;
         $param->RowBackgroundColorModelColumn = $this->attr['rowBgcolor'] ?? self::DEF_FCOLOR;
         $this->initColumnType();
-        return self::$ui->newTable(self::$ui->addr($param));
+        return self::$ui->newTable(FFI::addr($param));
     }
 
     public function pushChilds()
@@ -239,7 +240,7 @@ class Table extends Control
         if ($textColor >= 0) {
             $tp = self::$ui->new('uiTableTextColumnOptionalParams');
             $tp->ColorModelColumn = $textColor;
-            $tpPtr = self::$ui->addr($tp);
+            $tpPtr = FFI::addr($tp);
         }
         switch ($type) {
             case 'button':

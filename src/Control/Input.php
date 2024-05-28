@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use UI\Control;
 use FFI\CData;
 use UI\Event;
@@ -122,7 +123,7 @@ class Input extends Control
             default:
                 $v = $this->entryText();
         }
-        return self::$ui->string($v);
+        return FFI::string($v);
     }
 
     public function setValue($v)

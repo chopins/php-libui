@@ -11,6 +11,7 @@
 
 namespace UI\Struct;
 
+use FFI;
 use UI\UIBuild;
 
 class StrokeParams
@@ -38,10 +39,10 @@ class StrokeParams
         $paramType->MiterLimit = $this->miterLimit;
         $dashes = self::$ui->new('double');
         $dashes->cdata = $this->dashes;
-        $paramType->Dashes = self::$ui->addr($dashes);
+        $paramType->Dashes = FFI::addr($dashes);
         $paramType->NumDashes = $this->numDashes;
         $paramType->DashPhase = $this->dashPhase;
-        return $ptr ? self::$ui->addr($paramType) : $paramType;
+        return $ptr ? FFI::addr($paramType) : $paramType;
     }
 
 }

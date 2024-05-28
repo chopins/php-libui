@@ -38,11 +38,11 @@ class Event
     {
         return $this->target;
     }
-    public function ui()
+    public function ui(): UI
     {
         return $this->target->getUI();
     }
-    public function build()
+    public function build(): UIBuild
     {
         return $this->target->getBuild();
     }

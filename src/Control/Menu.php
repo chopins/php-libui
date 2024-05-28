@@ -57,7 +57,7 @@ class Menu extends Control
     public function addMenuItem(array $menus): MenuItem
     {
         $menus['parent'] = $this;
-        $menus['parent_id'] = $this->handle;
+        $menus['parent_id'] = $this->getHandle();
         $menus['idx'] = count($this->childs);
         $item = new MenuItem($this->build, $menus);
         $this->childs[] = $item;

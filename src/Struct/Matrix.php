@@ -11,6 +11,7 @@
 
 namespace UI\Struct;
 
+use FFI;
 use UI\UIBuild;
 
 /**
@@ -51,7 +52,7 @@ class Matrix
 
     public function getMatrix($ptr = true)
     {
-        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
+        return $ptr ? FFI::addr($this->structInstance) : $this->structInstance;
     }
 
     public function setIdentity()

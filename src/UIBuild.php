@@ -35,6 +35,7 @@ use UI\Control\Img;
 use UI\Event;
 use UI\UI;
 use ErrorException;
+use FFI;
 use RuntimeException;
 
 class UIBuild
@@ -247,7 +248,7 @@ class UIBuild
         if ($file === null) {
             return null;
         }
-        $path = self::$ui->string($file);
+        $path = FFI::string($file);
         self::$ui->freeText($file);
         return $path;
     }
@@ -258,7 +259,7 @@ class UIBuild
         if ($file === null) {
             return null;
         }
-        $path = self::$ui->string($file);
+        $path = FFI::string($file);
         self::$ui->freeText($file);
         return $path;
     }
@@ -275,9 +276,10 @@ class UIBuild
 
     public function appendControl(Control $control)
     {
-        $handle = $control->getHandle();
-        $this->handles[$handle] = $control;
-        $id = $control->getAttr('id') ?? $handle;
+        $ptrInt = $control->getControlHandle();
+
+        $this->handles[$ptrInt] = $control;
+        $id = $control->getAttr('id') ?? $ptrInt;
 
         $this->controls[$id] = $control;
         $name = $control::CTL_NAME;

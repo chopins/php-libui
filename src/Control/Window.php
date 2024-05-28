@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use FFI\CData;
 use UI\Control;
 use UI\Event;
@@ -110,7 +111,7 @@ class Window extends Control
     public function title($title = null)
     {
         if ($title === null) {
-            return self::$ui->string($this->windowTitle());
+            return FFI::string($this->windowTitle());
         }
         $this->attr['title'] = $title;
         $this->windowSetTitle($title);

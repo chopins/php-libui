@@ -11,6 +11,7 @@
 
 namespace UI\Struct;
 
+use FFI;
 use UI\UIBuild;
 
 class FontDescriptor
@@ -24,9 +25,15 @@ class FontDescriptor
         $this->structInstance = self::$ui->new('uiFontDescriptor');
     }
 
-    public function fill(string $family, float $size, TextWeight $weight, TextItalic $italic, TextStretch $stretch)
-    {
-        $this->structInstance->Family = $family;
+    public function fill(
+        string $family,
+        float $size = 13,
+        TextWeight $weight = TextWeight::TEXT_WEIGHT_NORMAL,
+        TextItalic $italic = TextItalic::TEXT_ITALIC_NORMAL,
+        TextStretch $stretch = TextStretch::TEXT_STRETCH_NORMAL
+    ) {
+
+        $this->structInstance->Family = self::$ui->constChar($family);
         $this->structInstance->Size = $size;
         $this->structInstance->Weight =  $weight->value;
         $this->structInstance->Italic = $italic->value;
@@ -36,10 +43,10 @@ class FontDescriptor
     public function __get($name)
     {
         $name = ucfirst(strtolower($name));
-        if($name == 'Family' || $name == 'Size') {
+        if ($name == 'Family' || $name == 'Size') {
             return $this->structInstance->$name;
         }
-        switch($name) {
+        switch ($name) {
             case 'Weight':
                 return TextWeight::tryFrom($this->structInstance->$name);
             case 'Italic':
@@ -49,14 +56,66 @@ class FontDescriptor
         }
     }
 
+    protected function getAnyOneFonts($im, $family, $gmagick)
+    {
+        $fontList = $gmagick ? $im->queryFonts("*$family*") : $im::queryFonts("*$family*");
+        if (empty($fontList)) {
+            $fontList = $gmagick ? $im->queryFonts("*") : $im::queryFonts("*");
+        }
+        return $fontList;
+    }
+
+    public function queryFontMetrics()
+    {
+        $gmagick = false;
+        if (class_exists('\Gmagick')) {
+            $imgClass = '\Gmagick';
+            $imgDrawClass = '\GmagickDraw';
+            $gmagick = true;
+        } else {
+            $imgClass = '\Imagick';
+            $imgDrawClass = '\ImagickDraw';
+        }
+
+        $im = new $imgClass();
+        $draw = new $imgDrawClass();
+        $family = FFI::string($this->structInstance->Family);
+        $family = strtr($family, ' ', '-');
+        $size = $this->structInstance->Size;
+        try {
+            $draw->setFont($family);
+        } catch (\Exception $e) {
+            $fontList = $this->getAnyOneFonts($im, $family, $gmagick);
+            if ($fontList) {
+                $draw->setFont($fontList[0]);
+            } else {
+                return [
+                    'characterWidth' => $size,
+                    'characterHeight' => $size,
+                    'ascender' => $size,
+                    'descender' => -4,
+                    'textWidth' => 87,
+                    'textHeight' => $size + 4,
+                    'maxHorizontalAdvance' => ceil(($size + 4) / 2),
+                ];
+            }
+        }
+        $draw->setFontSize($size);
+        $mt = $im->queryFontMetrics($draw, "QueryText查询字符");
+        if ($gmagick) {
+            $mt['maxHorizontalAdvance'] = $mt['maximumHorizontalAdvance'];
+        }
+        return $mt;
+    }
+
     public function value($ptr = true)
     {
-        return $ptr ? self::$ui->addr($this->structInstance) : $this->structInstance;
+        return $ptr ? FFI::addr($this->structInstance) : $this->structInstance;
     }
 
     public function free()
     {
-        self::$ui->freeFontButtonFont(self::$ui->addr($this->structInstance));
+        self::$ui->freeFontButtonFont(FFI::addr($this->structInstance));
     }
 
     public function __destruct()

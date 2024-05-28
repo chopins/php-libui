@@ -46,7 +46,6 @@ class MenuItem extends Menu
         if (isset($this->attr['click'])) {
             $this->onClick($this->attr['click']);
         }
-        $this->handle = $this->attr['parent_id'] . spl_object_id($this->instance);
         return $this->instance;
     }
 

@@ -11,6 +11,7 @@
 
 namespace UI\Control;
 
+use FFI;
 use UI\Control;
 use FFI\CData;
 use UI\Control\Attribute;
@@ -69,11 +70,6 @@ class AttributeString extends Control
         $this->freeAttributedString();
     }
 
-    public function len()
-    {
-        return strlen($this->attr['string']);
-    }
-
     protected function setAllAttr()
     {
         foreach (self::TYPE_MAP as $k => $t) {
@@ -114,10 +110,9 @@ class AttributeString extends Control
 
     public function forEachAttribute($callable, $data = null)
     {
-        $func = function ($s, $a, $start, $end, $cdata) use ($callable, $data): ForEachStatus {
-            $handle = self::$ui->controlHandle($a);
-            $ac = $this->build->getControlByHandle($handle);
-            $attr = $ac ?? new Attribute($this->build, [], $a);
+        $func = function ($s, $a, $start, $end, $cdata) use ($callable, $data) {
+            $ptr = self::controlPtr($a);
+            $attr = $this->build->getControlByHandle($ptr);
             return $callable($this, $attr, $start, $end, $data);
         };
         $this->attributedStringForEachAttribute($func, null);
