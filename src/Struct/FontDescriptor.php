@@ -58,15 +58,27 @@ class FontDescriptor
 
     protected function getAnyOneFonts($im, $family, $gmagick)
     {
+        static $fcache = [];
+        if (isset($fcache[$family])) {
+            return $fcache[$family];
+        }
         $fontList = $gmagick ? $im->queryFonts("*$family*") : $im::queryFonts("*$family*");
         if (empty($fontList)) {
             $fontList = $gmagick ? $im->queryFonts("*") : $im::queryFonts("*");
         }
+        $fcache[$family] = $fontList;
         return $fontList;
     }
 
     public function queryFontMetrics()
     {
+        static $mcache = [];
+        $family = FFI::string($this->structInstance->Family);
+        $size = $this->structInstance->Size;
+        $cacheKey = "$family-$size";
+        if (isset($mcache[$cacheKey])) {
+            return $mcache[$cacheKey];
+        }
         $gmagick = false;
         if (class_exists('\Gmagick')) {
             $imgClass = '\Gmagick';
@@ -79,9 +91,9 @@ class FontDescriptor
 
         $im = new $imgClass();
         $draw = new $imgDrawClass();
-        $family = FFI::string($this->structInstance->Family);
+
         $family = strtr($family, ' ', '-');
-        $size = $this->structInstance->Size;
+
         try {
             $draw->setFont($family);
         } catch (\Exception $e) {
@@ -89,7 +101,7 @@ class FontDescriptor
             if ($fontList) {
                 $draw->setFont($fontList[0]);
             } else {
-                return [
+                $mt = [
                     'characterWidth' => $size,
                     'characterHeight' => $size,
                     'ascender' => $size,
@@ -98,6 +110,8 @@ class FontDescriptor
                     'textHeight' => $size + 4,
                     'maxHorizontalAdvance' => ceil(($size + 4) / 2),
                 ];
+                $mcache[$cacheKey] = $mt;
+                return $mt;
             }
         }
         $draw->setFontSize($size);
@@ -105,6 +119,7 @@ class FontDescriptor
         if ($gmagick) {
             $mt['maxHorizontalAdvance'] = $mt['maximumHorizontalAdvance'];
         }
+        $mcache[$cacheKey] = $mt;
         return $mt;
     }
 

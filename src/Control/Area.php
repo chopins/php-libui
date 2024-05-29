@@ -16,13 +16,9 @@ use UI\Control;
 use FFI\CData;
 use UI\Struct\Matrix;
 use UI\Control\Path;
+use UI\Struct\AreaDrawParams;
 use UI\Struct\StrokeParams;
 use UI\Struct\Brush;
-use UI\Struct\TextLayoutParams;
-use UI\Struct\AreaDrawParams;
-use UI\Struct\EXT_KEY;
-use UI\Struct\ExtKey;
-use UI\Struct\KeyModifiers;
 use UI\Struct\WindowResizeEdge;
 
 /**
@@ -99,8 +95,7 @@ class Area extends Control
             ];
 
             $this->context = $params[0]->Context;
-
-            $areaParam = new AreaDrawParams($this->build, $params[0]);
+            $areaParam = AreaDrawParams::instance($this->build, $params[0]);
             $this->attr['draw']->trigger('draw', $this, ['handler' => $handlerArr, 'params' => $areaParam]);
         } catch (\Error $e) {
             echo $e;

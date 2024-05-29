@@ -15,7 +15,6 @@ use FFI;
 use UI\UIBuild;
 use UI\UI;
 use FFI\CData;
-use UI\Struct\AreaDrawParams;
 
 /**
  * @property-read string $id

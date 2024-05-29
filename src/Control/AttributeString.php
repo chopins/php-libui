@@ -51,6 +51,7 @@ class AttributeString extends Control
         'delete', 'numGraphemes', 'byteIndexToGrapheme', 'graphemeToByteIndex'
     ];
     protected $string = '';
+    protected $attributes = [];
 
     protected function newControl(): CData
     {
@@ -68,6 +69,13 @@ class AttributeString extends Control
     public function free()
     {
         $this->freeAttributedString();
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->attributes as $a) {
+            unset($a);
+        }
     }
 
     protected function setAllAttr()
@@ -105,6 +113,7 @@ class AttributeString extends Control
 
     public function setAttribute(Attribute $a, int $start, int $end)
     {
+        $this->attributes[] = $a;
         $this->attributedStringSetAttribute($a->getUIInstance(), $start, $end);
     }
 

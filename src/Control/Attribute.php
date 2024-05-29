@@ -53,7 +53,6 @@ class Attribute extends Control
 
     protected $callPrefix = 'attribute';
     protected $callPrefixFuncList = ['getType', 'family', 'size', 'weight', 'italic', 'stretch', 'underline'];
-    protected static $cacheColor = [];
 
     protected function newControl(): CData
     {
@@ -103,48 +102,48 @@ class Attribute extends Control
     }
 
     /**
-     * string: rgba(1,3,45,5)
-     * string: 0.1,0.2,0.3,0.4
+     * string(int): rgba(1,3,45,5)
+     * string(float): 0.1,0.2,0.3,0.4
      * string: #FFFFFF
      * array('red' => 0.1, 'green'=> 0.2, 'blue'=> 0.3, 'alpha' => 0.4)
      */
     public static function convertColor(string|array $color): array
     {
+        static $cacheColor;
         $c = [];
-        if (is_string($color)) {
-            if (isset(self::$cacheColor[$color])) {
-                return self::$cacheColor[$color];
+        if (!is_string($color)) {
+            return $color;
+        }
+        if (isset($cacheColor[$color])) {
+            return $cacheColor[$color];
+        }
+        if ($color[0] == '#') {
+            $scolor = intval(trim($color, '#'), 16);
+            $c['red'] = ($scolor >> 16) / 255;
+            $c['green'] = ($scolor >> 8 & 0xFF) / 255;
+            $c['blue'] = ($scolor & 0xFF) / 255;
+            $c['alpha'] = 1;
+            $cacheColor[$color] = $c;
+            return $c;
+        } elseif (strpos($color, 'rgba') === 0) {
+            $matches = [];
+            if (!preg_match('/^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(,\s*(1|(0\.\d+)*)\s*)*\)$/i', $color, $matches)) {
+                throw new ValueError('invaild rgba color value');
             }
-            if ($color[0] == '#') {
-                $scolor = intval(trim($color, '#'), 16);
-                $c['red'] = ($scolor >> 16) / 255;
-                $c['green'] = ($scolor >> 8 & 0xFF) / 255;
-                $c['blue'] = ($scolor & 0xFF) / 255;
-                $c['alpha'] = 1;
-                self::$cacheColor[$color] = $c;
-                return $c;
-            } elseif (strpos($color, 'rgba') === 0) {
-                $matches = [];
-                if (!preg_match('/^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(,\s*(1|(0\.\d+)*)\s*)*\)$/i', $color, $matches)) {
-                    throw new ValueError('invaild rgba color value');
-                }
-                $matchesCnt = count($matches);
-                $alpha = null;
-                if ($matchesCnt == 4) {
-                    list(, $c['red'], $c['green'], $c['blue']) = $matches;
-                } else if ($matchesCnt >= 6) {
-                    list(, $c['red'], $c['green'], $c['blue'],, $alpha) = $matches;
-                }
-                array_walk($c, fn (&$v) => $v /= 255);
-                $c['alpha'] = $alpha === null || $alpha === '' ? 1 : $alpha;
-                self::$cacheColor[$color] = $c;
-                return $c;
+            $matchesCnt = count($matches);
+            $alpha = '';
+            list(, $c['red'], $c['green'], $c['blue']) = $matches;
+            if ($matchesCnt >= 6) {
+                $alpha = $matches[5];
             }
-            list($c['red'], $c['green'], $c['blue'], $c['alpha']) = explode(',', $color);
-            self::$cacheColor[$color] = $c;
+            array_walk($c, fn (&$v) => $v /= 255);
+            $c['alpha'] = $alpha === '' ? 1 : $alpha;
+            $cacheColor[$color] = $c;
             return $c;
         }
-        return $color;
+        list($c['red'], $c['green'], $c['blue'], $c['alpha']) = explode(',', $color);
+        $cacheColor[$color] = $c;
+        return $c;
     }
     public function getColor(&$r, &$g, &$b, &$a)
     {

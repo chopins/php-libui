@@ -16,6 +16,7 @@ use FFI;
 use TypeError;
 class Struct
 {
+    protected $structDatas = [];
     const STRUCT_MAP = [
         'uiAreaHandler' => [
             'Draw' => ['callable', 'void', 'uiAreaHandler', 'uiControl', 'uiAreaDrawParams'],
@@ -127,7 +128,7 @@ class Struct
 
     public function value($type)
     {
-        return self::STRUCT_MAP[$type];
+        return $this->structDatas[$type];
     }
 
     public function getTypeSize($type)
@@ -149,7 +150,7 @@ class Struct
     public function __get(string $type)
     {
         if (isset(self::STRUCT_MAP[$type])) {
-            return $this->ffi->new($type);
+            return $this->structDatas[$type];
         }
         throw new TypeError("C struct $type not defined");
     }
@@ -177,6 +178,7 @@ class Struct
                 $cdata->$k = $v;
             }
         }
+        $this->structDatas[$type] = $cdata;
     }
 
 }

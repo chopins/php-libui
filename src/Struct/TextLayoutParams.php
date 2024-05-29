@@ -48,9 +48,9 @@ class TextLayoutParams
         return $this->structInstance;
     }
 
-    public function free()
+    public function __destruct()
     {
-        $this->string->free();
-        $this->font->free();
+        unset($this->string);
+        unset($this->font);
     }
 }

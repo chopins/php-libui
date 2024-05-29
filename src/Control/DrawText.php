@@ -14,11 +14,7 @@ namespace UI\Control;
 use UI\Control;
 use FFI\CData;
 use UI\UIBuild;
-use UI\Struct\AreaDrawParams;
 use UI\Struct\TextLayoutParams;
-use UI\Control\AttributeString;
-use UI\Struct\AttributeType;
-use UI\Struct\DrawTextAlign;
 use UI\Struct\FontDescriptor;
 
 /**
@@ -58,6 +54,7 @@ class DrawText extends Control
     public function free()
     {
         $this->drawFreeTextLayout();
+        unset($this->layoutParams);
     }
 
     public function extents(&$width, &$height)

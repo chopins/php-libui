@@ -12,6 +12,7 @@
 namespace UI\Struct;
 
 use FFI;
+use UI\Control;
 use UI\UIBuild;
 
 /**
@@ -28,6 +29,7 @@ class AreaDrawParams
     protected $structInstance = null;
     protected $build = null;
     protected static $ui;
+    protected static $instanceList = [];
 
     public function __construct(UIBuild $build, $params = null)
     {
@@ -39,6 +41,16 @@ class AreaDrawParams
         } else {
             $this->structInstance = self::$ui->new('uiAreaDrawParams');
         }
+    }
+
+    public static function instance($build, $params)
+    {
+        $ptr = Control::controlPtr($params);
+        if(isset(self::$instanceList[$ptr])) {
+            return self::$instanceList[$ptr];
+        }
+        self::$instanceList[$ptr] = new static($build, $params);
+        return self::$instanceList[$ptr];
     }
 
     public function fill(FFI\CData $context, float $areaWidth, float $areaHeight, float $clipX, float $clipY, float $clipWidth, float $clipHeight)

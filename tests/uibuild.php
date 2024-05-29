@@ -9,14 +9,8 @@
  */
 
 use UI\UIBuild;
-use UI\Event;
-use UI\Control\Area;
 use UI\Control\DrawText;
-use UI\Struct\AreaDrawParams;
 use UI\Struct\DrawTextAlign;
-use UI\Control\Attribute;
-use UI\Control\AttributeString;
-use UI\Struct\AttributeType;
 use UI\Struct\TextLayoutParams;
 
 include_once dirname(__DIR__) . '/examples/loadui.php';
