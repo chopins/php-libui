@@ -51,19 +51,28 @@ $build->show();
     ]
 ]
 ```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<window title="window title name" width="600" height="800" fullscreen="0" onclose="HTTP::quit">
+<menu>
+    </menu>
+<body>
+</body>
+</window>
+```
 
 ## window attribute key list:
-| attr   | type          | Description     | Default Vlaue |
-| ------ | ------------- | --------------- | ------------- |
-| title  | string        | window title    | No Win Title  |
-| width  | int           | window width    | 800           |
-| height | int           | window height   | 640           |
-| border | int           | window border   | 0             |
-| margin | int           | window margin   | 0             |
-| fullscreen | int           | window margin   | 0             |
-| quit   | \UI\Event | quit callback   | null          |
-| close  | \UI\Event | close callback  | null          |
-| resize | \UI\Event | resize callback | null          |
+| attr       | type      | Description     | Default Vlaue |
+| ---------- | --------- | --------------- | ------------- |
+| title      | string    | window title    | No Win Title  |
+| width      | int       | window width    | 800           |
+| height     | int       | window height   | 640           |
+| border     | int       | window border   | 0             |
+| margin     | int       | window margin   | 0             |
+| fullscreen | int       | window margin   | 0             |
+| quit       | \UI\Event | quit callback   | null          |
+| close      | \UI\Event | close callback  | null          |
+| resize     | \UI\Event | resize callback | null          |
 
 ## menu array
 The array level 1 of item element is one menu, similar:
@@ -90,25 +99,25 @@ The array level 1 of item element is one menu, similar:
 Top menu only contain `title`, `id`, `childs` , the `title` value will display in window, every element of `childs` array is submenu that display in drop-down menu. if element is string and equral `hr` will display a separator
 __current Build UI Config of submenu only contain the following attr:__
 
-| attr   | type          | Description                                                 | require |
-| ------ | ------------- | ----------------------------------------------------------- | ------- |
-| title  | string        | menu title                                                  | yes     |
-| type   | string        | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no      |
-| click  | \UI\Event | click callback                                              | no      |
-| childs | array         | child menu list                                             | no      |
+| attr   | type      | Description                                                                              | require |
+| ------ | --------- | ---------------------------------------------------------------------------------------- | ------- |
+| title  | string    | menu title                                                                               | yes     |
+| type   | string    | menu type, value is `text`,`quit`,`about`,`preferences` or `checkbox`, default is `text` | no      |
+| click  | \UI\Event | click callback                                                                           | no      |
+| childs | array     | child menu list                                                                          | no      |
 
 ## body array
 every element key of `body` array is control config, `widget` element is control name and `attr` element is control attr. see `examples/table.php` __Build UI__ current only support the following control:
 
 1. `button`, Button control,contain the following attr:
 
-   | attr   | type          | Description                                                                                                                                                                                                                                                            | require |
-   | ------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-   | type   | string        | control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:<br />  1. `file`, open file button<br />2. `save`, save file button<br />3. `font`, select font button<br />4. `color`, select color button<br />5. `button`, is default value | yes     |
-   | title  | string        | button label name                                                                                                                                                                                                                                                      | yes     |
+   | attr   | type      | Description                                                                                                                                                                                                                                                            | require |
+   | ------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+   | type   | string    | control type, smiliar HTML `<button>` tag of `type` attr, potential value is following:<br />  1. `file`, open file button<br />2. `save`, save file button<br />3. `font`, select font button<br />4. `color`, select color button<br />5. `button`, is default value | yes     |
+   | title  | string    | button label name                                                                                                                                                                                                                                                      | yes     |
    | click  | \UI\Event | when click callback, when type `file` and `save` is after select file call                                                                                                                                                                                             | no      |
    | change | \UI\Event | only when `color` and `font` available, select color or font be call                                                                                                                                                                                                   | no      |
-   | id     | string        |                                                                                                                                                                                                                                                                        | no      |
+   | id     | string    |                                                                                                                                                                                                                                                                        | no      |
 
 2. `box` box layout,the following attr:
 
@@ -126,19 +135,19 @@ every element key of `body` array is control config, `widget` element is control
 6. `vr`   vertical separator, no attr
 7. `input`  input control, the following attr:
 
-   | attr     | type          | Description                                                                                                                                                                                                                                                                                                                                                            | require |
-   | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-   | type     | string        | miliar HTML `<input>` tag of `type` attr, specify one of the following value:<br />1. `password`  password entry control<br />2. `search`   search entry control<br />3. `textarea` multiline entry control<br />4. `radio`    radio<br />5. `select`   select<br />6. `checkbox` checkbox<br />7. `text`, is default value<br />8.`number` is Spinbox<br />9.`slider` | yes     |
-   | readonly | bool          | whether readonly                                                                                                                                                                                                                                                                                                                                                       | no      |
-   | wrap     | bool          | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                                                                         | no      |
-   | option   | array         | `radio` and `select` available, element value is option title, key is natural order number                                                                                                                                                                                                                                                                             | no      |
+   | attr     | type      | Description                                                                                                                                                                                                                                                                                                                                                            | require |
+   | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+   | type     | string    | miliar HTML `<input>` tag of `type` attr, specify one of the following value:<br />1. `password`  password entry control<br />2. `search`   search entry control<br />3. `textarea` multiline entry control<br />4. `radio`    radio<br />5. `select`   select<br />6. `checkbox` checkbox<br />7. `text`, is default value<br />8.`number` is Spinbox<br />9.`slider` | yes     |
+   | readonly | bool      | whether readonly                                                                                                                                                                                                                                                                                                                                                       | no      |
+   | wrap     | bool      | only `textarea` is available, `false` is non wrapping textarea                                                                                                                                                                                                                                                                                                         | no      |
+   | option   | array     | `radio` and `select` available, element value is option title, key is natural order number                                                                                                                                                                                                                                                                             | no      |
    | change   | \UI\Event | exclude `checkbox` and `radio`                                                                                                                                                                                                                                                                                                                                         | no      |
-   | title    | string        | `checkbox` available                                                                                                                                                                                                                                                                                                                                                   | yes     |
+   | title    | string    | `checkbox` available                                                                                                                                                                                                                                                                                                                                                   | yes     |
    | click    | \UI\Event | only `radio` and `checkbox` available                                                                                                                                                                                                                                                                                                                                  | no      |
-   | min      | int           | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
-   | max      | int           | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
-   | id       | string        |                                                                                                                                                                                                                                                                                                                                                                        | no      |
-   | editable | bool          | `select` available                                                                                                                                                                                                                                                                                                                                                     | no      |
+   | min      | int       | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
+   | max      | int       | `number` and `slider` available                                                                                                                                                                                                                                                                                                                                        | yes     |
+   | id       | string    |                                                                                                                                                                                                                                                                                                                                                                        | no      |
+   | editable | bool      | `select` available                                                                                                                                                                                                                                                                                                                                                     | no      |
    
 8. `form`   form layout, has `padded`, `childs`,`id` attr, child widget has label attr
 9. `grid`   grid layout, the following attr:
@@ -151,7 +160,7 @@ every element key of `body` array is control config, `widget` element is control
    | child_width   | int    |             | no      |
    | child_height  | int    |             | no      |
    | child_hexpand | int    |             | no      |
-   | child_halign | int    |             | no      |
+   | child_halign  | int    |             | no      |
    | child_vexpand | int    |             | no      |
    | child_valign  | int    |             | no      |
    | childs        | array  |             | no      |
@@ -159,11 +168,11 @@ every element key of `body` array is control config, `widget` element is control
  
 10. `table`  table control, table cell has change event, it is following sub key :
 
-    | attr  | type   | Description                                                                                                                                                                                                                                                                                                               | require |
-    | ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-    | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text` <br />5. widget has `change` attr, for row column change callback                            | yes     |
-    | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor` | yes     |
-    | id    | string |                                                                                                                                                                                                                                                                                                                           | no      |
+    | attr  | type   | Description                                                                                                                                                                                                                                                                                                                                                      | require |
+    | ----- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+    | th    | array  | every element of value is array, key is id, has the following attr:<br />1. `editable`, `bool` type, the column is whether editable<br />2. `textColor`<br />3. `title`<br />4. `type`, specify value of `button`, `image`, `imgtext`, `progress`, `checkbox`, `checkboxtext`, `color`, `text` <br />5. widget has `change` attr, for row column change callback | yes     |
+    | tbody | array  | the table row value list, every element is one row value, when row of column is array has the following attr:<br />1. `image` type, has `src` `width` `height`<br />2. `color` type has `r`,`g`,`b`<br />3. `rowBgcolor`                                                                                                                                         | yes     |
+    | id    | string |                                                                                                                                                                                                                                                                                                                                                                  | no      |
 
 11. `tab`    tab control, has `page` sub array, `page` array every element value is page child control and key is page title
 12. `img`   image control, has flowing attr:
@@ -177,15 +186,19 @@ every element key of `body` array is control config, `widget` element is control
 
 13. `datetime` datetime control
     
-    | attr   | type          | description                                   | require |
-    | ------ | ------------- | --------------------------------------------- | ------- |
-    | type   | string        | specify one of value `time`,`date`,`datetime` | yes     |
+    | attr   | type      | description                                   | require |
+    | ------ | --------- | --------------------------------------------- | ------- |
+    | type   | string    | specify one of value `time`,`date`,`datetime` | yes     |
     | change | \UI\Event |                                               | no      |
-    | id     | string        |                                               | no      |
+    | id     | string    |                                               | no      |
 
 14.  `progress`, has `id` attr
-15.  unsupport control must call libui C function by `UI\UI`
-16.  `UI\Event`, all event callback class, The signature of the callback is as follows:
+15.  `area`,`canvas` create `Area`
+16.  `attribute` create `Attribute`
+17.  `drawtext` create `TextLayout`
+18.  `string` create a `AttributeString`
+19.  unsupport control must call libui C function by `UI\UI`
+20.  `UI\Event`, all event callback class, The signature of the callback is as follows:
 ```php
 /**
  * @param UI\Event $callable   The object instance of current event 
