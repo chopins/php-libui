@@ -4,7 +4,7 @@ PHP 绑定 [libui](https://github.com/andlabs/libui) 的 C 库.
 libui 一个轻量级的且可移植的GUI库，其使用了原生的GUI技术为每一个平台提高支持
 
 ### 必须
-* PHP >= 7.4
+* PHP >= 8.1
 * PHP FFI 扩展可用
 * libui 最新版本
 

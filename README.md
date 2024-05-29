@@ -5,7 +5,7 @@ PHP bindings to the [libui](https://github.com/andlabs/libui) C library.
 libui is a lightweight, portable GUI library that uses the native GUI technologies of each platform it supports.
 
 ### Requirements
-* PHP >= 7.4
+* PHP >= 8.1
 * PHP FFI extension available
 * libui latest version
 
