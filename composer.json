@@ -21,6 +21,9 @@
         "php": ">=8.1.0",
         "ext-ffi" : "*"
     },
+    "suggest" : {
+        "ext-imagick" : "For get font real height and width"
+    },
     "autoload" : {
         "psr-4": {
             "UI\\": "src/"

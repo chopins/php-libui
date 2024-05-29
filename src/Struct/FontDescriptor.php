@@ -84,9 +84,21 @@ class FontDescriptor
             $imgClass = '\Gmagick';
             $imgDrawClass = '\GmagickDraw';
             $gmagick = true;
-        } else {
+        } elseif (class_exists('\Imagick')) {
             $imgClass = '\Imagick';
             $imgDrawClass = '\ImagickDraw';
+        } else {
+            $mt = [
+                'characterWidth' => $size,
+                'characterHeight' => $size,
+                'ascender' => $size,
+                'descender' => -4,
+                'textWidth' => 87,
+                'textHeight' => $size + 4,
+                'maxHorizontalAdvance' => ceil(($size + 4) / 2),
+            ];
+            $mcache[$cacheKey] = $mt;
+            return $mt;
         }
 
         $im = new $imgClass();
