@@ -26,21 +26,18 @@ class Form extends Control
         return $this->instance;
     }
 
-    public function pushChilds()
+    protected function prepareOption()
     {
-        $this->attr['childs'] = $this->attr['childs'] ?? [];
-        $allStretchy = $this->attr['stretchy'] ?? 0;
-        foreach ($this->attr['childs'] as $i => $child) {
-            $itemStretchy = $child['stretchy'] ?? $allStretchy;
-            $control = $this->build->createItem($child);
-            $this->addChild($control, ['label' => $child['label'] ?? $i, 'stretchy' => $itemStretchy]);
+        $stretchy = $this->attr['stretchy'] ?? 0;
+        foreach ($this->attr['childs'] as $i => &$child) {
+            $child['stretchy'] = $child['stretchy'] ?? $stretchy;
+            $child['label'] = $child['label'] ?? $i;
         }
     }
 
     protected function addChild(Control $child, $option = [])
     {
-        parent::addChild($child, $option);
-        $this->append($option['label'], $child, $option['stretchy']);
+        $this->appendControl($option['label'], $child, $option['stretchy']);
     }
 
     public function __set($name, $value)
@@ -63,7 +60,12 @@ class Form extends Control
         return $this->formPadded();
     }
 
-    public function append(string $label, Control $child, int $stretchy)
+    protected function append(Control $child, $options = null)
+    {
+        $this->appendControl($options['label'], $child, $options['stretchy']);
+    }
+
+    protected function appendControl(string $label, Control $child, int $stretchy)
     {
         $control = $child->getUIInstance();
         $this->formAppend($label, $control, $stretchy);

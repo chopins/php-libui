@@ -22,6 +22,7 @@ class Img extends Control
 {
     const CTL_NAME = 'img';
     const IS_CONTROL = false;
+    const CHILD_TYPE = -1;
 
     protected function newControl(): CData
     {
@@ -34,7 +35,7 @@ class Img extends Control
         return $this->instance;
     }
 
-    public function pushChilds()
+    protected function pushItemChilds()
     {
         if (!empty($this->attr['src'])) {
             foreach ($this->attr['src'] as $src) {
@@ -73,5 +74,4 @@ class Img extends Control
         $ffi::memcpy($bin, $data, $len);
         $this->append($bin, $size[0], $size[1], $size['bits']);
     }
-
 }

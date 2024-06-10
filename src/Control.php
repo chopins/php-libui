@@ -24,6 +24,7 @@ abstract class Control
 {
     const CTL_NAME = '';
     const IS_CONTROL = true;
+    const CHILD_TYPE = 1;
 
     protected ?CData $instance = null;
     protected array $attr = [];
@@ -38,6 +39,7 @@ abstract class Control
     protected $handle = 0;
     private $win;
     private $parent;
+    protected $childs = [];
 
     public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
@@ -56,30 +58,53 @@ abstract class Control
         }
 
         $this->build->appendControl($this);
-        $this->pushChilds();
+        if ($this::CHILD_TYPE === 1) {
+            $this->pushChilds();
+        } else if ($this::CHILD_TYPE === -1) {
+            $this->pushItemChilds();
+        }
     }
 
     abstract protected function newControl(): CData;
 
-    public function pushChilds()
+    protected function pushItemChilds()
+    {
+    }
+
+    protected function setRelationship($control)
+    {
+        $control->win = $this->win;
+        $control->parent = $this;
+        $this->childs[] = $control;
+    }
+
+    final public function pushChilds()
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
-        foreach ($this->attr['childs'] as $child) {
-            $control = $this->build->createItem($child);
+        $this->prepareOption();
+        foreach ($this->attr['childs'] as $i => $child) {
+            $control = $this->build->createItem($child, $i, $this::class);
             $this->addChild($control, $child);
+            $this->setRelationship($control);
         }
+    }
+
+    protected function prepareOption()
+    {
     }
 
     protected function addChild(Control $child, $options = [])
     {
-        $child->parent = $this;
-        $child->win = $this->win;
     }
 
-    public function appendChild(\UI\Control $child)
+    public function appendChild(\UI\Control $child, $options = null)
     {
         $this->updateChildsList($child);
-        $this->addChild($child);
+        $this->append($child, $options);
+    }
+    protected function append(\UI\Control $child, $options = null)
+    {
+        $this->addChild($child, $options);
     }
 
     protected function updateChildsList(Control $child)
@@ -87,6 +112,7 @@ abstract class Control
         $attr = $child->getAttr();
         $attr['name'] = $child::CTL_NAME;
         $this->attr['childs'][] = $attr;
+        $this->setRelationship($child);
     }
 
     public function getWin()
@@ -215,7 +241,7 @@ abstract class Control
     {
         $this->$event(function (...$params) use ($event, $callable) {
             try {
-                $event->setTargetPtr($params[0]);
+                $callable->setTargetPtr($params[0]);
                 $callable->trigger($event, $this, ['data' => $params[1]]);
             } catch (\Exception $e) {
                 echo $e;

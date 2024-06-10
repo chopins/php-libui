@@ -31,18 +31,18 @@ class Group extends Control
         return $this->instance;
     }
 
-    public function pushChilds()
+    protected function prepareOption()
     {
         $this->attr['child'] = $this->attr['child'] ?? [];
         if ($this->attr['child']) {
-            $control = $this->build->createItem($this->attr['child']);
-            $this->addChild($control, $this->attr['child']);
+            $this->attr['childs'] = [
+                $this->attr['child']
+            ];
         }
     }
 
     protected function addChild(\UI\Control $child, $option = [])
     {
-        parent::addChild($child, $option);
         $this->setChild($child);
     }
 

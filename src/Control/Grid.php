@@ -76,7 +76,7 @@ class Grid extends Control
         }
         $this->assertEnum($option['child_halign'], UIAlign::class);
         $this->assertEnum($option['child_valign'], UIAlign::class);
-        $this->append(
+        $this->appendControl(
                 $childs,
                 $option['child_left'],
                 $option['child_top'],
@@ -93,7 +93,7 @@ class Grid extends Control
         return $this->gridPadded();
     }
 
-    protected function append(Control $child, int $left, int $top, int $xspan, int $yspan, int $hexpand, UIAlign $halign, int $vexpand, UIAlign $valign)
+    protected function appendControl(Control $child, int $left, int $top, int $xspan, int $yspan, int $hexpand, UIAlign $halign, int $vexpand, UIAlign $valign)
     {
         $ui = $child->getUIInstance();
         $this->gridAppend($ui, $left, $top, $xspan, $yspan, $hexpand, $halign->value, $vexpand, $valign->value);

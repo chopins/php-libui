@@ -25,16 +25,21 @@ class Tab extends Control
         return self::$ui->newTab();
     }
 
-    public function pushChilds()
+    protected function prepareOption()
     {
-        $this->attr['childs'] = $this->attr['childs'] ?? [];
-        foreach ($this->attr['childs'] as $childs) {
-            foreach ($childs['childs'] as $config) {
-                $control = $this->build->createItem($config);
-                parent::addChild($childs, $config);
-                $this->appendPage($childs['title'], $control);
+        $childs = $this->attr['childs'] ?? [];
+        $this->attr['childs'] = [];
+        foreach ($childs as $page) {
+            foreach ($page['childs'] as $config) {
+                $config['pagename'] = $page['title'];
+                $this->attr['childs'][] = $config;
             }
         }
+    }
+
+    protected function addChild(Control $child, $options = [])
+    {
+        $this->appendPage($options['pagename'], $child);
     }
 
     public function appendPage($pageName, Control $childs)
@@ -68,5 +73,4 @@ class Tab extends Control
     {
         $this->tabSetMargined($page, $margin);
     }
-
 }

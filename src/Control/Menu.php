@@ -25,6 +25,7 @@ class Menu extends Control
 {
     const CTL_NAME = 'menu';
     const IS_CONTROL = false;
+    const CHILD_TYPE = -1;
 
     protected $childs = [];
 
@@ -37,7 +38,7 @@ class Menu extends Control
         return $this->instance;
     }
 
-    public function pushChilds()
+    protected function pushItemChilds()
     {
         $this->attr['childs'] = $this->attr['childs'] ?? [];
         foreach ($this->attr['childs'] as $child) {
@@ -60,8 +61,7 @@ class Menu extends Control
         $menus['parent_id'] = $this->getControlHandle();
         $menus['idx'] = count($this->childs);
         $item = new MenuItem($this->build, $menus);
-        parent::addChild($item, $menus);
-        $this->childs[] = $item;
+        $this->setRelationship($item);
         return $item;
     }
 

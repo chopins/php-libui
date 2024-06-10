@@ -25,6 +25,7 @@ class Table extends Control
 {
     const CTL_NAME = 'table';
     const DEF_FCOLOR = -1;
+    const CHILD_TYPE = -1;
 
     protected $model = null;
     protected $modelHandle = null;
@@ -46,7 +47,7 @@ class Table extends Control
         return self::$ui->newTable(FFI::addr($param));
     }
 
-    public function pushChilds()
+    protected function pushItemChilds()
     {
         foreach ($this->attr['th'] as $index => $config) {
             $idx = $config['idx'] ?? $index;

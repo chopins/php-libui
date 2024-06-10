@@ -335,10 +335,11 @@ class UIBuild
         return $this->handles[$handle];
     }
 
-    public function createItem(array $config, $idx = 0): Control
+    public function createItem(array $config, $idx = 0, $parent = ''): Control
     {
         if (!isset($config['widget'])) {
-            throw new RuntimeException("widget config error at ($idx) config is " . var_export($config, true));
+            $parent = $parent ? "$parent add" : '';
+            throw new RuntimeException("$parent widget config error at offset {$idx}, config " . var_export($config, true));
         }
         switch ($config['widget']) {
             case 'button':

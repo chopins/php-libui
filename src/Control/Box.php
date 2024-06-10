@@ -46,7 +46,7 @@ class Box extends Control
     public function addChild(\UI\Control $childs, $option = [])
     {
         $fit = $option['child_fit'] ?? $this->attr['child_fit'];
-        $this->append($childs, $fit);
+        $this->appendControl($childs, $fit);
     }
 
     public function setPadded(int $padded)
@@ -60,7 +60,12 @@ class Box extends Control
         return $this->boxPadded();
     }
 
-    public function append(Control $control, int $stretchy)
+    protected function append(\UI\Control $childs, $option = [])
+    {
+        $this->addChild($childs, $option);
+    }
+
+    protected function appendControl(Control $control, int $stretchy)
     {
         $ui = $control->getUIInstance();
         $this->boxAppend($ui, $stretchy);
