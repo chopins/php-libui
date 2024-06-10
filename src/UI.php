@@ -6,7 +6,7 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
+ *
  */
 
 namespace UI;

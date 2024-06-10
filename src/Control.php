@@ -6,7 +6,6 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
  */
 
 namespace UI;
@@ -37,6 +36,8 @@ abstract class Control
     protected $callPrefix = '';
     protected $callPrefixFuncList = [];
     protected $handle = 0;
+    private $win;
+    private $parent;
 
     public function __construct(UIBuild $build, array $attr, CData $instance = null)
     {
@@ -50,6 +51,10 @@ abstract class Control
         } else {
             $this->instance = $instance;
         }
+        if ($this::CTL_NAME == 'win') {
+            $this->win = $this;
+        }
+
         $this->build->appendControl($this);
         $this->pushChilds();
     }
@@ -67,6 +72,8 @@ abstract class Control
 
     protected function addChild(Control $child, $options = [])
     {
+        $child->parent = $this;
+        $child->win = $this->win;
     }
 
     public function appendChild(\UI\Control $child)
@@ -80,6 +87,15 @@ abstract class Control
         $attr = $child->getAttr();
         $attr['name'] = $child::CTL_NAME;
         $this->attr['childs'][] = $attr;
+    }
+
+    public function getWin()
+    {
+        return $this->win;
+    }
+    public function parent()
+    {
+        return $this->parent;
     }
 
     public function getAttr($key = null)
@@ -163,7 +179,7 @@ abstract class Control
         $this->controlDestroy();
     }
 
-    public function parent()
+    public function parentPtr()
     {
         return $this->controlParent();
     }
@@ -199,6 +215,7 @@ abstract class Control
     {
         $this->$event(function (...$params) use ($event, $callable) {
             try {
+                $event->setTargetPtr($params[0]);
                 $callable->trigger($event, $this, ['data' => $params[1]]);
             } catch (\Exception $e) {
                 echo $e;

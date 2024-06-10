@@ -6,7 +6,6 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
  */
 
 namespace UI\Control;
@@ -32,6 +31,7 @@ class Tab extends Control
         foreach ($this->attr['childs'] as $childs) {
             foreach ($childs['childs'] as $config) {
                 $control = $this->build->createItem($config);
+                parent::addChild($childs, $config);
                 $this->appendPage($childs['title'], $control);
             }
         }

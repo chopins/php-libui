@@ -6,7 +6,7 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
+ *
  */
 
 namespace UI;
@@ -21,6 +21,7 @@ class Event
     protected $before = null;
     protected $after = null;
     protected $target = null;
+    protected $targetPtr;
     protected $eventData = [];
     private $eventType = null;
     private $beforeDataKey = null;
@@ -33,6 +34,14 @@ class Event
     {
         $this->call = $callable;
         $this->bindParams = $bindParams;
+    }
+    public function getTargetPtr()
+    {
+        return $this->targetPtr;
+    }
+    public function setTargetPtr($ptr)
+    {
+        $this->targetPtr = $ptr;
     }
     public function getTarget()
     {

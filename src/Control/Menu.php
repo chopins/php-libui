@@ -6,7 +6,7 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
+ *
  */
 
 namespace UI\Control;
@@ -60,6 +60,7 @@ class Menu extends Control
         $menus['parent_id'] = $this->getControlHandle();
         $menus['idx'] = count($this->childs);
         $item = new MenuItem($this->build, $menus);
+        parent::addChild($item, $menus);
         $this->childs[] = $item;
         return $item;
     }

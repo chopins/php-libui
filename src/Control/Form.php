@@ -6,7 +6,6 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
  */
 
 namespace UI\Control;
@@ -40,6 +39,7 @@ class Form extends Control
 
     protected function addChild(Control $child, $option = [])
     {
+        parent::addChild($child, $option);
         $this->append($option['label'], $child, $option['stretchy']);
     }
 

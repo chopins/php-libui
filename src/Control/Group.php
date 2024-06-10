@@ -6,7 +6,6 @@
  * @copyright  Copyright (c) 2019 Szopen Xiao (Toknot.com)
  * @license    http://toknot.com/LICENSE.txt New BSD License
  * @link       https://github.com/chopins/php-libui
- * @version    0.1
  */
 
 namespace UI\Control;
@@ -41,9 +40,10 @@ class Group extends Control
         }
     }
 
-    protected function addChild(\UI\Control $childs, $option = [])
+    protected function addChild(\UI\Control $child, $option = [])
     {
-        $this->setChild($childs);
+        parent::addChild($child, $option);
+        $this->setChild($child);
     }
 
     public function __set($name, $value)
