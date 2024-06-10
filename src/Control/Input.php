@@ -90,6 +90,9 @@ class Input extends Control
         if (isset($this->attr['click'])) {
             $this->onClick($this->attr['click']);
         }
+        if(isset($this->attr['value'])) {
+            $this->setValue($this->attr['value']);
+        }
         return $this->instance;
     }
 
