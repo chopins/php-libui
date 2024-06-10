@@ -115,13 +115,18 @@ abstract class Control
         $this->setRelationship($child);
     }
 
-    public function getWin()
+    public function win()
     {
         return $this->win;
     }
     public function parent()
     {
         return $this->parent;
+    }
+
+    public function getChilds()
+    {
+        return $this->childs;
     }
 
     public function getAttr($key = null)
@@ -183,6 +188,11 @@ abstract class Control
     public function show()
     {
         $this->controlShow();
+    }
+
+    public function freeWidget()
+    {
+        $this->freeControl();
     }
 
     public function hide()
